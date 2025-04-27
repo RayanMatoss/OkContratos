@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -65,9 +64,38 @@ export const useFornecedoresCrud = () => {
     }
   };
 
+  const updateFornecedor = async (id: string, data: Omit<NewFornecedor, "id">): Promise<boolean> => {
+    try {
+      setLoading(true);
+      const { error } = await supabase
+        .from('fornecedores')
+        .update(data)
+        .eq('id', id);
+
+      if (error) throw error;
+      
+      toast({
+        title: "Sucesso",
+        description: "Fornecedor atualizado com sucesso."
+      });
+
+      return true;
+    } catch (error: any) {
+      toast({
+        title: "Erro",
+        description: error.message,
+        variant: "destructive"
+      });
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     loading,
     addFornecedor,
-    deleteFornecedor
+    deleteFornecedor,
+    updateFornecedor
   };
 };

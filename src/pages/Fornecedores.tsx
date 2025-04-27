@@ -1,24 +1,28 @@
+
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { SearchFornecedores } from "@/components/fornecedores/SearchFornecedores";
-import { AddFornecedorDialog } from "@/components/fornecedores/AddFornecedorDialog";
+import { FornecedorFormDialog } from "@/components/fornecedores/FornecedorFormDialog";
 import { FornecedoresTable } from "@/components/fornecedores/FornecedoresTable";
-import { useFornecedoresState } from "@/hooks/useFornecedores";
+import { useFornecedoresState } from "@/hooks/fornecedores";
 
 const Fornecedores = () => {
   const {
     searchTerm,
     setSearchTerm,
-    showAddDialog,
-    setShowAddDialog,
+    showDialog,
+    setShowDialog,
     loading,
-    newFornecedor,
+    fornecedorForm,
     filteredFornecedores,
     handleAddFornecedor,
     handleEdit,
+    handleUpdate,
     handleDelete,
+    handleOpenAdd,
     handleFornecedorChange,
+    isEditing,
     fetchFornecedores
   } = useFornecedoresState();
 
@@ -35,7 +39,7 @@ const Fornecedores = () => {
             Gerenciamento dos fornecedores cadastrados
           </p>
         </div>
-        <Button onClick={() => setShowAddDialog(true)} className="flex items-center gap-2">
+        <Button onClick={handleOpenAdd} className="flex items-center gap-2">
           <Plus size={16} />
           <span>Novo Fornecedor</span>
         </Button>
@@ -54,13 +58,14 @@ const Fornecedores = () => {
         onDelete={handleDelete}
       />
 
-      <AddFornecedorDialog
-        open={showAddDialog}
-        onOpenChange={setShowAddDialog}
-        onSubmit={handleAddFornecedor}
+      <FornecedorFormDialog
+        open={showDialog}
+        onOpenChange={setShowDialog}
+        onSubmit={isEditing ? handleUpdate : handleAddFornecedor}
         loading={loading}
-        fornecedor={newFornecedor}
+        fornecedor={fornecedorForm}
         onFornecedorChange={handleFornecedorChange}
+        mode={isEditing ? 'edit' : 'create'}
       />
     </div>
   );
