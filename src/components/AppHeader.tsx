@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -81,7 +80,7 @@ const AppHeader = ({ onToggleSidebar, isSidebarCollapsed }: AppHeaderProps) => {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="relative">
               <Bell size={20} />
-              {unreadNotifications > 0 && (
+              {notificacoes.length > 0 && (
                 <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-destructive" />
               )}
             </Button>
@@ -89,23 +88,9 @@ const AppHeader = ({ onToggleSidebar, isSidebarCollapsed }: AppHeaderProps) => {
           <DropdownMenuContent align="end" className="w-80">
             <DropdownMenuLabel>Notificações</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {notificacoes.length > 0 ? (
-              notificacoes.map((notif) => (
-                <DropdownMenuItem key={notif.id} className="cursor-pointer">
-                  <div className="flex flex-col gap-1">
-                    <span className="font-medium">{notif.titulo}</span>
-                    <span className="text-xs text-muted-foreground">{notif.mensagem}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {new Date(notif.data).toLocaleDateString()}
-                    </span>
-                  </div>
-                </DropdownMenuItem>
-              ))
-            ) : (
-              <div className="p-4 text-center text-muted-foreground">
-                Sem notificações
-              </div>
-            )}
+            <div className="p-4 text-center text-muted-foreground">
+              Sem notificações
+            </div>
           </DropdownMenuContent>
         </DropdownMenu>
 

@@ -26,10 +26,22 @@ export const usuarios: Usuario[] = [];
 // Relatórios
 export const relatorios: RelatorioMensal[] = [];
 
-// Util function
+// Dashboard data
 export const getDashboardData = () => ({
   totalContratos: 0,
   contratosAVencer: 0,
   totalFornecedores: 0,
   ordensPendentes: 0
 });
+
+// Notifications
+export type Notification = {
+  id: string;
+  titulo: string;
+  mensagem: string;
+  data: string;
+  lida: boolean;
+};
+
+export const notificacoes: Notification[] = [];
+
