@@ -7,12 +7,20 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { ItemForm } from "./ItemForm";
 import { ItemsList } from "./ItemsList";
+import { Contrato } from "@/types";
+
+interface NewItem {
+  descricao: string;
+  quantidade: string;
+  unidade: string;
+  valor_unitario: string;
+}
 
 interface AddItemsDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSuccess: () => void;
-  contratos: any[];
+  contratos: Pick<Contrato, 'id' | 'numero' | 'objeto'>[];
 }
 
 export const AddItemsDialog = ({ open, onOpenChange, onSuccess, contratos }: AddItemsDialogProps) => {

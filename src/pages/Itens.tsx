@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -7,14 +6,25 @@ import { supabase } from "@/integrations/supabase/client";
 import { SearchInput } from "@/components/itens/SearchInput";
 import { ItemsTable } from "@/components/itens/ItemsTable";
 import { AddItemsDialog } from "@/components/itens/AddItemsDialog";
+import { Item, Contrato } from "@/types";
+
+interface ItemWithContract extends Item {
+  contratos?: {
+    numero: string;
+    objeto: string;
+    fornecedores?: {
+      nome: string;
+    };
+  };
+}
 
 const Itens = () => {
   const { toast } = useToast();
-  const [itens, setItens] = useState<any[]>([]);
+  const [itens, setItens] = useState<ItemWithContract[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [contratos, setContratos] = useState<any[]>([]);
+  const [contratos, setContratos] = useState<Pick<Contrato, 'id' | 'numero' | 'objeto'>[]>([]);
 
   useEffect(() => {
     fetchItens();

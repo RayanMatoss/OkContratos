@@ -1,9 +1,19 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { formatCurrency } from "@/lib/utils";
+import { Item } from "@/types";
+
+interface ItemTableItem extends Item {
+  contratos?: {
+    numero: string;
+    fornecedores?: {
+      nome: string;
+    };
+  };
+}
 
 interface ItemsTableProps {
-  items: any[];
+  items: ItemTableItem[];
   loading: boolean;
 }
 

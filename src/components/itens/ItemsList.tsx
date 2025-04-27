@@ -2,7 +2,7 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { formatCurrency } from "@/lib/utils";
 
-interface Item {
+interface NewItem {
   descricao: string;
   quantidade: string;
   unidade: string;
@@ -10,7 +10,7 @@ interface Item {
 }
 
 interface ItemsListProps {
-  items: Item[];
+  items: NewItem[];
 }
 
 export const ItemsList = ({ items }: ItemsListProps) => {

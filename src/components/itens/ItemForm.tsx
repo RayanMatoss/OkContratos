@@ -5,17 +5,19 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
 
+interface NewItem {
+  descricao: string;
+  quantidade: string;
+  unidade: string;
+  valor_unitario: string;
+}
+
 interface ItemFormProps {
-  onAdd: (item: {
-    descricao: string;
-    quantidade: string;
-    unidade: string;
-    valor_unitario: string;
-  }) => void;
+  onAdd: (item: NewItem) => void;
 }
 
 export const ItemForm = ({ onAdd }: ItemFormProps) => {
-  const [item, setItem] = useState({
+  const [item, setItem] = useState<NewItem>({
     descricao: "",
     quantidade: "",
     unidade: "",
