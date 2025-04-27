@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,6 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Plus, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { ItemForm } from "@/components/itens/ItemForm";
+import { ItemsList } from "@/components/itens/ItemsList";
 
 const Itens = () => {
   const { toast } = useToast();
@@ -16,14 +17,8 @@ const Itens = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [loading, setLoading] = useState(true);
   const [contratos, setContratos] = useState<any[]>([]);
-
-  const [newItem, setNewItem] = useState({
-    contrato_id: "",
-    descricao: "",
-    quantidade: "",
-    unidade: "",
-    valor_unitario: ""
-  });
+  const [selectedContrato, setSelectedContrato] = useState("");
+  const [itemsList, setItemsList] = useState<any[]>([]);
 
   useEffect(() => {
     fetchItens();
@@ -78,35 +73,42 @@ const Itens = () => {
     }
   }
 
-  const handleAddItem = async () => {
-    try {
-      const itemToAdd = {
-        contrato_id: newItem.contrato_id,
-        descricao: newItem.descricao,
-        quantidade: parseFloat(newItem.quantidade),
-        unidade: newItem.unidade,
-        valor_unitario: parseFloat(newItem.valor_unitario),
-        quantidade_consumida: 0
-      };
+  const handleAddItem = (newItem: any) => {
+    setItemsList([...itemsList, newItem]);
+  };
 
-      const { error } = await supabase.from('itens').insert([itemToAdd]);
+  const handleSubmitItems = async () => {
+    if (!selectedContrato || itemsList.length === 0) {
+      toast({
+        title: "Erro",
+        description: "Selecione um contrato e adicione pelo menos um item",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const itemsToAdd = itemsList.map(item => ({
+        contrato_id: selectedContrato,
+        descricao: item.descricao,
+        quantidade: parseFloat(item.quantidade),
+        unidade: item.unidade,
+        valor_unitario: parseFloat(item.valor_unitario),
+        quantidade_consumida: 0
+      }));
+
+      const { error } = await supabase.from('itens').insert(itemsToAdd);
 
       if (error) throw error;
 
       setShowAddDialog(false);
       toast({
         title: "Sucesso",
-        description: "Item adicionado com sucesso."
+        description: "Itens adicionados com sucesso."
       });
       
-      // Reset form and refresh data
-      setNewItem({
-        contrato_id: "",
-        descricao: "",
-        quantidade: "",
-        unidade: "",
-        valor_unitario: ""
-      });
+      setItemsList([]);
+      setSelectedContrato("");
       fetchItens();
     } catch (error: any) {
       toast({
@@ -206,7 +208,7 @@ const Itens = () => {
       <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
         <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>
-            <DialogTitle>Adicionar Novo Item</DialogTitle>
+            <DialogTitle>Adicionar Novos Itens</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="space-y-2">
@@ -214,8 +216,8 @@ const Itens = () => {
               <select
                 id="contrato"
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                value={newItem.contrato_id}
-                onChange={(e) => setNewItem({ ...newItem, contrato_id: e.target.value })}
+                value={selectedContrato}
+                onChange={(e) => setSelectedContrato(e.target.value)}
               >
                 <option value="">Selecione um contrato</option>
                 {contratos.map(contrato => (
@@ -225,53 +227,20 @@ const Itens = () => {
                 ))}
               </select>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="descricao">Descrição do Item</Label>
-              <Input
-                id="descricao"
-                placeholder="Ex: Combustível Gasolina Comum"
-                value={newItem.descricao}
-                onChange={(e) => setNewItem({ ...newItem, descricao: e.target.value })}
-              />
-            </div>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="quantidade">Quantidade</Label>
-                <Input
-                  id="quantidade"
-                  type="number"
-                  placeholder="Ex: 1000"
-                  value={newItem.quantidade}
-                  onChange={(e) => setNewItem({ ...newItem, quantidade: e.target.value })}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="unidade">Unidade</Label>
-                <Input
-                  id="unidade"
-                  placeholder="Ex: Litro"
-                  value={newItem.unidade}
-                  onChange={(e) => setNewItem({ ...newItem, unidade: e.target.value })}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="valor">Valor Unitário</Label>
-                <Input
-                  id="valor"
-                  type="number"
-                  step="0.01"
-                  placeholder="Ex: 5.79"
-                  value={newItem.valor_unitario}
-                  onChange={(e) => setNewItem({ ...newItem, valor_unitario: e.target.value })}
-                />
-              </div>
-            </div>
+            
+            <ItemForm onAdd={handleAddItem} />
+            
+            <ItemsList items={itemsList} />
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowAddDialog(false)}>
+            <Button variant="outline" onClick={() => {
+              setShowAddDialog(false);
+              setItemsList([]);
+              setSelectedContrato("");
+            }}>
               Cancelar
             </Button>
-            <Button onClick={handleAddItem}>Adicionar Item</Button>
+            <Button onClick={handleSubmitItems}>Salvar Itens</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
