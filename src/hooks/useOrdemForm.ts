@@ -6,6 +6,7 @@ import { Item } from "@/types";
 
 export const useOrdemForm = (onSuccess?: () => void) => {
   const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState<Date | undefined>(new Date());
   const [numero, setNumero] = useState("");
   const [contratos, setContratos] = useState<any[]>([]);
@@ -73,6 +74,7 @@ export const useOrdemForm = (onSuccess?: () => void) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (!contratoId || !data || !numero) {
       toast({
         title: "Erro",
@@ -82,6 +84,7 @@ export const useOrdemForm = (onSuccess?: () => void) => {
       return;
     }
 
+    setLoading(true);
     try {
       const { data: ordemData, error: ordemError } = await supabase
         .from("ordens")
@@ -121,6 +124,8 @@ export const useOrdemForm = (onSuccess?: () => void) => {
         description: error.message,
         variant: "destructive",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -135,6 +140,7 @@ export const useOrdemForm = (onSuccess?: () => void) => {
     setContratoId,
     selectedItems,
     setSelectedItems,
-    handleSubmit
+    handleSubmit,
+    loading
   };
 };

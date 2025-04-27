@@ -1,5 +1,4 @@
 
-import { Button } from "@/components/ui/button";
 import { FormSheet } from "@/components/ui/form-sheet";
 import OrdemFormFields from "./OrdemFormFields";
 import OrdemItemsSelection from "./OrdemItemsSelection";
@@ -29,7 +28,8 @@ export const AddOrdemForm = ({
     setContratoId,
     selectedItems,
     setSelectedItems,
-    handleSubmit
+    handleSubmit,
+    loading
   } = useOrdemForm(onSuccess);
 
   return (
@@ -39,6 +39,8 @@ export const AddOrdemForm = ({
       title="Nova Ordem de Fornecimento"
       description="Preencha os dados para criar uma nova ordem de fornecimento"
       onSubmit={handleSubmit}
+      loading={loading}
+      submitLabel="Criar Ordem"
     >
       <div className="space-y-6">
         <OrdemFormFields

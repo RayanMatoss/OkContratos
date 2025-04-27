@@ -30,10 +30,15 @@ export function FormSheet({
   submitLabel = "Salvar",
   loading = false
 }: FormSheetProps) {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit(e);
+  };
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="w-full sm:max-w-[540px] overflow-y-auto" side="right">
-        <form onSubmit={onSubmit} className="h-full flex flex-col">
+        <form onSubmit={handleSubmit} className="h-full flex flex-col">
           <SheetHeader className="space-y-2">
             <SheetTitle>{title}</SheetTitle>
             {description && <SheetDescription>{description}</SheetDescription>}
@@ -48,6 +53,7 @@ export function FormSheet({
               variant="outline" 
               type="button"
               onClick={() => onOpenChange(false)}
+              disabled={loading}
             >
               Cancelar
             </Button>
