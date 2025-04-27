@@ -3,7 +3,15 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { formatCurrency } from "@/lib/utils";
 import { Item } from "@/types";
 
-interface ItemTableItem extends Item {
+// This interface matches what comes from the database
+interface ItemTableResponse {
+  id: string;
+  contrato_id: string;
+  descricao: string;
+  quantidade: number;
+  quantidade_consumida: number;
+  unidade: string;
+  valor_unitario: number;
   contratos?: {
     numero: string;
     fornecedores?: {
@@ -13,7 +21,7 @@ interface ItemTableItem extends Item {
 }
 
 interface ItemsTableProps {
-  items: ItemTableItem[];
+  items: ItemTableResponse[];
   loading: boolean;
 }
 

@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -6,9 +7,18 @@ import { supabase } from "@/integrations/supabase/client";
 import { SearchInput } from "@/components/itens/SearchInput";
 import { ItemsTable } from "@/components/itens/ItemsTable";
 import { AddItemsDialog } from "@/components/itens/AddItemsDialog";
-import { Item, Contrato } from "@/types";
+import { Contrato } from "@/types";
 
-interface ItemWithContract extends Item {
+// This interface matches what comes from the database
+interface ItemResponse {
+  id: string;
+  contrato_id: string;
+  created_at: string;
+  descricao: string;
+  quantidade: number;
+  quantidade_consumida: number;
+  unidade: string;
+  valor_unitario: number;
   contratos?: {
     numero: string;
     objeto: string;
@@ -18,13 +28,15 @@ interface ItemWithContract extends Item {
   };
 }
 
+type ContratoBasic = Pick<Contrato, 'id' | 'numero' | 'objeto'>;
+
 const Itens = () => {
   const { toast } = useToast();
-  const [itens, setItens] = useState<ItemWithContract[]>([]);
+  const [itens, setItens] = useState<ItemResponse[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [contratos, setContratos] = useState<Pick<Contrato, 'id' | 'numero' | 'objeto'>[]>([]);
+  const [contratos, setContratos] = useState<ContratoBasic[]>([]);
 
   useEffect(() => {
     fetchItens();
