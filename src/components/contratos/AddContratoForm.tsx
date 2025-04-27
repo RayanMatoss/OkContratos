@@ -1,9 +1,11 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import DatePickerField from "./DatePickerField";
 import ContratoBasicInfo from "./ContratoBasicInfo";
 import { FormSheet } from "@/components/ui/form-sheet";
+import { Fornecedor } from "@/types";
 
 type AddContratoFormProps = {
   open: boolean;
@@ -19,6 +21,7 @@ export const AddContratoForm = ({
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [formStep, setFormStep] = useState<"basic" | "dates" | "items">("basic");
+  const [fornecedores, setFornecedores] = useState<Fornecedor[]>([]);
   const [formData, setFormData] = useState({
     numero: "",
     objeto: "",
@@ -28,6 +31,44 @@ export const AddContratoForm = ({
     data_inicio: new Date(),
     data_termino: new Date()
   });
+
+  useEffect(() => {
+    if (open) {
+      fetchFornecedores();
+    }
+  }, [open]);
+
+  const formatFornecedor = (fornecedor: any): Fornecedor => {
+    return {
+      id: fornecedor.id,
+      nome: fornecedor.nome,
+      cnpj: fornecedor.cnpj,
+      email: fornecedor.email || "",
+      telefone: fornecedor.telefone || "",
+      endereco: fornecedor.endereco || "",
+      createdAt: new Date(fornecedor.created_at),
+    };
+  };
+
+  const fetchFornecedores = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("fornecedores")
+        .select("*")
+        .order("nome");
+
+      if (error) throw error;
+
+      const formattedFornecedores = data.map(formatFornecedor);
+      setFornecedores(formattedFornecedores);
+    } catch (error: any) {
+      toast({
+        title: "Erro ao carregar fornecedores",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+  };
 
   const handleNextStep = () => {
     if (formStep === "basic") {
@@ -96,6 +137,7 @@ export const AddContratoForm = ({
           fundoMunicipal={formData.fundo_municipal as any}
           objeto={formData.objeto}
           valor={formData.valor}
+          fornecedores={fornecedores}
           onFieldChange={(field, value) => setFormData({
             ...formData,
             [field]: value

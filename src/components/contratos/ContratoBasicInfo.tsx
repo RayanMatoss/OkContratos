@@ -2,8 +2,7 @@
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { fornecedores } from "@/data/mockData";
-import { FundoMunicipal } from "@/types";
+import { FundoMunicipal, Fornecedor } from "@/types";
 
 interface ContratoBasicInfoProps {
   numero: string;
@@ -11,6 +10,7 @@ interface ContratoBasicInfoProps {
   fundoMunicipal: FundoMunicipal;
   objeto: string;
   valor: string;
+  fornecedores: Fornecedor[];
   onFieldChange: (field: string, value: string) => void;
 }
 
@@ -20,6 +20,7 @@ const ContratoBasicInfo = ({
   fundoMunicipal,
   objeto,
   valor,
+  fornecedores,
   onFieldChange
 }: ContratoBasicInfoProps) => {
   return (
