@@ -1,4 +1,3 @@
-
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,6 +15,7 @@ interface OrdemFormFieldsProps {
   contratoId: string;
   setContratoId: (id: string) => void;
   contratos: any[];
+  loadingNumero?: boolean;
 }
 
 const OrdemFormFields = ({
@@ -26,6 +26,7 @@ const OrdemFormFields = ({
   contratoId,
   setContratoId,
   contratos,
+  loadingNumero = false
 }: OrdemFormFieldsProps) => {
   return (
     <div className="space-y-4">
@@ -33,10 +34,14 @@ const OrdemFormFields = ({
         <Label htmlFor="numero">Número da OF</Label>
         <Input
           id="numero"
-          placeholder="Digite o número da ordem"
+          placeholder="Carregando número..."
           value={numero}
           onChange={(e) => setNumero(e.target.value)}
+          disabled={loadingNumero}
         />
+        <p className="text-xs text-muted-foreground">
+          Formato: 000/AAAA (ex: 001/2025)
+        </p>
       </div>
 
       <div className="space-y-2">

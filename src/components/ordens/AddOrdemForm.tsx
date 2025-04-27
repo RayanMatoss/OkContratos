@@ -29,7 +29,8 @@ export const AddOrdemForm = ({
     selectedItems,
     setSelectedItems,
     handleSubmit,
-    loading
+    loading,
+    loadingNumero
   } = useOrdemForm(onSuccess);
 
   return (
@@ -51,6 +52,7 @@ export const AddOrdemForm = ({
           contratoId={contratoId}
           setContratoId={setContratoId}
           contratos={contratos}
+          loadingNumero={loadingNumero}
         />
         
         {contratoId && (

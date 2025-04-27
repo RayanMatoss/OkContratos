@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,18 +12,31 @@ export const useOrdemForm = (onSuccess?: () => void) => {
   const [contratoItems, setContratoItems] = useState<Item[]>([]);
   const [contratoId, setContratoId] = useState("");
   const [selectedItems, setSelectedItems] = useState<{itemId: string; quantidade: number}[]>([]);
+  const [loadingNumero, setLoadingNumero] = useState(true);
 
   useEffect(() => {
     fetchContratos();
+    fetchNextNumero();
   }, []);
 
-  useEffect(() => {
-    if (contratoId) {
-      fetchContratoItems();
-    } else {
-      setContratoItems([]);
+  const fetchNextNumero = async () => {
+    setLoadingNumero(true);
+    try {
+      const { data, error } = await supabase
+        .rpc('get_next_ordem_numero');
+
+      if (error) throw error;
+      setNumero(data);
+    } catch (error: any) {
+      toast({
+        title: "Erro",
+        description: "Erro ao gerar próximo número da ordem",
+        variant: "destructive",
+      });
+    } finally {
+      setLoadingNumero(false);
     }
-  }, [contratoId]);
+  };
 
   const fetchContratos = async () => {
     const { data, error } = await supabase
@@ -96,7 +108,18 @@ export const useOrdemForm = (onSuccess?: () => void) => {
         .select("id")
         .single();
 
-      if (ordemError) throw ordemError;
+      if (ordemError) {
+        if (ordemError.code === '23505') { // Unique violation
+          toast({
+            title: "Número já existe",
+            description: "Este número de ordem já está em uso. Um novo número será sugerido.",
+            variant: "destructive",
+          });
+          await fetchNextNumero();
+          return;
+        }
+        throw ordemError;
+      }
 
       if (selectedItems.length > 0) {
         const itensConsumidos = selectedItems.map(item => ({
@@ -141,6 +164,7 @@ export const useOrdemForm = (onSuccess?: () => void) => {
     selectedItems,
     setSelectedItems,
     handleSubmit,
-    loading
+    loading,
+    loadingNumero
   };
 };
