@@ -48,12 +48,12 @@ const Ordens = () => {
 
       <OrdensTable filteredOrdens={filteredOrdens} />
       
-      {showAddDialog && (
-        <AddOrdemForm 
-          onCancel={() => setShowAddDialog(false)}
-          onSuccess={() => setShowAddDialog(false)}
-        />
-      )}
+      <AddOrdemForm 
+        open={showAddDialog}
+        onOpenChange={setShowAddDialog}
+        onCancel={() => setShowAddDialog(false)}
+        onSuccess={() => setShowAddDialog(false)}
+      />
     </div>
   );
 };
