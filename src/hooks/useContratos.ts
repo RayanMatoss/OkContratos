@@ -64,6 +64,30 @@ export const useContratos = () => {
     }
   };
 
+  const deleteContrato = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('contratos')
+        .delete()
+        .eq('id', id)
+        .eq('status', 'Em Aprovação');
+
+      if (error) throw error;
+
+      await fetchContratos();
+      toast({
+        title: "Contrato excluído",
+        description: "O contrato foi excluído com sucesso",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Erro ao excluir contrato",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
   useEffect(() => {
     fetchContratos();
 
@@ -87,5 +111,5 @@ export const useContratos = () => {
     };
   }, []);
 
-  return { contratos, loading, fetchContratos };
+  return { contratos, loading, fetchContratos, deleteContrato };
 };

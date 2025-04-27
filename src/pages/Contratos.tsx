@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,12 +8,11 @@ import ContratosTable from "@/components/contratos/ContratosTable";
 import { useContratos } from "@/hooks/useContratos";
 import { useToast } from "@/hooks/use-toast";
 import { Contrato } from "@/types";
-import { supabase } from "@/integrations/supabase/client";
 
 const Contratos = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddForm, setShowAddForm] = useState(false);
-  const { contratos, loading, fetchContratos } = useContratos();
+  const { contratos, loading, deleteContrato } = useContratos();
   const { toast } = useToast();
 
   const filteredContratos = contratos.filter((contrato) => {
@@ -31,28 +31,7 @@ const Contratos = () => {
   };
 
   const handleDelete = async (contrato: Contrato) => {
-    try {
-      const { error } = await supabase
-        .from('contratos')
-        .delete()
-        .eq('id', contrato.id)
-        .eq('status', 'Em Aprovação');
-
-      if (error) throw error;
-
-      await fetchContratos();
-      
-      toast({
-        title: "Contrato excluído",
-        description: "O contrato foi excluído com sucesso",
-      });
-    } catch (error: any) {
-      toast({
-        title: "Erro ao excluir contrato",
-        description: error.message,
-        variant: "destructive",
-      });
-    }
+    await deleteContrato(contrato.id);
   };
 
   return (
