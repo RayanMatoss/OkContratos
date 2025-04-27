@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
@@ -72,7 +71,17 @@ export const AddOrdemForm = ({ onSuccess, onCancel }: AddOrdemFormProps) => {
       return;
     }
 
-    setContratoItems(data as Item[] || []);
+    const transformedItems: Item[] = (data || []).map(item => ({
+      id: item.id,
+      contratoId: item.contrato_id,
+      descricao: item.descricao,
+      quantidade: item.quantidade,
+      valorUnitario: item.valor_unitario,
+      unidade: item.unidade,
+      quantidadeConsumida: item.quantidade_consumida
+    }));
+
+    setContratoItems(transformedItems);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

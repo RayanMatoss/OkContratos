@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Search } from "lucide-react";
 import OrdensTable from "@/components/ordens/OrdensTable";
-import AddOrdemForm from "@/components/ordens/AddOrdemForm";
+import { AddOrdemForm } from "@/components/ordens/AddOrdemForm";
 import { ordens } from "@/data/mockData";
 
 const Ordens = () => {
@@ -48,10 +48,12 @@ const Ordens = () => {
 
       <OrdensTable filteredOrdens={filteredOrdens} />
       
-      <AddOrdemForm 
-        showDialog={showAddDialog} 
-        onOpenChange={setShowAddDialog} 
-      />
+      {showAddDialog && (
+        <AddOrdemForm 
+          onCancel={() => setShowAddDialog(false)}
+          onSuccess={() => setShowAddDialog(false)}
+        />
+      )}
     </div>
   );
 };

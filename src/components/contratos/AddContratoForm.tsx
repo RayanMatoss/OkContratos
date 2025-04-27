@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { DatePickerField } from "./DatePickerField";
-import { ContratoBasicInfo } from "./ContratoBasicInfo";
+import DatePickerField from "./DatePickerField";
+import ContratoBasicInfo from "./ContratoBasicInfo";
 
 type AddContratoFormProps = {
   onClose: () => void;
@@ -75,7 +75,16 @@ export const AddContratoForm = ({ onClose, onSuccess }: AddContratoFormProps) =>
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {formStep === "basic" && (
-        <ContratoBasicInfo formData={formData} setFormData={setFormData} />
+        <ContratoBasicInfo 
+          numero={formData.numero}
+          fornecedorId={formData.fornecedor_id}
+          fundoMunicipal={formData.fundo_municipal as any}
+          objeto={formData.objeto}
+          valor={formData.valor}
+          onFieldChange={(field, value) => 
+            setFormData({ ...formData, [field]: value })
+          }
+        />
       )}
 
       {formStep === "dates" && (
@@ -83,14 +92,14 @@ export const AddContratoForm = ({ onClose, onSuccess }: AddContratoFormProps) =>
           <DatePickerField
             label="Data de Início"
             date={formData.data_inicio}
-            onSelect={(date) =>
+            onDateChange={(date) =>
               setFormData({ ...formData, data_inicio: date || new Date() })
             }
           />
           <DatePickerField
             label="Data de Término"
             date={formData.data_termino}
-            onSelect={(date) =>
+            onDateChange={(date) =>
               setFormData({ ...formData, data_termino: date || new Date() })
             }
           />
@@ -128,3 +137,5 @@ export const AddContratoForm = ({ onClose, onSuccess }: AddContratoFormProps) =>
     </form>
   );
 };
+
+export default AddContratoForm;

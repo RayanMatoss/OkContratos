@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Search } from "lucide-react";
 import { contratos } from "@/data/mockData";
-import AddContratoForm from "@/components/contratos/AddContratoForm";
+import { AddContratoForm } from "@/components/contratos/AddContratoForm";
 import ContratosTable from "@/components/contratos/ContratosTable";
 
 const Contratos = () => {
@@ -50,8 +50,8 @@ const Contratos = () => {
       <ContratosTable contratos={filteredContratos} />
 
       <AddContratoForm
-        showDialog={showAddDialog}
-        onCloseDialog={() => setShowAddDialog(false)}
+        onClose={() => setShowAddDialog(false)}
+        onSuccess={() => setShowAddDialog(false)}
       />
     </div>
   );
