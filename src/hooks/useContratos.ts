@@ -35,6 +35,7 @@ export const useContratos = () => {
         dataTermino: new Date(contrato.data_termino),
         fornecedorId: contrato.fornecedor_id,
         fundoMunicipal: contrato.fundo_municipal,
+        createdAt: new Date(contrato.created_at),
         itens: []
       })));
     } catch (error: any) {
