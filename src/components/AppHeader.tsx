@@ -2,18 +2,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Bell, Search, Menu, LogOut } from "lucide-react";
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuLabel, 
-  DropdownMenuSeparator, 
-  DropdownMenuTrigger 
-} from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
+import { Menu, LogOut } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { NotificationBell } from "@/components/notifications/NotificationBell";
 
 interface AppHeaderProps {
   onToggleSidebar: () => void;
@@ -21,7 +13,6 @@ interface AppHeaderProps {
 }
 
 const AppHeader = ({ onToggleSidebar, isSidebarCollapsed }: AppHeaderProps) => {
-  const [showSearch, setShowSearch] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -39,10 +30,9 @@ const AppHeader = ({ onToggleSidebar, isSidebarCollapsed }: AppHeaderProps) => {
   };
 
   return (
-    <header className={cn(
-      "h-16 fixed top-0 right-0 bg-background border-b border-border z-10 flex items-center justify-between px-4",
+    <header className={`h-16 fixed top-0 right-0 bg-background border-b border-border z-10 flex items-center justify-between px-4 ${
       isSidebarCollapsed ? "left-16" : "left-64"
-    )}>
+    }`}>
       <div className="flex items-center">
         <Button
           variant="ghost"
@@ -55,41 +45,8 @@ const AppHeader = ({ onToggleSidebar, isSidebarCollapsed }: AppHeaderProps) => {
       </div>
 
       <div className="flex items-center gap-2">
-        {showSearch && (
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Pesquisar..."
-              className="h-9 rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-              autoFocus
-              onBlur={() => setShowSearch(false)}
-            />
-          </div>
-        )}
+        <NotificationBell />
         
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          onClick={() => setShowSearch(!showSearch)}
-        >
-          <Search size={20} />
-        </Button>
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="relative">
-              <Bell size={20} />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-80">
-            <DropdownMenuLabel>Notificações</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <div className="p-4 text-center text-muted-foreground">
-              Sem notificações
-            </div>
-          </DropdownMenuContent>
-        </DropdownMenu>
-
         <Button
           variant="ghost"
           size="icon"
