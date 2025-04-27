@@ -64,7 +64,13 @@ export const ItemsTable = ({ items, loading, onEdit, onDelete }: ItemsTableProps
                     onEdit={() => onEdit?.(item)}
                     onDelete={() => onDelete?.(item)}
                     showDelete={item.quantidade_consumida === 0}
-                    showEdit={item.quantidade_consumida === 0}
+                    showEdit={true}
+                    disableDelete={item.quantidade_consumida > 0}
+                    deleteTooltip={
+                      item.quantidade_consumida > 0
+                        ? "Não é possível excluir um item que já foi consumido"
+                        : undefined
+                    }
                   />
                 </TableCell>
               </TableRow>

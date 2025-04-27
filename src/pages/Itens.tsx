@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { SearchInput } from "@/components/itens/SearchInput";
 import { ItemsTable } from "@/components/itens/ItemsTable";
 import { AddItemsDialog } from "@/components/itens/AddItemsDialog";
+import { EditItemDialog } from "@/components/itens/EditItemDialog";
 import { Contrato } from "@/types";
 
 interface ItemResponse {
@@ -32,6 +33,7 @@ const Itens = () => {
   const [itens, setItens] = useState<ItemResponse[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddDialog, setShowAddDialog] = useState(false);
+  const [editingItem, setEditingItem] = useState<ItemResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [contratos, setContratos] = useState<Contrato[]>([]);
 
@@ -114,10 +116,15 @@ const Itens = () => {
   });
 
   const handleEdit = (item: ItemResponse) => {
-    toast({
-      title: "Em breve",
-      description: "A edição de itens será implementada em breve",
-    });
+    if (item.quantidade_consumida > 0) {
+      toast({
+        title: "Edição não permitida",
+        description: "Não é possível editar um item que já foi consumido",
+        variant: "destructive"
+      });
+      return;
+    }
+    setEditingItem(item);
   };
 
   const handleDelete = async (item: ItemResponse) => {
@@ -183,6 +190,15 @@ const Itens = () => {
         }}
         contratos={contratos}
       />
+
+      {editingItem && (
+        <EditItemDialog
+          open={!!editingItem}
+          onOpenChange={(open) => !open && setEditingItem(null)}
+          onSuccess={fetchItens}
+          item={editingItem}
+        />
+      )}
     </div>
   );
 };
