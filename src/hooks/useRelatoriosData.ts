@@ -38,7 +38,14 @@ export const useRelatoriosData = () => {
     ordens: r.valorTotalOrdens / 1000,
   }));
 
+  // Get the current date to use as fallback
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1; // JavaScript months are 0-indexed
+  const currentYear = currentDate.getFullYear();
+
   const ultimoRelatorio = relatoriosFiltrados[0] || {
+    mes: currentMonth,
+    ano: currentYear,
     totalContratos: 0,
     contratosVencidos: 0,
     contratosAtivos: 0,
