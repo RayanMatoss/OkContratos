@@ -5,6 +5,12 @@ import { format } from "date-fns";
 import { OrdemFornecimento } from "@/types";
 import { Loader } from "lucide-react";
 import { TableActions } from "@/components/ui/table-actions";
+import { 
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface OrdensTableProps {
   filteredOrdens: OrdemFornecimento[];
@@ -42,27 +48,46 @@ const OrdensTable = ({
         </TableHeader>
         <TableBody>
           {filteredOrdens.length > 0 ? (
-            filteredOrdens.map((ordem) => (
-              <TableRow key={ordem.id}>
-                <TableCell className="font-medium">{ordem.numero}</TableCell>
-                <TableCell>{ordem.contrato?.numero}</TableCell>
-                <TableCell>
-                  {format(new Date(ordem.dataEmissao), 'dd/MM/yyyy')}
-                </TableCell>
-                <TableCell>{ordem.contrato?.fornecedor?.nome}</TableCell>
-                <TableCell>
-                  <StatusBadge status={ordem.status} />
-                </TableCell>
-                <TableCell className="text-right">
-                  <TableActions
-                    onEdit={() => onEdit(ordem)}
-                    onDelete={() => onDelete(ordem)}
-                    showEdit={ordem.status === "Pendente"}
-                    showDelete={ordem.status === "Pendente"}
-                  />
-                </TableCell>
-              </TableRow>
-            ))
+            filteredOrdens.map((ordem) => {
+              const canEdit = ordem.status === "Pendente";
+              const canDelete = ordem.status === "Pendente";
+              
+              return (
+                <TableRow key={ordem.id}>
+                  <TableCell className="font-medium">{ordem.numero}</TableCell>
+                  <TableCell>{ordem.contrato?.numero}</TableCell>
+                  <TableCell>
+                    {format(new Date(ordem.dataEmissao), 'dd/MM/yyyy')}
+                  </TableCell>
+                  <TableCell>{ordem.contrato?.fornecedor?.nome}</TableCell>
+                  <TableCell>
+                    <StatusBadge status={ordem.status} />
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <TooltipProvider>
+                      <TableActions
+                        onEdit={() => onEdit(ordem)}
+                        onDelete={() => onDelete(ordem)}
+                        showEdit={true}
+                        showDelete={true}
+                        disableDelete={!canDelete}
+                        disableEdit={!canEdit}
+                        deleteTooltip={
+                          !canDelete 
+                            ? "Não é possível excluir uma ordem que não está com status Pendente" 
+                            : undefined
+                        }
+                        editTooltip={
+                          !canEdit 
+                            ? "Não é possível editar uma ordem que não está com status Pendente" 
+                            : undefined
+                        }
+                      />
+                    </TooltipProvider>
+                  </TableCell>
+                </TableRow>
+              );
+            })
           ) : (
             <TableRow>
               <TableCell colSpan={6} className="h-24 text-center">

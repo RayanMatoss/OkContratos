@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Search } from "lucide-react";
 import OrdensTable from "@/components/ordens/OrdensTable";
-import { AddOrdemForm } from "@/components/ordens/AddOrdemForm";
+import { OrdemFormDialog } from "@/components/ordens/OrdemFormDialog";
 import { useOrdens } from "@/hooks/useOrdens";
 import { useToast } from "@/hooks/use-toast";
 import { OrdemFornecimento } from "@/types";
@@ -12,7 +12,9 @@ import { supabase } from "@/integrations/supabase/client";
 
 const Ordens = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [showAddDialog, setShowAddDialog] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const [editingOrdem, setEditingOrdem] = useState<OrdemFornecimento | undefined>();
+  const [formMode, setFormMode] = useState<'create' | 'edit'>('create');
   const { ordens, loading, refetch } = useOrdens();
   const { toast } = useToast();
 
@@ -23,12 +25,25 @@ const Ordens = () => {
     );
   });
 
+  const handleAdd = () => {
+    setFormMode('create');
+    setEditingOrdem(undefined);
+    setShowForm(true);
+  };
+
   const handleEdit = (ordem: OrdemFornecimento) => {
-    // To be implemented in the next step
-    toast({
-      title: "Em breve",
-      description: "A edição de ordens será implementada em breve",
-    });
+    if (ordem.status !== "Pendente") {
+      toast({
+        title: "Não é possível editar",
+        description: "Apenas ordens com status 'Pendente' podem ser editadas",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    setFormMode('edit');
+    setEditingOrdem(ordem);
+    setShowForm(true);
   };
 
   const handleDelete = async (ordem: OrdemFornecimento) => {
@@ -56,6 +71,12 @@ const Ordens = () => {
     }
   };
 
+  const handleFormSuccess = () => {
+    setShowForm(false);
+    setEditingOrdem(undefined);
+    refetch();
+  };
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between">
@@ -65,7 +86,7 @@ const Ordens = () => {
             Gerenciamento das ordens de fornecimento e serviço
           </p>
         </div>
-        <Button onClick={() => setShowAddDialog(true)} className="flex items-center gap-2">
+        <Button onClick={handleAdd} className="flex items-center gap-2">
           <Plus size={16} />
           <span>Nova Ordem</span>
         </Button>
@@ -91,14 +112,12 @@ const Ordens = () => {
         onDelete={handleDelete}
       />
       
-      <AddOrdemForm 
-        open={showAddDialog}
-        onOpenChange={setShowAddDialog}
-        onCancel={() => setShowAddDialog(false)}
-        onSuccess={() => {
-          setShowAddDialog(false);
-          refetch();
-        }}
+      <OrdemFormDialog 
+        open={showForm}
+        onOpenChange={setShowForm}
+        onSuccess={handleFormSuccess}
+        ordem={editingOrdem}
+        mode={formMode}
       />
     </div>
   );

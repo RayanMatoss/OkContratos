@@ -1,3 +1,4 @@
+
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,6 +17,7 @@ interface OrdemFormFieldsProps {
   setContratoId: (id: string) => void;
   contratos: any[];
   loadingNumero?: boolean;
+  mode?: 'create' | 'edit';
 }
 
 const OrdemFormFields = ({
@@ -26,7 +28,8 @@ const OrdemFormFields = ({
   contratoId,
   setContratoId,
   contratos,
-  loadingNumero = false
+  loadingNumero = false,
+  mode = 'create'
 }: OrdemFormFieldsProps) => {
   return (
     <div className="space-y-4">
@@ -37,11 +40,19 @@ const OrdemFormFields = ({
           placeholder="Carregando número..."
           value={numero}
           onChange={(e) => setNumero(e.target.value)}
-          disabled={loadingNumero}
+          disabled={loadingNumero || mode === 'edit'} // Disable in edit mode
+          className={mode === 'edit' ? "bg-muted" : ""}
         />
-        <p className="text-xs text-muted-foreground">
-          Formato: 000/AAAA (ex: 001/2025)
-        </p>
+        {mode === 'create' && (
+          <p className="text-xs text-muted-foreground">
+            Formato: 000/AAAA (ex: 001/2025)
+          </p>
+        )}
+        {mode === 'edit' && (
+          <p className="text-xs text-muted-foreground">
+            O número da ordem não pode ser alterado após a criação
+          </p>
+        )}
       </div>
 
       <div className="space-y-2">
@@ -51,6 +62,7 @@ const OrdemFormFields = ({
           value={contratoId}
           onChange={(e) => setContratoId(e.target.value)}
           className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+          disabled={mode === 'edit'} // Disable in edit mode
         >
           <option value="">Selecione um contrato</option>
           {contratos.map((contrato) => (
@@ -59,6 +71,11 @@ const OrdemFormFields = ({
             </option>
           ))}
         </select>
+        {mode === 'edit' && (
+          <p className="text-xs text-muted-foreground">
+            O contrato não pode ser alterado após a criação da ordem
+          </p>
+        )}
       </div>
 
       <div className="space-y-2">

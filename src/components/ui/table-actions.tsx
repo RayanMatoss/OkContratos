@@ -25,7 +25,9 @@ interface TableActionsProps {
   showDelete?: boolean;
   showEdit?: boolean;
   disableDelete?: boolean;
+  disableEdit?: boolean;
   deleteTooltip?: string;
+  editTooltip?: string;
 }
 
 export const TableActions = ({ 
@@ -34,46 +36,58 @@ export const TableActions = ({
   showDelete = true,
   showEdit = true,
   disableDelete = false,
-  deleteTooltip
+  disableEdit = false,
+  deleteTooltip,
+  editTooltip
 }: TableActionsProps) => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   return (
     <div className="flex items-center gap-2">
       {showEdit && (
-        <Button 
-          variant="ghost" 
-          size="icon"
-          onClick={onEdit}
-        >
-          <Edit className="h-4 w-4" />
-          <span className="sr-only">Editar</span>
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div>
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={() => !disableEdit && onEdit()}
+                disabled={disableEdit}
+              >
+                <Edit className="h-4 w-4" />
+                <span className="sr-only">Editar</span>
+              </Button>
+            </div>
+          </TooltipTrigger>
+          {editTooltip && disableEdit && (
+            <TooltipContent>
+              <p>{editTooltip}</p>
+            </TooltipContent>
+          )}
+        </Tooltip>
       )}
       
       {showDelete && (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => !disableDelete && setShowDeleteDialog(true)}
-                  disabled={disableDelete}
-                >
-                  <Trash2 className="h-4 w-4 text-destructive" />
-                  <span className="sr-only">Excluir</span>
-                </Button>
-              </div>
-            </TooltipTrigger>
-            {deleteTooltip && disableDelete && (
-              <TooltipContent>
-                <p>{deleteTooltip}</p>
-              </TooltipContent>
-            )}
-          </Tooltip>
-        </TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => !disableDelete && setShowDeleteDialog(true)}
+                disabled={disableDelete}
+              >
+                <Trash2 className="h-4 w-4 text-destructive" />
+                <span className="sr-only">Excluir</span>
+              </Button>
+            </div>
+          </TooltipTrigger>
+          {deleteTooltip && disableDelete && (
+            <TooltipContent>
+              <p>{deleteTooltip}</p>
+            </TooltipContent>
+          )}
+        </Tooltip>
       )}
 
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
