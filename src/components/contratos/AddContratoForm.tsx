@@ -1,103 +1,130 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { FundoMunicipal } from "@/types";
-import DatePickerField from "./DatePickerField";
-import ContratoBasicInfo from "./ContratoBasicInfo";
+import { DatePickerField } from "./DatePickerField";
+import { ContratoBasicInfo } from "./ContratoBasicInfo";
 
-interface AddContratoFormProps {
-  showDialog: boolean;
-  onCloseDialog: () => void;
-}
+type AddContratoFormProps = {
+  onClose: () => void;
+  onSuccess?: () => void;
+};
 
-const AddContratoForm = ({ showDialog, onCloseDialog }: AddContratoFormProps) => {
-  const [newContrato, setNewContrato] = useState({
+export const AddContratoForm = ({ onClose, onSuccess }: AddContratoFormProps) => {
+  const { toast } = useToast();
+  const [formStep, setFormStep] = useState<"basic" | "dates" | "items">("basic");
+  const [formData, setFormData] = useState({
     numero: "",
-    fornecedorId: "",
-    fundoMunicipal: "Prefeitura" as FundoMunicipal,
     objeto: "",
+    fornecedor_id: "",
     valor: "",
-    dataInicio: new Date(),
-    dataTermino: new Date(),
+    fundo_municipal: "",
+    data_inicio: new Date(),
+    data_termino: new Date(),
   });
 
-  const handleFieldChange = (field: string, value: string) => {
-    setNewContrato((prev) => ({ ...prev, [field]: value }));
+  const handleNextStep = () => {
+    if (formStep === "basic") {
+      setFormStep("dates");
+    } else if (formStep === "dates") {
+      setFormStep("items");
+    }
   };
 
-  const handleAddContrato = async () => {
+  const handlePreviousStep = () => {
+    if (formStep === "dates") {
+      setFormStep("basic");
+    } else if (formStep === "items") {
+      setFormStep("dates");
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
-      const { error } = await supabase.from('contratos').insert([{
-        numero: newContrato.numero,
-        fornecedor_id: newContrato.fornecedorId,
-        fundo_municipal: newContrato.fundoMunicipal,
-        objeto: newContrato.objeto,
-        valor: parseFloat(newContrato.valor.replace(/[^\d.,]/g, '').replace(',', '.')),
-        data_inicio: newContrato.dataInicio.toISOString(),
-        data_termino: newContrato.dataTermino.toISOString()
-      }]);
+      const { error } = await supabase.from("contratos").insert({
+        numero: formData.numero,
+        objeto: formData.objeto,
+        fornecedor_id: formData.fornecedor_id,
+        valor: parseFloat(formData.valor),
+        fundo_municipal: formData.fundo_municipal,
+        data_inicio: formData.data_inicio.toISOString(),
+        data_termino: formData.data_termino.toISOString(),
+      });
 
       if (error) throw error;
 
-      onCloseDialog();
-      window.location.reload();
       toast({
-        description: "Contrato cadastrado com sucesso.",
+        title: "Contrato criado",
+        description: "O contrato foi criado com sucesso.",
       });
+
+      onSuccess?.();
+      onClose();
     } catch (error: any) {
       toast({
+        title: "Erro",
         description: error.message,
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
   return (
-    <Dialog open={showDialog} onOpenChange={onCloseDialog}>
-      <DialogContent className="sm:max-w-[600px]">
-        <DialogHeader>
-          <DialogTitle>Adicionar Novo Contrato</DialogTitle>
-        </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <ContratoBasicInfo
-            numero={newContrato.numero}
-            fornecedorId={newContrato.fornecedorId}
-            fundoMunicipal={newContrato.fundoMunicipal}
-            objeto={newContrato.objeto}
-            valor={newContrato.valor}
-            onFieldChange={handleFieldChange}
+    <form onSubmit={handleSubmit} className="space-y-6">
+      {formStep === "basic" && (
+        <ContratoBasicInfo formData={formData} setFormData={setFormData} />
+      )}
+
+      {formStep === "dates" && (
+        <div className="space-y-4">
+          <DatePickerField
+            label="Data de Início"
+            date={formData.data_inicio}
+            onSelect={(date) =>
+              setFormData({ ...formData, data_inicio: date || new Date() })
+            }
           />
-
-          <div className="grid grid-cols-2 gap-4">
-            <DatePickerField
-              date={newContrato.dataInicio}
-              onDateChange={(date) =>
-                setNewContrato((prev) => ({ ...prev, dataInicio: date }))
-              }
-              label="Data de Início"
-            />
-
-            <DatePickerField
-              date={newContrato.dataTermino}
-              onDateChange={(date) =>
-                setNewContrato((prev) => ({ ...prev, dataTermino: date }))
-              }
-              label="Data de Término"
-            />
-          </div>
+          <DatePickerField
+            label="Data de Término"
+            date={formData.data_termino}
+            onSelect={(date) =>
+              setFormData({ ...formData, data_termino: date || new Date() })
+            }
+          />
         </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={onCloseDialog}>
+      )}
+
+      {formStep === "items" && (
+        <div className="space-y-4">
+          <h3 className="text-lg font-medium">Itens do Contrato</h3>
+          <p className="text-sm text-muted-foreground">
+            Os itens podem ser adicionados após a criação do contrato.
+          </p>
+        </div>
+      )}
+
+      <div className="flex justify-between">
+        {formStep !== "basic" ? (
+          <Button type="button" variant="outline" onClick={handlePreviousStep}>
+            Voltar
+          </Button>
+        ) : (
+          <Button type="button" variant="outline" onClick={onClose}>
             Cancelar
           </Button>
-          <Button onClick={handleAddContrato}>Salvar</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        )}
+
+        {formStep !== "items" ? (
+          <Button type="button" onClick={handleNextStep}>
+            Avançar
+          </Button>
+        ) : (
+          <Button type="submit">Salvar Contrato</Button>
+        )}
+      </div>
+    </form>
   );
 };
-
-export default AddContratoForm;

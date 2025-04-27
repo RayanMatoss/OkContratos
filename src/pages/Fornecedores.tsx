@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,8 +7,8 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { Label } from "@/components/ui/label";
 import { fornecedores } from "@/data/mockData";
 import { Plus, Search } from "lucide-react";
-import { supabase } from "@/lib/supabase";
-import { toast } from "@/components/ui/toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const Fornecedores = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -19,6 +20,7 @@ const Fornecedores = () => {
     telefone: "",
     endereco: "",
   });
+  const { toast } = useToast();
 
   const filteredFornecedores = fornecedores.filter((fornecedor) => {
     return (
@@ -44,7 +46,7 @@ const Fornecedores = () => {
       window.location.reload(); // Temporary solution to refresh data
       toast({
         title: "Sucesso",
-        description: "Fornecedor cadastrado com sucesso.",
+        description: "Fornecedor cadastrado com sucesso."
       });
     } catch (error: any) {
       toast({
