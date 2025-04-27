@@ -1,7 +1,8 @@
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Bell, Search, Menu } from "lucide-react";
+import { Bell, Search, Menu, LogOut } from "lucide-react";
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -12,6 +13,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { notificacoes } from "@/data/mockData";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface AppHeaderProps {
   onToggleSidebar: () => void;
@@ -21,6 +24,21 @@ interface AppHeaderProps {
 const AppHeader = ({ onToggleSidebar, isSidebarCollapsed }: AppHeaderProps) => {
   const [showSearch, setShowSearch] = useState(false);
   const unreadNotifications = notificacoes.filter(n => !n.lida).length;
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      navigate('/auth');
+    } catch (error: any) {
+      toast({
+        title: "Erro ao sair",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+  };
 
   return (
     <header className={cn(
@@ -90,6 +108,15 @@ const AppHeader = ({ onToggleSidebar, isSidebarCollapsed }: AppHeaderProps) => {
             )}
           </DropdownMenuContent>
         </DropdownMenu>
+
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={handleLogout}
+          className="ml-2"
+        >
+          <LogOut size={20} />
+        </Button>
       </div>
     </header>
   );
