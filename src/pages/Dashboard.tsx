@@ -4,42 +4,20 @@ import DashboardCard from "@/components/DashboardCard";
 import ChartContainer from "@/components/ChartContainer";
 import StatisticsDonut from "@/components/StatisticsDonut";
 import BarChartComponent from "@/components/BarChartComponent";
-import { contratos, getDashboardData, relatorios, ordens } from "@/data/mockData";
 import StatusBadge from "@/components/StatusBadge";
+import { useDashboardData } from "@/hooks/useDashboardData";
+import { Loader } from "lucide-react";
 
 const Dashboard = () => {
-  const { totalContratos, contratosAVencer, totalFornecedores, ordensPendentes } = getDashboardData();
+  const { data, loading } = useDashboardData();
 
-  const statusContratosData = [
-    { 
-      name: "Ativos", 
-      value: contratos.filter(c => c.status === "Ativo").length, 
-      color: "#10B981" 
-    },
-    { 
-      name: "A Vencer", 
-      value: contratos.filter(c => c.status === "A Vencer").length, 
-      color: "#F59E0B"
-    },
-    { 
-      name: "Expirados", 
-      value: contratos.filter(c => c.status === "Expirado").length, 
-      color: "#EF4444"
-    },
-  ];
-
-  const ordensData = relatorios.map(r => ({
-    name: `${r.mes}/${r.ano}`,
-    value: r.ordensRealizadas,
-  }));
-
-  const contratosRecentes = [...contratos]
-    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-    .slice(0, 5);
-
-  const ordensPendentesLista = ordens
-    .filter(o => o.status === "Pendente")
-    .slice(0, 5);
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <Loader className="w-6 h-6 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -53,15 +31,15 @@ const Dashboard = () => {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         <DashboardCard
           title="Total de Contratos"
-          value={totalContratos}
+          value={data.totalContratos}
           icon={FileText}
-          description={totalContratos === 0 ? "Nenhum contrato registrado" : "Contratos registrados"}
+          description={data.totalContratos === 0 ? "Nenhum contrato registrado" : "Contratos registrados"}
           iconColor="text-primary"
         />
         
         <DashboardCard
           title="Contratos a Vencer"
-          value={contratosAVencer}
+          value={data.contratosAVencer}
           icon={Calendar}
           description="Próximos 30 dias"
           iconColor="text-warning"
@@ -69,29 +47,29 @@ const Dashboard = () => {
         
         <DashboardCard
           title="Fornecedores"
-          value={totalFornecedores}
+          value={data.totalFornecedores}
           icon={Users}
-          description={totalFornecedores === 0 ? "Nenhum fornecedor registrado" : "Fornecedores registrados"}
+          description={data.totalFornecedores === 0 ? "Nenhum fornecedor registrado" : "Fornecedores registrados"}
           iconColor="text-info"
         />
         
         <DashboardCard
           title="Ordens Pendentes"
-          value={ordensPendentes}
+          value={data.ordensPendentes}
           icon={Bell}
-          description={ordensPendentes === 0 ? "Nenhuma pendência" : "Necessitam aprovação"}
+          description={data.ordensPendentes === 0 ? "Nenhuma pendência" : "Necessitam aprovação"}
           iconColor="text-destructive"
         />
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
         <ChartContainer title="Status de Contratos">
-          <StatisticsDonut data={statusContratosData} />
+          <StatisticsDonut data={data.statusContratosData} />
         </ChartContainer>
         
         <ChartContainer title="Ordens de Fornecimento">
           <BarChartComponent
-            data={ordensData}
+            data={data.ordensData}
             xAxisKey="name"
             barKey="value"
             barName="Ordens"
@@ -102,9 +80,9 @@ const Dashboard = () => {
 
       <div className="grid gap-6 md:grid-cols-2">
         <ChartContainer title="Contratos Recentes">
-          {contratosRecentes.length > 0 ? (
+          {data.contratosRecentes.length > 0 ? (
             <div className="space-y-4">
-              {contratosRecentes.map((contrato) => (
+              {data.contratosRecentes.map((contrato) => (
                 <div 
                   key={contrato.id} 
                   className="flex items-center justify-between border-b border-border pb-3"
@@ -130,9 +108,9 @@ const Dashboard = () => {
         </ChartContainer>
         
         <ChartContainer title="Ordens Pendentes">
-          {ordensPendentesLista.length > 0 ? (
+          {data.ordensPendentesLista.length > 0 ? (
             <div className="space-y-4">
-              {ordensPendentesLista.map((ordem) => (
+              {data.ordensPendentesLista.map((ordem) => (
                 <div 
                   key={ordem.id} 
                   className="flex items-center justify-between border-b border-border pb-3"
@@ -143,7 +121,7 @@ const Dashboard = () => {
                       Contrato: {ordem.contrato?.numero}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {new Date(ordem.dataEmissao).toLocaleDateString()}
+                      {new Date(ordem.data_emissao).toLocaleDateString()}
                     </p>
                   </div>
                   <StatusBadge status={ordem.status} />
