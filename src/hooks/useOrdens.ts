@@ -18,9 +18,20 @@ export const useOrdens = () => {
           contrato:contratos (
             id,
             numero,
+            fornecedor_id,
+            fundo_municipal,
+            objeto,
+            valor,
+            data_inicio,
+            data_termino,
+            status,
             fornecedor:fornecedores (
               id,
-              nome
+              nome,
+              cnpj,
+              email,
+              telefone,
+              endereco
             )
           )
         `)
@@ -35,9 +46,23 @@ export const useOrdens = () => {
         contrato: ordem.contrato ? {
           id: ordem.contrato.id,
           numero: ordem.contrato.numero,
+          fornecedorId: ordem.contrato.fornecedor_id,
+          fundoMunicipal: ordem.contrato.fundo_municipal as any,
+          objeto: ordem.contrato.objeto,
+          valor: ordem.contrato.valor,
+          dataInicio: new Date(ordem.contrato.data_inicio),
+          dataTermino: new Date(ordem.contrato.data_termino),
+          status: ordem.contrato.status as any,
+          itens: [], // Empty array since we're not fetching items
+          createdAt: new Date(ordem.created_at),
           fornecedor: ordem.contrato.fornecedor ? {
             id: ordem.contrato.fornecedor.id,
-            nome: ordem.contrato.fornecedor.nome
+            nome: ordem.contrato.fornecedor.nome,
+            cnpj: ordem.contrato.fornecedor.cnpj,
+            email: ordem.contrato.fornecedor.email || "",
+            telefone: ordem.contrato.fornecedor.telefone || "",
+            endereco: ordem.contrato.fornecedor.endereco || "",
+            createdAt: new Date() // Since we don't have created_at from the fornecedor in this query
           } : undefined
         } : undefined,
         dataEmissao: new Date(ordem.data_emissao),
