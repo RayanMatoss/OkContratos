@@ -29,15 +29,30 @@ export const useContratos = () => {
 
       if (error) throw error;
 
-      setContratos(data.map(contrato => ({
-        ...contrato,
+      const formattedContratos: Contrato[] = data.map(contrato => ({
+        id: contrato.id,
+        numero: contrato.numero,
+        fornecedorId: contrato.fornecedor_id,
+        fundoMunicipal: contrato.fundo_municipal as any,
+        objeto: contrato.objeto,
+        valor: contrato.valor,
         dataInicio: new Date(contrato.data_inicio),
         dataTermino: new Date(contrato.data_termino),
-        fornecedorId: contrato.fornecedor_id,
-        fundoMunicipal: contrato.fundo_municipal,
+        status: contrato.status as any,
         createdAt: new Date(contrato.created_at),
+        fornecedor: contrato.fornecedor ? {
+          id: contrato.fornecedor.id,
+          nome: contrato.fornecedor.nome,
+          cnpj: contrato.fornecedor.cnpj,
+          email: contrato.fornecedor.email || "",
+          telefone: contrato.fornecedor.telefone || "",
+          endereco: contrato.fornecedor.endereco || "",
+          createdAt: new Date() // Since the fornecedor data from API doesn't include created_at
+        } : undefined,
         itens: []
-      })));
+      }));
+
+      setContratos(formattedContratos);
     } catch (error: any) {
       toast({
         title: "Erro ao carregar contratos",
