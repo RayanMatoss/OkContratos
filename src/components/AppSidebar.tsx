@@ -1,12 +1,14 @@
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { LayoutDashboard, FileText, Users, FileEdit, Package, ChartBar, Settings, Bell } from "lucide-react";
+
 interface SidebarLinkProps {
   to: string;
   icon: React.ElementType;
   label: string;
   isActive: boolean;
 }
+
 const SidebarLink = ({
   to,
   icon: Icon,
@@ -18,6 +20,7 @@ const SidebarLink = ({
       <span>{label}</span>
     </Link>;
 };
+
 const AppSidebar = () => {
   const location = useLocation();
   const currentPath = location.pathname;
@@ -50,10 +53,11 @@ const AppSidebar = () => {
     icon: Settings,
     label: "Configurações"
   }];
+
   return <aside className="w-64 h-screen bg-sidebar fixed left-0 top-0 border-r border-border flex flex-col">
       <div className="p-6">
         <h1 className="text-xl font-bold text-white">
-          <span className="text-primary">Ok</span>Contract
+          <span className="text-primary">Ok</span>Contrato
         </h1>
       </div>
       
@@ -74,4 +78,5 @@ const AppSidebar = () => {
       </div>
     </aside>;
 };
+
 export default AppSidebar;
