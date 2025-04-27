@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,7 +8,7 @@ import ContratosTable from "@/components/contratos/ContratosTable";
 
 const Contratos = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [showAddDialog, setShowAddDialog] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(false);
 
   const filteredContratos = contratos.filter((contrato) => {
     return (
@@ -28,7 +27,7 @@ const Contratos = () => {
             Gerenciamento dos contratos registrados no sistema
           </p>
         </div>
-        <Button onClick={() => setShowAddDialog(true)} className="flex items-center gap-2">
+        <Button onClick={() => setShowAddForm(true)} className="flex items-center gap-2">
           <Plus size={16} />
           <span>Novo Contrato</span>
         </Button>
@@ -50,8 +49,12 @@ const Contratos = () => {
       <ContratosTable contratos={filteredContratos} />
 
       <AddContratoForm
-        onClose={() => setShowAddDialog(false)}
-        onSuccess={() => setShowAddDialog(false)}
+        open={showAddForm}
+        onOpenChange={setShowAddForm}
+        onSuccess={() => {
+          setShowAddForm(false);
+          window.location.reload(); // Temporary solution to refresh data
+        }}
       />
     </div>
   );

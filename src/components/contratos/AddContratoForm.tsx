@@ -1,21 +1,23 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import DatePickerField from "./DatePickerField";
 import ContratoBasicInfo from "./ContratoBasicInfo";
+import { FormSheet } from "@/components/ui/form-sheet";
+
 type AddContratoFormProps = {
-  onClose: () => void;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   onSuccess?: () => void;
 };
+
 export const AddContratoForm = ({
-  onClose,
+  open,
+  onOpenChange,
   onSuccess
 }: AddContratoFormProps) => {
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
   const [formStep, setFormStep] = useState<"basic" | "dates" | "items">("basic");
   const [formData, setFormData] = useState({
     numero: "",
@@ -26,6 +28,7 @@ export const AddContratoForm = ({
     data_inicio: new Date(),
     data_termino: new Date()
   });
+
   const handleNextStep = () => {
     if (formStep === "basic") {
       setFormStep("dates");
@@ -33,6 +36,7 @@ export const AddContratoForm = ({
       setFormStep("items");
     }
   };
+
   const handlePreviousStep = () => {
     if (formStep === "dates") {
       setFormStep("basic");
@@ -40,12 +44,13 @@ export const AddContratoForm = ({
       setFormStep("dates");
     }
   };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    
     try {
-      const {
-        error
-      } = await supabase.from("contratos").insert({
+      const { error } = await supabase.from("contratos").insert({
         numero: formData.numero,
         objeto: formData.objeto,
         fornecedor_id: formData.fornecedor_id,
@@ -54,46 +59,81 @@ export const AddContratoForm = ({
         data_inicio: formData.data_inicio.toISOString(),
         data_termino: formData.data_termino.toISOString()
       });
+
       if (error) throw error;
+
       toast({
-        title: "Contrato criado",
-        description: "O contrato foi criado com sucesso."
+        title: "Sucesso",
+        description: "Contrato criado com sucesso."
       });
+      
       onSuccess?.();
-      onClose();
+      onOpenChange(false);
     } catch (error: any) {
       toast({
         title: "Erro",
         description: error.message,
         variant: "destructive"
       });
+    } finally {
+      setLoading(false);
     }
   };
-  return <form onSubmit={handleSubmit} className="space-y-6">
-      {formStep === "basic" && <ContratoBasicInfo numero={formData.numero} fornecedorId={formData.fornecedor_id} fundoMunicipal={formData.fundo_municipal as any} objeto={formData.objeto} valor={formData.valor} onFieldChange={(field, value) => setFormData({
-      ...formData,
-      [field]: value
-    })} />}
 
-      {formStep === "dates" && <div className="space-y-4">
-          <DatePickerField label="Data de Início" date={formData.data_inicio} onDateChange={date => setFormData({
-        ...formData,
-        data_inicio: date || new Date()
-      })} />
-          <DatePickerField label="Data de Término" date={formData.data_termino} onDateChange={date => setFormData({
-        ...formData,
-        data_termino: date || new Date()
-      })} />
-        </div>}
+  return (
+    <FormSheet
+      open={open}
+      onOpenChange={onOpenChange}
+      onSubmit={handleSubmit}
+      title="Novo Contrato"
+      description="Preencha os dados do novo contrato"
+      loading={loading}
+    >
+      {formStep === "basic" && (
+        <ContratoBasicInfo 
+          numero={formData.numero}
+          fornecedorId={formData.fornecedor_id}
+          fundoMunicipal={formData.fundo_municipal as any}
+          objeto={formData.objeto}
+          valor={formData.valor}
+          onFieldChange={(field, value) => setFormData({
+            ...formData,
+            [field]: value
+          })}
+        />
+      )}
 
-      {formStep === "items" && <div className="space-y-4">
+      {formStep === "dates" && (
+        <div className="space-y-4">
+          <DatePickerField 
+            label="Data de Início" 
+            date={formData.data_inicio} 
+            onDateChange={date => setFormData({
+              ...formData,
+              data_inicio: date || new Date()
+            })} 
+          />
+          <DatePickerField 
+            label="Data de Término" 
+            date={formData.data_termino} 
+            onDateChange={date => setFormData({
+              ...formData,
+              data_termino: date || new Date()
+            })} 
+          />
+        </div>
+      )}
+
+      {formStep === "items" && (
+        <div className="space-y-4">
           <h3 className="text-lg font-medium">Itens do Contrato</h3>
           <p className="text-sm text-muted-foreground">
             Os itens podem ser adicionados após a criação do contrato.
           </p>
-        </div>}
-
-      
-    </form>;
+        </div>
+      )}
+    </FormSheet>
+  );
 };
+
 export default AddContratoForm;
