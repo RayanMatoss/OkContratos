@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -73,11 +74,27 @@ const Itens = () => {
     try {
       const { data, error } = await supabase
         .from('contratos')
-        .select('id, numero, objeto')
+        .select('id, numero, objeto, fornecedor_id, fundo_municipal, valor, data_inicio, data_termino, status, created_at')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setContratos(data || []);
+      
+      // Transform the data to match the Contrato type
+      const formattedContratos: Contrato[] = data.map(contrato => ({
+        id: contrato.id,
+        numero: contrato.numero,
+        fornecedorId: contrato.fornecedor_id,
+        fundoMunicipal: contrato.fundo_municipal as any,
+        objeto: contrato.objeto,
+        valor: contrato.valor,
+        dataInicio: new Date(contrato.data_inicio),
+        dataTermino: new Date(contrato.data_termino),
+        status: contrato.status as any,
+        createdAt: new Date(contrato.created_at),
+        itens: []
+      }));
+      
+      setContratos(formattedContratos);
     } catch (error: any) {
       toast({
         title: "Erro",
