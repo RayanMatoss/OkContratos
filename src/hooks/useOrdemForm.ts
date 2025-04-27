@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,6 +19,15 @@ export const useOrdemForm = (onSuccess?: () => void) => {
     fetchContratos();
     fetchNextNumero();
   }, []);
+
+  // Add back the effect to fetch contract items when contratoId changes
+  useEffect(() => {
+    if (contratoId) {
+      fetchContratoItems();
+    } else {
+      setContratoItems([]);
+    }
+  }, [contratoId]);
 
   const fetchNextNumero = async () => {
     setLoadingNumero(true);
@@ -57,31 +67,39 @@ export const useOrdemForm = (onSuccess?: () => void) => {
   };
 
   const fetchContratoItems = async () => {
-    const { data, error } = await supabase
-      .from("itens")
-      .select("*")
-      .eq("contrato_id", contratoId);
+    try {
+      const { data, error } = await supabase
+        .from("itens")
+        .select("*")
+        .eq("contrato_id", contratoId);
 
-    if (error) {
+      if (error) {
+        toast({
+          title: "Erro",
+          description: "Erro ao carregar itens do contrato",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const transformedItems: Item[] = (data || []).map(item => ({
+        id: item.id,
+        contratoId: item.contrato_id,
+        descricao: item.descricao,
+        quantidade: item.quantidade,
+        valorUnitario: item.valor_unitario,
+        unidade: item.unidade,
+        quantidadeConsumida: item.quantidade_consumida
+      }));
+
+      setContratoItems(transformedItems);
+    } catch (error: any) {
       toast({
         title: "Erro",
-        description: "Erro ao carregar itens do contrato",
+        description: error.message,
         variant: "destructive",
       });
-      return;
     }
-
-    const transformedItems: Item[] = (data || []).map(item => ({
-      id: item.id,
-      contratoId: item.contrato_id,
-      descricao: item.descricao,
-      quantidade: item.quantidade,
-      valorUnitario: item.valor_unitario,
-      unidade: item.unidade,
-      quantidadeConsumida: item.quantidade_consumida
-    }));
-
-    setContratoItems(transformedItems);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
