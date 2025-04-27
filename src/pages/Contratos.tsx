@@ -1,14 +1,16 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Search } from "lucide-react";
-import { contratos } from "@/data/mockData";
 import { AddContratoForm } from "@/components/contratos/AddContratoForm";
 import ContratosTable from "@/components/contratos/ContratosTable";
+import { useContratos } from "@/hooks/useContratos";
 
 const Contratos = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddForm, setShowAddForm] = useState(false);
+  const { contratos, loading } = useContratos();
 
   const filteredContratos = contratos.filter((contrato) => {
     return (
@@ -51,10 +53,7 @@ const Contratos = () => {
       <AddContratoForm
         open={showAddForm}
         onOpenChange={setShowAddForm}
-        onSuccess={() => {
-          setShowAddForm(false);
-          window.location.reload(); // Temporary solution to refresh data
-        }}
+        onSuccess={() => setShowAddForm(false)}
       />
     </div>
   );
