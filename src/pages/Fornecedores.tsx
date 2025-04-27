@@ -29,6 +29,19 @@ const Fornecedores = () => {
     fetchFornecedores();
   }, []);
 
+  // Function to convert snake_case to camelCase
+  const formatFornecedor = (fornecedor: any): Fornecedor => {
+    return {
+      id: fornecedor.id,
+      nome: fornecedor.nome,
+      cnpj: fornecedor.cnpj,
+      email: fornecedor.email || "",
+      telefone: fornecedor.telefone || "",
+      endereco: fornecedor.endereco || "",
+      createdAt: new Date(fornecedor.created_at),
+    };
+  };
+
   const fetchFornecedores = async () => {
     try {
       const { data, error } = await supabase
@@ -38,7 +51,9 @@ const Fornecedores = () => {
 
       if (error) throw error;
 
-      setFornecedores(data);
+      // Transform each fornecedor to match the Fornecedor type
+      const formattedFornecedores = data.map(formatFornecedor);
+      setFornecedores(formattedFornecedores);
     } catch (error: any) {
       toast({
         title: "Erro ao carregar fornecedores",
@@ -73,7 +88,9 @@ const Fornecedores = () => {
 
       if (error) throw error;
 
-      setFornecedores([...fornecedores, data]);
+      // Format the new fornecedor before adding it to the state
+      const formattedFornecedor = formatFornecedor(data);
+      setFornecedores([...fornecedores, formattedFornecedor]);
       setShowAddDialog(false);
       setNewFornecedor({
         nome: "",
