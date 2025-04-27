@@ -1,14 +1,17 @@
 
 import { format } from "date-fns";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { TableActions } from "@/components/ui/table-actions";
 import StatusBadge from "@/components/StatusBadge";
 import { Contrato } from "@/types";
 
 interface ContratosTableProps {
   contratos: Contrato[];
+  onEdit?: (contrato: Contrato) => void;
+  onDelete?: (contrato: Contrato) => void;
 }
 
-const ContratosTable = ({ contratos }: ContratosTableProps) => {
+const ContratosTable = ({ contratos, onEdit, onDelete }: ContratosTableProps) => {
   return (
     <div className="rounded-md border">
       <Table>
@@ -20,6 +23,7 @@ const ContratosTable = ({ contratos }: ContratosTableProps) => {
             <TableHead>Valor</TableHead>
             <TableHead>Vigência</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead className="text-right">Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -42,11 +46,19 @@ const ContratosTable = ({ contratos }: ContratosTableProps) => {
                 <TableCell>
                   <StatusBadge status={contrato.status} />
                 </TableCell>
+                <TableCell className="text-right">
+                  <TableActions
+                    onEdit={() => onEdit?.(contrato)}
+                    onDelete={() => onDelete?.(contrato)}
+                    showEdit={contrato.status === "Em Aprovação"}
+                    showDelete={contrato.status === "Em Aprovação"}
+                  />
+                </TableCell>
               </TableRow>
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={6} className="h-24 text-center">
+              <TableCell colSpan={7} className="h-24 text-center">
                 Nenhum contrato encontrado.
               </TableCell>
             </TableRow>

@@ -1,11 +1,11 @@
-
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Plus, Search } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { TableActions } from "@/components/ui/table-actions";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Plus, Search } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import type { Fornecedor } from "@/types";
@@ -24,12 +24,10 @@ const Fornecedores = () => {
   });
   const { toast } = useToast();
 
-  // Fetch fornecedores on component mount
   useEffect(() => {
     fetchFornecedores();
   }, []);
 
-  // Function to convert snake_case to camelCase
   const formatFornecedor = (fornecedor: any): Fornecedor => {
     return {
       id: fornecedor.id,
@@ -51,7 +49,6 @@ const Fornecedores = () => {
 
       if (error) throw error;
 
-      // Transform each fornecedor to match the Fornecedor type
       const formattedFornecedores = data.map(formatFornecedor);
       setFornecedores(formattedFornecedores);
     } catch (error: any) {
@@ -88,7 +85,6 @@ const Fornecedores = () => {
 
       if (error) throw error;
 
-      // Format the new fornecedor before adding it to the state
       const formattedFornecedor = formatFornecedor(data);
       setFornecedores([...fornecedores, formattedFornecedor]);
       setShowAddDialog(false);
@@ -112,6 +108,37 @@ const Fornecedores = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleEdit = (fornecedor: Fornecedor) => {
+    toast({
+      title: "Em breve",
+      description: "A edição de fornecedores será implementada em breve",
+    });
+  };
+
+  const handleDelete = async (fornecedor: Fornecedor) => {
+    try {
+      const { error } = await supabase
+        .from('fornecedores')
+        .delete()
+        .eq('id', fornecedor.id);
+
+      if (error) throw error;
+
+      setFornecedores(fornecedores.filter(f => f.id !== fornecedor.id));
+      
+      toast({
+        title: "Fornecedor excluído",
+        description: "O fornecedor foi excluído com sucesso",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Erro ao excluir fornecedor",
+        description: error.message,
+        variant: "destructive",
+      });
     }
   };
 
@@ -152,6 +179,7 @@ const Fornecedores = () => {
               <TableHead>Email</TableHead>
               <TableHead>Telefone</TableHead>
               <TableHead>Endereço</TableHead>
+              <TableHead className="text-right">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -163,11 +191,17 @@ const Fornecedores = () => {
                   <TableCell>{fornecedor.email}</TableCell>
                   <TableCell>{fornecedor.telefone}</TableCell>
                   <TableCell>{fornecedor.endereco}</TableCell>
+                  <TableCell className="text-right">
+                    <TableActions
+                      onEdit={() => handleEdit(fornecedor)}
+                      onDelete={() => handleDelete(fornecedor)}
+                    />
+                  </TableCell>
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={5} className="h-24 text-center">
+                <TableCell colSpan={6} className="h-24 text-center">
                   Nenhum fornecedor encontrado.
                 </TableCell>
               </TableRow>

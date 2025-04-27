@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,11 +5,15 @@ import { Plus, Search } from "lucide-react";
 import { AddContratoForm } from "@/components/contratos/AddContratoForm";
 import ContratosTable from "@/components/contratos/ContratosTable";
 import { useContratos } from "@/hooks/useContratos";
+import { useToast } from "@/hooks/use-toast";
+import { Contrato } from "@/types";
+import { supabase } from "@/integrations/supabase/client";
 
 const Contratos = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddForm, setShowAddForm] = useState(false);
-  const { contratos, loading } = useContratos();
+  const { contratos, loading, fetchContratos } = useContratos();
+  const { toast } = useToast();
 
   const filteredContratos = contratos.filter((contrato) => {
     return (
@@ -19,6 +22,38 @@ const Contratos = () => {
       contrato.fornecedor?.nome.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
+
+  const handleEdit = (contrato: Contrato) => {
+    toast({
+      title: "Em breve",
+      description: "A edição de contratos será implementada em breve",
+    });
+  };
+
+  const handleDelete = async (contrato: Contrato) => {
+    try {
+      const { error } = await supabase
+        .from('contratos')
+        .delete()
+        .eq('id', contrato.id)
+        .eq('status', 'Em Aprovação');
+
+      if (error) throw error;
+
+      await fetchContratos();
+      
+      toast({
+        title: "Contrato excluído",
+        description: "O contrato foi excluído com sucesso",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Erro ao excluir contrato",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -48,7 +83,11 @@ const Contratos = () => {
         </div>
       </div>
 
-      <ContratosTable contratos={filteredContratos} />
+      <ContratosTable 
+        contratos={filteredContratos} 
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
 
       <AddContratoForm
         open={showAddForm}

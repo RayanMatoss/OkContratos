@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -9,7 +8,6 @@ import { ItemsTable } from "@/components/itens/ItemsTable";
 import { AddItemsDialog } from "@/components/itens/AddItemsDialog";
 import { Contrato } from "@/types";
 
-// This interface matches what comes from the database
 interface ItemResponse {
   id: string;
   contrato_id: string;
@@ -28,15 +26,13 @@ interface ItemResponse {
   };
 }
 
-type ContratoBasic = Pick<Contrato, 'id' | 'numero' | 'objeto'>;
-
 const Itens = () => {
   const { toast } = useToast();
   const [itens, setItens] = useState<ItemResponse[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [contratos, setContratos] = useState<ContratoBasic[]>([]);
+  const [contratos, setContratos] = useState<Contrato[]>([]);
 
   useEffect(() => {
     fetchItens();
@@ -100,6 +96,41 @@ const Itens = () => {
     );
   });
 
+  const handleEdit = (item: ItemResponse) => {
+    toast({
+      title: "Em breve",
+      description: "A edição de itens será implementada em breve",
+    });
+  };
+
+  const handleDelete = async (item: ItemResponse) => {
+    try {
+      if (item.quantidade_consumida > 0) {
+        throw new Error("Não é possível excluir um item que já foi consumido");
+      }
+
+      const { error } = await supabase
+        .from('itens')
+        .delete()
+        .eq('id', item.id);
+
+      if (error) throw error;
+
+      await fetchItens();
+      
+      toast({
+        title: "Item excluído",
+        description: "O item foi excluído com sucesso",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Erro ao excluir item",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between">
@@ -119,12 +150,20 @@ const Itens = () => {
         <SearchInput value={searchTerm} onChange={setSearchTerm} />
       </div>
 
-      <ItemsTable items={filteredItens} loading={loading} />
+      <ItemsTable 
+        items={filteredItens} 
+        loading={loading}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
 
       <AddItemsDialog
         open={showAddDialog}
         onOpenChange={setShowAddDialog}
-        onSuccess={fetchItens}
+        onSuccess={() => {
+          setShowAddDialog(false);
+          fetchItens();
+        }}
         contratos={contratos}
       />
     </div>

@@ -1,9 +1,8 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { formatCurrency } from "@/lib/utils";
-import { Item } from "@/types";
+import { TableActions } from "@/components/ui/table-actions";
 
-// This interface matches what comes from the database
 interface ItemTableResponse {
   id: string;
   contrato_id: string;
@@ -23,9 +22,11 @@ interface ItemTableResponse {
 interface ItemsTableProps {
   items: ItemTableResponse[];
   loading: boolean;
+  onEdit?: (item: ItemTableResponse) => void;
+  onDelete?: (item: ItemTableResponse) => void;
 }
 
-export const ItemsTable = ({ items, loading }: ItemsTableProps) => {
+export const ItemsTable = ({ items, loading, onEdit, onDelete }: ItemsTableProps) => {
   return (
     <div className="rounded-md border">
       <Table>
@@ -39,6 +40,7 @@ export const ItemsTable = ({ items, loading }: ItemsTableProps) => {
             <TableHead>Unidade</TableHead>
             <TableHead className="text-right">Valor Unit.</TableHead>
             <TableHead className="text-right">Valor Total</TableHead>
+            <TableHead className="text-right">Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -57,11 +59,19 @@ export const ItemsTable = ({ items, loading }: ItemsTableProps) => {
                 <TableCell className="text-right">
                   {formatCurrency(item.quantidade * item.valor_unitario)}
                 </TableCell>
+                <TableCell className="text-right">
+                  <TableActions
+                    onEdit={() => onEdit?.(item)}
+                    onDelete={() => onDelete?.(item)}
+                    showDelete={item.quantidade_consumida === 0}
+                    showEdit={item.quantidade_consumida === 0}
+                  />
+                </TableCell>
               </TableRow>
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={8} className="h-24 text-center">
+              <TableCell colSpan={9} className="h-24 text-center">
                 {loading ? "Carregando itens..." : "Nenhum item encontrado."}
               </TableCell>
             </TableRow>
