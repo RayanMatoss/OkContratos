@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -64,6 +63,41 @@ export const useContratos = () => {
     }
   };
 
+  const updateContrato = async (id: string, data: Partial<Omit<Contrato, 'id' | 'createdAt' | 'status'>>) => {
+    try {
+      const { error } = await supabase
+        .from('contratos')
+        .update({
+          numero: data.numero,
+          fornecedor_id: data.fornecedorId,
+          fundo_municipal: data.fundoMunicipal,
+          objeto: data.objeto,
+          valor: data.valor,
+          data_inicio: data.dataInicio?.toISOString(),
+          data_termino: data.dataTermino?.toISOString(),
+        })
+        .eq('id', id)
+        .eq('status', 'Em Aprovação');
+
+      if (error) throw error;
+
+      await fetchContratos();
+      toast({
+        title: "Contrato atualizado",
+        description: "O contrato foi atualizado com sucesso",
+      });
+
+      return true;
+    } catch (error: any) {
+      toast({
+        title: "Erro ao atualizar contrato",
+        description: error.message,
+        variant: "destructive",
+      });
+      return false;
+    }
+  };
+
   const deleteContrato = async (id: string) => {
     try {
       const { error } = await supabase
@@ -111,5 +145,5 @@ export const useContratos = () => {
     };
   }, []);
 
-  return { contratos, loading, fetchContratos, deleteContrato };
+  return { contratos, loading, fetchContratos, deleteContrato, updateContrato };
 };

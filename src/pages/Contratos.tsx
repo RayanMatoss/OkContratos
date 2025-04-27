@@ -1,9 +1,8 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Search } from "lucide-react";
-import { AddContratoForm } from "@/components/contratos/AddContratoForm";
+import { ContratoFormDialog } from "@/components/contratos/ContratoFormDialog";
 import ContratosTable from "@/components/contratos/ContratosTable";
 import { useContratos } from "@/hooks/useContratos";
 import { useToast } from "@/hooks/use-toast";
@@ -11,7 +10,8 @@ import { Contrato } from "@/types";
 
 const Contratos = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [showAddForm, setShowAddForm] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const [editingContrato, setEditingContrato] = useState<Contrato | undefined>();
   const { contratos, loading, deleteContrato } = useContratos();
   const { toast } = useToast();
 
@@ -24,10 +24,21 @@ const Contratos = () => {
   });
 
   const handleEdit = (contrato: Contrato) => {
-    toast({
-      title: "Em breve",
-      description: "A edição de contratos será implementada em breve",
-    });
+    if (contrato.status !== 'Em Aprovação') {
+      toast({
+        title: "Edição não permitida",
+        description: "Apenas contratos em aprovação podem ser editados",
+        variant: "destructive"
+      });
+      return;
+    }
+    setEditingContrato(contrato);
+    setShowForm(true);
+  };
+
+  const handleCloseForm = () => {
+    setShowForm(false);
+    setEditingContrato(undefined);
   };
 
   const handleDelete = async (contrato: Contrato) => {
@@ -43,7 +54,7 @@ const Contratos = () => {
             Gerenciamento dos contratos registrados no sistema
           </p>
         </div>
-        <Button onClick={() => setShowAddForm(true)} className="flex items-center gap-2">
+        <Button onClick={() => setShowForm(true)} className="flex items-center gap-2">
           <Plus size={16} />
           <span>Novo Contrato</span>
         </Button>
@@ -68,10 +79,11 @@ const Contratos = () => {
         onDelete={handleDelete}
       />
 
-      <AddContratoForm
-        open={showAddForm}
-        onOpenChange={setShowAddForm}
-        onSuccess={() => setShowAddForm(false)}
+      <ContratoFormDialog
+        open={showForm}
+        onOpenChange={handleCloseForm}
+        mode={editingContrato ? 'edit' : 'create'}
+        contrato={editingContrato}
       />
     </div>
   );
