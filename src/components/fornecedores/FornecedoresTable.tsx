@@ -2,6 +2,8 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { TableActions } from "@/components/ui/table-actions";
 import type { Fornecedor } from "@/types";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface FornecedoresTableProps {
   fornecedores: Fornecedor[];
@@ -10,6 +12,30 @@ interface FornecedoresTableProps {
 }
 
 export const FornecedoresTable = ({ fornecedores, onEdit, onDelete }: FornecedoresTableProps) => {
+  const [fornecedoresWithContracts, setFornecedoresWithContracts] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    const checkContracts = async () => {
+      const promises = fornecedores.map(async (fornecedor) => {
+        const { count } = await supabase
+          .from('contratos')
+          .select('*', { count: 'exact', head: true })
+          .eq('fornecedor_id', fornecedor.id);
+        
+        return { id: fornecedor.id, hasContracts: (count || 0) > 0 };
+      });
+
+      const results = await Promise.all(promises);
+      const idsWithContracts = new Set(
+        results.filter(r => r.hasContracts).map(r => r.id)
+      );
+      
+      setFornecedoresWithContracts(idsWithContracts);
+    };
+
+    checkContracts();
+  }, [fornecedores]);
+
   return (
     <div className="rounded-md border">
       <Table>
@@ -36,6 +62,12 @@ export const FornecedoresTable = ({ fornecedores, onEdit, onDelete }: Fornecedor
                   <TableActions
                     onEdit={() => onEdit(fornecedor)}
                     onDelete={() => onDelete(fornecedor)}
+                    disableDelete={fornecedoresWithContracts.has(fornecedor.id)}
+                    deleteTooltip={
+                      fornecedoresWithContracts.has(fornecedor.id) 
+                        ? "Este fornecedor possui contratos associados e não pode ser excluído"
+                        : undefined
+                    }
                   />
                 </TableCell>
               </TableRow>
