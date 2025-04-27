@@ -21,5 +21,5 @@ export const getDashboardData = () => ({
   totalContratos: contratos.length,
   contratosAVencer: contratos.filter(c => new Date(c.dataTermino) > new Date()).length,
   totalFornecedores: fornecedores.length,
-  ordensPendentes: ordens.filter(o => !o.dataConclusao).length
+  ordensPendentes: ordens.filter(o => o.status === "Pendente").length
 });
