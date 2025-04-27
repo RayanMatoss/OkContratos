@@ -64,7 +64,7 @@ export const useDashboardData = () => {
       // Fetch fornecedores count
       const { count: fornecedoresCount, error: fornecedoresError } = await supabase
         .from("fornecedores")
-        .select('*', { count: true, head: true });
+        .select('*', { count: true });
 
       if (fornecedoresError) throw fornecedoresError;
 
