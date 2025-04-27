@@ -41,13 +41,13 @@ const AppSidebar = () => {
   const currentPath = location.pathname;
 
   const sidebarLinks = [
-    { to: "/", icon: LayoutDashboard, label: "Dashboard" },
-    { to: "/contratos", icon: FileText, label: "Contratos" },
-    { to: "/fornecedores", icon: Users, label: "Fornecedores" },
-    { to: "/ordens", icon: FileEdit, label: "Ordens" },
-    { to: "/itens", icon: Package, label: "Itens" },
-    { to: "/relatorios", icon: ChartBar, label: "Relatórios" },
-    { to: "/configuracoes", icon: Settings, label: "Configurações" }
+    { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+    { to: "/dashboard/contratos", icon: FileText, label: "Contratos" },
+    { to: "/dashboard/fornecedores", icon: Users, label: "Fornecedores" },
+    { to: "/dashboard/ordens", icon: FileEdit, label: "Ordens" },
+    { to: "/dashboard/itens", icon: Package, label: "Itens" },
+    { to: "/dashboard/relatorios", icon: ChartBar, label: "Relatórios" },
+    { to: "/dashboard/configuracoes", icon: Settings, label: "Configurações" }
   ];
 
   return (
@@ -66,8 +66,8 @@ const AppSidebar = () => {
             icon={link.icon}
             label={link.label}
             isActive={
-              link.to === "/" 
-                ? currentPath === "/" 
+              link.to === "/dashboard" 
+                ? currentPath === "/dashboard" 
                 : currentPath.startsWith(link.to)
             }
           />

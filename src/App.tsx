@@ -13,18 +13,20 @@ import Itens from "./pages/Itens";
 import Relatorios from "./pages/Relatorios";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
+import Index from "./pages/Index";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
       <BrowserRouter>
+        <Toaster />
+        <Sonner />
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/" element={<AppLayout />}>
+          <Route path="/" element={<Index />} />
+          <Route path="/dashboard" element={<AppLayout />}>
             <Route index element={<Dashboard />} />
             <Route path="contratos" element={<Contratos />} />
             <Route path="fornecedores" element={<Fornecedores />} />
