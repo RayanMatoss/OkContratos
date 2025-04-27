@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -10,7 +11,6 @@ import {
   DropdownMenuSeparator, 
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
-import { notificacoes } from "@/data/mockData";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -22,7 +22,6 @@ interface AppHeaderProps {
 
 const AppHeader = ({ onToggleSidebar, isSidebarCollapsed }: AppHeaderProps) => {
   const [showSearch, setShowSearch] = useState(false);
-  const unreadNotifications = notificacoes.filter(n => !n.lida).length;
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -80,9 +79,6 @@ const AppHeader = ({ onToggleSidebar, isSidebarCollapsed }: AppHeaderProps) => {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="relative">
               <Bell size={20} />
-              {notificacoes.length > 0 && (
-                <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-destructive" />
-              )}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-80">

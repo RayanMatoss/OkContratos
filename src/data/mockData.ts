@@ -8,40 +8,18 @@ import {
   Usuario 
 } from "@/types";
 
-// Fornecedores
+// Data collections
 export const fornecedores: Fornecedor[] = [];
-
-// Itens
 export const itens: Item[] = [];
-
-// Contratos
 export const contratos: Contrato[] = [];
-
-// Ordens de Fornecimento
 export const ordens: OrdemFornecimento[] = [];
-
-// Usuários
 export const usuarios: Usuario[] = [];
-
-// Relatórios
 export const relatorios: RelatorioMensal[] = [];
 
 // Dashboard data
 export const getDashboardData = () => ({
-  totalContratos: 0,
-  contratosAVencer: 0,
-  totalFornecedores: 0,
-  ordensPendentes: 0
+  totalContratos: contratos.length,
+  contratosAVencer: contratos.filter(c => new Date(c.dataTermino) > new Date()).length,
+  totalFornecedores: fornecedores.length,
+  ordensPendentes: ordens.filter(o => !o.dataConclusao).length
 });
-
-// Notifications
-export type Notification = {
-  id: string;
-  titulo: string;
-  mensagem: string;
-  data: string;
-  lida: boolean;
-};
-
-export const notificacoes: Notification[] = [];
-
