@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,10 +20,19 @@ const OrdemItemsSelection = ({
 }: OrdemItemsSelectionProps) => {
   const [selectedItems, setSelectedItems] = useState<{ itemId: string; quantidade: number }[]>(initialSelectedItems);
 
-  // When initial items change, update the local state
+  // Reset selected items when contract changes in create mode
+  useEffect(() => {
+    if (mode === 'create') {
+      setSelectedItems([]);
+      onItemsChange([]);
+    }
+  }, [selectedContratoId, mode]);
+
+  // Initialize selected items from props
   useEffect(() => {
     if (initialSelectedItems.length > 0) {
       setSelectedItems(initialSelectedItems);
+      onItemsChange(initialSelectedItems);
     }
   }, [initialSelectedItems]);
 
@@ -79,8 +87,7 @@ const OrdemItemsSelection = ({
           const availableQuantity = item.quantidade - item.quantidadeConsumida;
           const selectedQuantity = getSelectedQuantity(item.id);
           
-          // In edit mode, we need to add back the current selection to the available amount
-          // since it's already counted in the consumed quantity
+          // In edit mode, add back the current selection to the available amount
           const adjustedAvailable = mode === 'edit' 
             ? availableQuantity + selectedQuantity 
             : availableQuantity;
@@ -101,11 +108,14 @@ const OrdemItemsSelection = ({
                   min={0}
                   max={adjustedAvailable}
                   value={selectedQuantity || ''}
-                  placeholder="Qtd"
                   onChange={(e) => {
-                    handleQuantityChange(item.id, parseInt(e.target.value) || 0);
+                    const value = parseInt(e.target.value) || 0;
+                    if (value <= adjustedAvailable) {
+                      handleQuantityChange(item.id, value);
+                    }
                   }}
                   className="text-right"
+                  placeholder="Qtd"
                 />
               </div>
             </div>

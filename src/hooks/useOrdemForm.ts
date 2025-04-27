@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -17,7 +16,7 @@ export const useOrdemForm = (
   const [numero, setNumero] = useState(initialOrdem?.numero || "");
   const [contratos, setContratos] = useState<any[]>([]);
   const [contratoItems, setContratoItems] = useState<Item[]>([]);
-  const [contratoId, setContratoId] = useState(initialOrdem?.contratoId || "");
+  const [contratoId, setContratoId] = useState("");
   const [selectedItems, setSelectedItems] = useState<{itemId: string; quantidade: number}[]>([]);
   const [loadingNumero, setLoadingNumero] = useState(mode === 'create');
   const [originalItemsConsumidos, setOriginalItemsConsumidos] = useState<{
@@ -25,6 +24,13 @@ export const useOrdemForm = (
     itemId: string;
     quantidade: number;
   }[]>([]);
+
+  // Initialize contratoId from the initialOrdem
+  useEffect(() => {
+    if (mode === 'edit' && initialOrdem) {
+      setContratoId(initialOrdem.contratoId);
+    }
+  }, [mode, initialOrdem]);
 
   useEffect(() => {
     fetchContratos();
@@ -34,47 +40,37 @@ export const useOrdemForm = (
     }
   }, [mode]);
 
-  // Add effect to fetch contract items when contratoId changes
-  useEffect(() => {
-    if (contratoId) {
-      fetchContratoItems();
-      
-      // If in edit mode, fetch the consumed items
-      if (mode === 'edit' && initialOrdem) {
-        fetchConsumedItems();
-      }
-    } else {
-      setContratoItems([]);
-      setSelectedItems([]);
-    }
-  }, [contratoId, mode, initialOrdem]);
-
-  const fetchConsumedItems = async () => {
-    if (!initialOrdem) return;
-
+  const fetchContratoItems = async () => {
     try {
       const { data, error } = await supabase
-        .from("itens_consumidos")
-        .select("id, item_id, quantidade")
-        .eq("ordem_id", initialOrdem.id);
+        .from("itens")
+        .select("*")
+        .eq("contrato_id", contratoId);
 
-      if (error) throw error;
+      if (error) {
+        toast({
+          title: "Erro",
+          description: "Erro ao carregar itens do contrato",
+          variant: "destructive",
+        });
+        return;
+      }
 
-      const consumedItems = (data || []).map(item => ({
+      const transformedItems: Item[] = (data || []).map(item => ({
         id: item.id,
-        itemId: item.item_id,
-        quantidade: item.quantidade
+        contratoId: item.contrato_id,
+        descricao: item.descricao,
+        quantidade: item.quantidade,
+        valorUnitario: item.valor_unitario,
+        unidade: item.unidade,
+        quantidadeConsumida: item.quantidade_consumida
       }));
 
-      setOriginalItemsConsumidos(consumedItems);
-      setSelectedItems(consumedItems.map(item => ({
-        itemId: item.itemId,
-        quantidade: item.quantidade
-      })));
+      setContratoItems(transformedItems);
     } catch (error: any) {
       toast({
         title: "Erro",
-        description: "Erro ao carregar itens consumidos: " + error.message,
+        description: error.message,
         variant: "destructive",
       });
     }
@@ -117,37 +113,45 @@ export const useOrdemForm = (
     setContratos(data || []);
   };
 
-  const fetchContratoItems = async () => {
+  useEffect(() => {
+    if (contratoId) {
+      fetchContratoItems();
+      
+      if (mode === 'edit' && initialOrdem) {
+        fetchConsumedItems();
+      }
+    } else {
+      setContratoItems([]);
+      setSelectedItems([]);
+    }
+  }, [contratoId, mode, initialOrdem]);
+
+  const fetchConsumedItems = async () => {
+    if (!initialOrdem) return;
+
     try {
       const { data, error } = await supabase
-        .from("itens")
-        .select("*")
-        .eq("contrato_id", contratoId);
+        .from("itens_consumidos")
+        .select("id, item_id, quantidade")
+        .eq("ordem_id", initialOrdem.id);
 
-      if (error) {
-        toast({
-          title: "Erro",
-          description: "Erro ao carregar itens do contrato",
-          variant: "destructive",
-        });
-        return;
-      }
+      if (error) throw error;
 
-      const transformedItems: Item[] = (data || []).map(item => ({
+      const consumedItems = (data || []).map(item => ({
         id: item.id,
-        contratoId: item.contrato_id,
-        descricao: item.descricao,
-        quantidade: item.quantidade,
-        valorUnitario: item.valor_unitario,
-        unidade: item.unidade,
-        quantidadeConsumida: item.quantidade_consumida
+        itemId: item.item_id,
+        quantidade: item.quantidade
       }));
 
-      setContratoItems(transformedItems);
+      setOriginalItemsConsumidos(consumedItems);
+      setSelectedItems(consumedItems.map(item => ({
+        itemId: item.itemId,
+        quantidade: item.quantidade
+      })));
     } catch (error: any) {
       toast({
         title: "Erro",
-        description: error.message,
+        description: "Erro ao carregar itens consumidos: " + error.message,
         variant: "destructive",
       });
     }

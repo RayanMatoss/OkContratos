@@ -40,7 +40,7 @@ const OrdemFormFields = ({
           placeholder="Carregando número..."
           value={numero}
           onChange={(e) => setNumero(e.target.value)}
-          disabled={loadingNumero || mode === 'edit'} // Disable in edit mode
+          disabled={loadingNumero || mode === 'edit'}
           className={mode === 'edit' ? "bg-muted" : ""}
         />
         {mode === 'create' && (
@@ -62,7 +62,7 @@ const OrdemFormFields = ({
           value={contratoId}
           onChange={(e) => setContratoId(e.target.value)}
           className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
-          disabled={mode === 'edit'} // Disable in edit mode
+          disabled={mode === 'edit'} // Only disable in edit mode
         >
           <option value="">Selecione um contrato</option>
           {contratos.map((contrato) => (
