@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { contratos } from "@/data/mockData";
 import DatePickerField from "@/components/contratos/DatePickerField";
 import { supabase } from "@/integrations/supabase/client";
+import OrdemItemsSelection from "./OrdemItemsSelection";
 
 interface AddOrdemFormProps {
   showDialog: boolean;
@@ -62,6 +63,9 @@ const AddOrdemForm = ({ showDialog, onOpenChange }: AddOrdemFormProps) => {
     }
   };
 
+  const selectedContrato = contratos.find((c) => c.id === newOrdem.contratoId);
+  const contratoItens = selectedContrato?.itens || [];
+
   return (
     <Dialog open={showDialog} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px]">
@@ -112,53 +116,13 @@ const AddOrdemForm = ({ showDialog, onOpenChange }: AddOrdemFormProps) => {
           </div>
 
           {newOrdem.contratoId && (
-            <div className="space-y-2">
-              <Label>Itens do Contrato</Label>
-              <div className="max-h-[200px] overflow-y-auto space-y-2 rounded-md border p-2">
-                {contratos
-                  .find((c) => c.id === newOrdem.contratoId)
-                  ?.itens.map((item) => (
-                    <div key={item.id} className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-medium">{item.descricao}</p>
-                        <p className="text-xs text-muted-foreground">
-                          Disponível: {item.quantidade - item.quantidadeConsumida} {item.unidade}
-                        </p>
-                      </div>
-                      <div className="w-20">
-                        <Input
-                          type="number"
-                          min={0}
-                          max={item.quantidade - item.quantidadeConsumida}
-                          placeholder="Qtd"
-                          onChange={(e) => {
-                            const quantidade = parseInt(e.target.value) || 0;
-                            const itemIdx = newOrdem.itensConsumidos.findIndex(
-                              (i) => i.itemId === item.id
-                            );
-                            if (itemIdx >= 0) {
-                              const newItens = [...newOrdem.itensConsumidos];
-                              newItens[itemIdx].quantidade = quantidade;
-                              setNewOrdem({
-                                ...newOrdem,
-                                itensConsumidos: newItens,
-                              });
-                            } else {
-                              setNewOrdem({
-                                ...newOrdem,
-                                itensConsumidos: [
-                                  ...newOrdem.itensConsumidos,
-                                  { itemId: item.id, quantidade },
-                                ],
-                              });
-                            }
-                          }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            </div>
+            <OrdemItemsSelection
+              selectedContratoId={newOrdem.contratoId}
+              contratoItens={contratoItens}
+              onItemsChange={(items) =>
+                setNewOrdem({ ...newOrdem, itensConsumidos: items })
+              }
+            />
           )}
         </div>
         <DialogFooter>
