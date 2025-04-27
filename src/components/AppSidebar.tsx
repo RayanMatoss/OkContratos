@@ -1,6 +1,15 @@
+
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, FileText, Users, FileEdit, Package, ChartBar, Settings, Bell } from "lucide-react";
+import { 
+  LayoutDashboard, 
+  Users, 
+  FileText, 
+  Package, 
+  FileEdit, 
+  ChartBar, 
+  Settings 
+} from "lucide-react";
 
 interface SidebarLinkProps {
   to: string;
@@ -24,35 +33,43 @@ const SidebarLink = ({
 const AppSidebar = () => {
   const location = useLocation();
   const currentPath = location.pathname;
-  const sidebarLinks = [{
-    to: "/dashboard",
-    icon: LayoutDashboard,
-    label: "Dashboard"
-  }, {
-    to: "/dashboard/contratos",
-    icon: FileText,
-    label: "Contratos"
-  }, {
-    to: "/dashboard/fornecedores",
-    icon: Users,
-    label: "Fornecedores"
-  }, {
-    to: "/dashboard/ordens",
-    icon: FileEdit,
-    label: "Ordens"
-  }, {
-    to: "/dashboard/itens",
-    icon: Package,
-    label: "Itens"
-  }, {
-    to: "/dashboard/relatorios",
-    icon: ChartBar,
-    label: "Relatórios"
-  }, {
-    to: "/dashboard/configuracoes",
-    icon: Settings,
-    label: "Configurações"
-  }];
+  const sidebarLinks = [
+    {
+      to: "/dashboard",
+      icon: LayoutDashboard,
+      label: "Dashboard"
+    },
+    {
+      to: "/dashboard/fornecedores",
+      icon: Users,
+      label: "Fornecedores"
+    },
+    {
+      to: "/dashboard/contratos",
+      icon: FileText,
+      label: "Contratos"
+    },
+    {
+      to: "/dashboard/itens",
+      icon: Package,
+      label: "Itens"
+    },
+    {
+      to: "/dashboard/ordens",
+      icon: FileEdit,
+      label: "Ordens"
+    },
+    {
+      to: "/dashboard/relatorios",
+      icon: ChartBar,
+      label: "Relatórios"
+    },
+    {
+      to: "/dashboard/configuracoes",
+      icon: Settings,
+      label: "Configurações"
+    }
+  ];
 
   return <aside className="w-64 h-screen bg-sidebar fixed left-0 top-0 border-r border-border flex flex-col">
       <div className="p-6">
