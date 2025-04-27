@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useFetchFornecedores } from "./useFetchFornecedores";
 
 export const useFornecedores = (shouldFetchOnMount: boolean = false) => {
@@ -9,7 +9,7 @@ export const useFornecedores = (shouldFetchOnMount: boolean = false) => {
     if (shouldFetchOnMount) {
       fetchFornecedores();
     }
-  }, [shouldFetchOnMount]);
+  }, [shouldFetchOnMount, fetchFornecedores]);
 
   return { fornecedores, loading, fetchFornecedores };
 };
