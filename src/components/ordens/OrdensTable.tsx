@@ -1,15 +1,24 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import StatusBadge from "@/components/StatusBadge";
-import { ordens } from "@/data/mockData";
 import { format } from "date-fns";
 import { OrdemFornecimento } from "@/types";
+import { Loader } from "lucide-react";
 
 interface OrdensTableProps {
   filteredOrdens: OrdemFornecimento[];
+  loading: boolean;
 }
 
-const OrdensTable = ({ filteredOrdens }: OrdensTableProps) => {
+const OrdensTable = ({ filteredOrdens, loading }: OrdensTableProps) => {
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-32">
+        <Loader className="w-6 h-6 animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <div className="rounded-md border">
       <Table>

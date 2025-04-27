@@ -5,11 +5,12 @@ import { Input } from "@/components/ui/input";
 import { Plus, Search } from "lucide-react";
 import OrdensTable from "@/components/ordens/OrdensTable";
 import { AddOrdemForm } from "@/components/ordens/AddOrdemForm";
-import { ordens } from "@/data/mockData";
+import { useOrdens } from "@/hooks/useOrdens";
 
 const Ordens = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddDialog, setShowAddDialog] = useState(false);
+  const { ordens, loading, refetch } = useOrdens();
 
   const filteredOrdens = ordens.filter((ordem) => {
     return (
@@ -46,13 +47,16 @@ const Ordens = () => {
         </div>
       </div>
 
-      <OrdensTable filteredOrdens={filteredOrdens} />
+      <OrdensTable filteredOrdens={filteredOrdens} loading={loading} />
       
       <AddOrdemForm 
         open={showAddDialog}
         onOpenChange={setShowAddDialog}
         onCancel={() => setShowAddDialog(false)}
-        onSuccess={() => setShowAddDialog(false)}
+        onSuccess={() => {
+          setShowAddDialog(false);
+          refetch();
+        }}
       />
     </div>
   );
