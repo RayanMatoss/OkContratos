@@ -1,18 +1,20 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { fornecedores } from "@/data/mockData";
 import { Plus, Search } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import type { Fornecedor } from "@/types";
 
 const Fornecedores = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddDialog, setShowAddDialog] = useState(false);
+  const [fornecedores, setFornecedores] = useState<Fornecedor[]>([]);
+  const [loading, setLoading] = useState(false);
   const [newFornecedor, setNewFornecedor] = useState({
     nome: "",
     cnpj: "",
@@ -22,28 +24,65 @@ const Fornecedores = () => {
   });
   const { toast } = useToast();
 
+  // Fetch fornecedores on component mount
+  useEffect(() => {
+    fetchFornecedores();
+  }, []);
+
+  const fetchFornecedores = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('fornecedores')
+        .select('*')
+        .order('nome');
+
+      if (error) throw error;
+
+      setFornecedores(data);
+    } catch (error: any) {
+      toast({
+        title: "Erro ao carregar fornecedores",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+  };
+
   const filteredFornecedores = fornecedores.filter((fornecedor) => {
     return (
       fornecedor.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
       fornecedor.cnpj.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      fornecedor.email.toLowerCase().includes(searchTerm.toLowerCase())
+      fornecedor.email?.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
 
   const handleAddFornecedor = async () => {
     try {
-      const { error } = await supabase.from('fornecedores').insert([{
-        nome: newFornecedor.nome,
-        cnpj: newFornecedor.cnpj,
-        email: newFornecedor.email,
-        telefone: newFornecedor.telefone,
-        endereco: newFornecedor.endereco
-      }]);
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('fornecedores')
+        .insert([{
+          nome: newFornecedor.nome,
+          cnpj: newFornecedor.cnpj,
+          email: newFornecedor.email,
+          telefone: newFornecedor.telefone,
+          endereco: newFornecedor.endereco
+        }])
+        .select()
+        .single();
 
       if (error) throw error;
 
+      setFornecedores([...fornecedores, data]);
       setShowAddDialog(false);
-      window.location.reload(); // Temporary solution to refresh data
+      setNewFornecedor({
+        nome: "",
+        cnpj: "",
+        email: "",
+        telefone: "",
+        endereco: "",
+      });
+      
       toast({
         title: "Sucesso",
         description: "Fornecedor cadastrado com sucesso."
@@ -54,6 +93,8 @@ const Fornecedores = () => {
         description: error.message,
         variant: "destructive"
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -185,7 +226,9 @@ const Fornecedores = () => {
             <Button variant="outline" onClick={() => setShowAddDialog(false)}>
               Cancelar
             </Button>
-            <Button onClick={handleAddFornecedor}>Salvar</Button>
+            <Button onClick={handleAddFornecedor} disabled={loading}>
+              {loading ? "Salvando..." : "Salvar"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
