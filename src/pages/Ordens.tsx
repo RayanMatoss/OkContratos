@@ -6,11 +6,15 @@ import { Plus, Search } from "lucide-react";
 import OrdensTable from "@/components/ordens/OrdensTable";
 import { AddOrdemForm } from "@/components/ordens/AddOrdemForm";
 import { useOrdens } from "@/hooks/useOrdens";
+import { useToast } from "@/hooks/use-toast";
+import { OrdemFornecimento } from "@/types";
+import { supabase } from "@/integrations/supabase/client";
 
 const Ordens = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddDialog, setShowAddDialog] = useState(false);
   const { ordens, loading, refetch } = useOrdens();
+  const { toast } = useToast();
 
   const filteredOrdens = ordens.filter((ordem) => {
     return (
@@ -18,6 +22,39 @@ const Ordens = () => {
       ordem.contrato?.numero.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
+
+  const handleEdit = (ordem: OrdemFornecimento) => {
+    // To be implemented in the next step
+    toast({
+      title: "Em breve",
+      description: "A edição de ordens será implementada em breve",
+    });
+  };
+
+  const handleDelete = async (ordem: OrdemFornecimento) => {
+    try {
+      const { error } = await supabase
+        .from('ordens')
+        .delete()
+        .eq('id', ordem.id)
+        .eq('status', 'Pendente');
+
+      if (error) throw error;
+
+      await refetch();
+      
+      toast({
+        title: "Ordem excluída",
+        description: "A ordem foi excluída com sucesso",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Erro ao excluir ordem",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -47,7 +84,12 @@ const Ordens = () => {
         </div>
       </div>
 
-      <OrdensTable filteredOrdens={filteredOrdens} loading={loading} />
+      <OrdensTable 
+        filteredOrdens={filteredOrdens} 
+        loading={loading} 
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
       
       <AddOrdemForm 
         open={showAddDialog}

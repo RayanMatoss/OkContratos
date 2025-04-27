@@ -4,13 +4,21 @@ import StatusBadge from "@/components/StatusBadge";
 import { format } from "date-fns";
 import { OrdemFornecimento } from "@/types";
 import { Loader } from "lucide-react";
+import { TableActions } from "@/components/ui/table-actions";
 
 interface OrdensTableProps {
   filteredOrdens: OrdemFornecimento[];
   loading: boolean;
+  onEdit: (ordem: OrdemFornecimento) => void;
+  onDelete: (ordem: OrdemFornecimento) => void;
 }
 
-const OrdensTable = ({ filteredOrdens, loading }: OrdensTableProps) => {
+const OrdensTable = ({ 
+  filteredOrdens, 
+  loading,
+  onEdit,
+  onDelete 
+}: OrdensTableProps) => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-32">
@@ -29,6 +37,7 @@ const OrdensTable = ({ filteredOrdens, loading }: OrdensTableProps) => {
             <TableHead>Emissão</TableHead>
             <TableHead>Fornecedor</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead className="text-right">Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -44,11 +53,19 @@ const OrdensTable = ({ filteredOrdens, loading }: OrdensTableProps) => {
                 <TableCell>
                   <StatusBadge status={ordem.status} />
                 </TableCell>
+                <TableCell className="text-right">
+                  <TableActions
+                    onEdit={() => onEdit(ordem)}
+                    onDelete={() => onDelete(ordem)}
+                    showEdit={ordem.status === "Pendente"}
+                    showDelete={ordem.status === "Pendente"}
+                  />
+                </TableCell>
               </TableRow>
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={5} className="h-24 text-center">
+              <TableCell colSpan={6} className="h-24 text-center">
                 Nenhuma ordem encontrada.
               </TableCell>
             </TableRow>
