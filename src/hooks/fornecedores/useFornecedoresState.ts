@@ -1,15 +1,14 @@
 
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import type { Fornecedor } from "@/types";
-import { formatFornecedor, type NewFornecedor } from "./types";
+import type { NewFornecedor } from "./types";
+import { useFornecedoresCrud } from "./useFornecedoresCrud";
+import { useFetchFornecedores } from "./useFetchFornecedores";
 
 export const useFornecedoresState = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddDialog, setShowAddDialog] = useState(false);
-  const [fornecedores, setFornecedores] = useState<Fornecedor[]>([]);
-  const [loading, setLoading] = useState(false);
   const [newFornecedor, setNewFornecedor] = useState<NewFornecedor>({
     nome: "",
     cnpj: "",
@@ -17,41 +16,15 @@ export const useFornecedoresState = () => {
     telefone: "",
     endereco: "",
   });
+
   const { toast } = useToast();
-
-  const fetchFornecedores = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('fornecedores')
-        .select('*')
-        .order('nome');
-
-      if (error) throw error;
-
-      const formattedFornecedores = data.map(formatFornecedor);
-      setFornecedores(formattedFornecedores);
-    } catch (error: any) {
-      toast({
-        title: "Erro ao carregar fornecedores",
-        description: error.message,
-        variant: "destructive"
-      });
-    }
-  };
+  const { fornecedores, fetchFornecedores } = useFetchFornecedores();
+  const { loading, addFornecedor, deleteFornecedor } = useFornecedoresCrud();
 
   const handleAddFornecedor = async () => {
-    try {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from('fornecedores')
-        .insert([newFornecedor])
-        .select()
-        .single();
-
-      if (error) throw error;
-
-      const formattedFornecedor = formatFornecedor(data);
-      setFornecedores([...fornecedores, formattedFornecedor]);
+    const result = await addFornecedor(newFornecedor);
+    if (result) {
+      await fetchFornecedores();
       setShowAddDialog(false);
       setNewFornecedor({
         nome: "",
@@ -60,19 +33,6 @@ export const useFornecedoresState = () => {
         telefone: "",
         endereco: "",
       });
-      
-      toast({
-        title: "Sucesso",
-        description: "Fornecedor cadastrado com sucesso."
-      });
-    } catch (error: any) {
-      toast({
-        title: "Erro",
-        description: error.message,
-        variant: "destructive"
-      });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -84,26 +44,9 @@ export const useFornecedoresState = () => {
   };
 
   const handleDelete = async (fornecedor: Fornecedor) => {
-    try {
-      const { error } = await supabase
-        .from('fornecedores')
-        .delete()
-        .eq('id', fornecedor.id);
-
-      if (error) throw error;
-
-      setFornecedores(fornecedores.filter(f => f.id !== fornecedor.id));
-      
-      toast({
-        title: "Fornecedor excluído",
-        description: "O fornecedor foi excluído com sucesso",
-      });
-    } catch (error: any) {
-      toast({
-        title: "Erro ao excluir fornecedor",
-        description: error.message,
-        variant: "destructive",
-      });
+    const success = await deleteFornecedor(fornecedor);
+    if (success) {
+      await fetchFornecedores();
     }
   };
 
