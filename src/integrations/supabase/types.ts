@@ -9,6 +9,163 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      contratos: {
+        Row: {
+          created_at: string
+          data_inicio: string
+          data_termino: string
+          fornecedor_id: string
+          fundo_municipal: string
+          id: string
+          numero: string
+          objeto: string
+          status: string
+          valor: number
+        }
+        Insert: {
+          created_at?: string
+          data_inicio: string
+          data_termino: string
+          fornecedor_id: string
+          fundo_municipal: string
+          id?: string
+          numero: string
+          objeto: string
+          status?: string
+          valor: number
+        }
+        Update: {
+          created_at?: string
+          data_inicio?: string
+          data_termino?: string
+          fornecedor_id?: string
+          fundo_municipal?: string
+          id?: string
+          numero?: string
+          objeto?: string
+          status?: string
+          valor?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contratos_fornecedor_id_fkey"
+            columns: ["fornecedor_id"]
+            isOneToOne: false
+            referencedRelation: "fornecedores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fornecedores: {
+        Row: {
+          cnpj: string
+          created_at: string
+          email: string | null
+          endereco: string | null
+          id: string
+          nome: string
+          telefone: string | null
+        }
+        Insert: {
+          cnpj: string
+          created_at?: string
+          email?: string | null
+          endereco?: string | null
+          id?: string
+          nome: string
+          telefone?: string | null
+        }
+        Update: {
+          cnpj?: string
+          created_at?: string
+          email?: string | null
+          endereco?: string | null
+          id?: string
+          nome?: string
+          telefone?: string | null
+        }
+        Relationships: []
+      }
+      itens: {
+        Row: {
+          contrato_id: string
+          created_at: string
+          descricao: string
+          id: string
+          quantidade: number
+          quantidade_consumida: number
+          unidade: string
+          valor_unitario: number
+        }
+        Insert: {
+          contrato_id: string
+          created_at?: string
+          descricao: string
+          id?: string
+          quantidade: number
+          quantidade_consumida?: number
+          unidade: string
+          valor_unitario: number
+        }
+        Update: {
+          contrato_id?: string
+          created_at?: string
+          descricao?: string
+          id?: string
+          quantidade?: number
+          quantidade_consumida?: number
+          unidade?: string
+          valor_unitario?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "itens_contrato_id_fkey"
+            columns: ["contrato_id"]
+            isOneToOne: false
+            referencedRelation: "contratos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      itens_consumidos: {
+        Row: {
+          created_at: string
+          id: string
+          item_id: string
+          ordem_id: string
+          quantidade: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          item_id: string
+          ordem_id: string
+          quantidade: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          item_id?: string
+          ordem_id?: string
+          quantidade?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "itens_consumidos_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "itens"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "itens_consumidos_ordem_id_fkey"
+            columns: ["ordem_id"]
+            isOneToOne: false
+            referencedRelation: "ordens"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       OkContratos: {
         Row: {
           created_at: string
@@ -23,6 +180,41 @@ export type Database = {
           id?: number
         }
         Relationships: []
+      }
+      ordens: {
+        Row: {
+          contrato_id: string
+          created_at: string
+          data_emissao: string
+          id: string
+          numero: string
+          status: string
+        }
+        Insert: {
+          contrato_id: string
+          created_at?: string
+          data_emissao: string
+          id?: string
+          numero: string
+          status?: string
+        }
+        Update: {
+          contrato_id?: string
+          created_at?: string
+          data_emissao?: string
+          id?: string
+          numero?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ordens_contrato_id_fkey"
+            columns: ["contrato_id"]
+            isOneToOne: false
+            referencedRelation: "contratos"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {

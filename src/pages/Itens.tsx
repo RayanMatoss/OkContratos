@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -6,10 +5,21 @@ import { Progress } from "@/components/ui/progress";
 import { contratos, itens } from "@/data/mockData";
 import { Search } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button, Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle, Label } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import { toast } from "@/components/ui/toast";
 
 const Itens = () => {
+  const [showAddDialog, setShowAddDialog] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [contratoFilter, setContratoFilter] = useState<string>("todos");
+  const [newItem, setNewItem] = useState({
+    contratoId: "",
+    descricao: "",
+    quantidade: "",
+    valorUnitario: "",
+    unidade: ""
+  });
 
   const filteredItens = itens.filter((item) => {
     const matchesSearch = item.descricao.toLowerCase().includes(searchTerm.toLowerCase());
@@ -17,13 +27,46 @@ const Itens = () => {
     return matchesSearch && matchesContrato;
   });
 
+  const handleAddItem = async () => {
+    try {
+      const { error } = await supabase.from('itens').insert([{
+        contrato_id: newItem.contratoId,
+        descricao: newItem.descricao,
+        quantidade: parseFloat(newItem.quantidade),
+        valor_unitario: parseFloat(newItem.valorUnitario.replace(/[^\d.,]/g, '').replace(',', '.')),
+        unidade: newItem.unidade
+      }]);
+
+      if (error) throw error;
+
+      setShowAddDialog(false);
+      window.location.reload(); // Temporary solution to refresh data
+      toast({
+        title: "Sucesso",
+        description: "Item cadastrado com sucesso.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Erro",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+  };
+
   return (
     <div className="space-y-6 animate-fade-in">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Itens de Contrato</h1>
-        <p className="text-muted-foreground">
-          Acompanhamento do consumo dos itens de contratos
-        </p>
+      <div className="flex justify-between">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Itens de Contrato</h1>
+          <p className="text-muted-foreground">
+            Acompanhamento do consumo dos itens de contratos
+          </p>
+        </div>
+        <Button onClick={() => setShowAddDialog(true)} className="flex items-center gap-2">
+          <Plus size={16} />
+          <span>Novo Item</span>
+        </Button>
       </div>
 
       <div className="flex items-center gap-4">
@@ -110,6 +153,91 @@ const Itens = () => {
           </TableBody>
         </Table>
       </div>
+
+      <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Adicionar Novo Item</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="contrato">Contrato</Label>
+              <Select
+                value={newItem.contratoId}
+                onValueChange={(value) =>
+                  setNewItem({ ...newItem, contratoId: value })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione um contrato" />
+                </SelectTrigger>
+                <SelectContent>
+                  {contratos
+                    .filter(c => c.status === "Ativo")
+                    .map((contrato) => (
+                    <SelectItem key={contrato.id} value={contrato.id}>
+                      {contrato.numero} - {contrato.fornecedor?.nome}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="descricao">Descrição</Label>
+              <Input
+                id="descricao"
+                value={newItem.descricao}
+                onChange={(e) =>
+                  setNewItem({ ...newItem, descricao: e.target.value })
+                }
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="quantidade">Quantidade</Label>
+                <Input
+                  id="quantidade"
+                  type="number"
+                  value={newItem.quantidade}
+                  onChange={(e) =>
+                    setNewItem({ ...newItem, quantidade: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="unidade">Unidade</Label>
+                <Input
+                  id="unidade"
+                  value={newItem.unidade}
+                  onChange={(e) =>
+                    setNewItem({ ...newItem, unidade: e.target.value })
+                  }
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="valorUnitario">Valor Unitário</Label>
+              <Input
+                id="valorUnitario"
+                value={newItem.valorUnitario}
+                onChange={(e) =>
+                  setNewItem({ ...newItem, valorUnitario: e.target.value })
+                }
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowAddDialog(false)}>
+              Cancelar
+            </Button>
+            <Button onClick={handleAddItem}>Salvar</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

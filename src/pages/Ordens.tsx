@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +16,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/lib/supabase";
+import { toast } from "@/components/ui/toast";
 
 const Ordens = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -35,9 +36,53 @@ const Ordens = () => {
     );
   });
 
-  const handleAddOrdem = () => {
-    setShowAddDialog(false);
-    // Aqui seria feita a lógica para adicionar a ordem
+  const handleAddOrdem = async () => {
+    try {
+      // First, create the order
+      const { data: ordem, error: orderError } = await supabase.from('ordens').insert([{
+        numero: newOrdem.numero,
+        contrato_id: newOrdem.contratoId,
+        data_emissao: newOrdem.dataEmissao.toISOString(),
+      }]).select().single();
+
+      if (orderError) throw orderError;
+
+      // Then, add the consumed items
+      const itemsToInsert = newOrdem.itensConsumidos.map(item => ({
+        ordem_id: ordem.id,
+        item_id: item.itemId,
+        quantidade: item.quantidade
+      }));
+
+      const { error: itemsError } = await supabase
+        .from('itens_consumidos')
+        .insert(itemsToInsert);
+
+      if (itemsError) throw itemsError;
+
+      // Update the consumed quantities in the items table
+      for (const item of newOrdem.itensConsumidos) {
+        const { error: updateError } = await supabase.rpc('update_item_quantity', {
+          p_item_id: item.itemId,
+          p_quantidade: item.quantidade
+        });
+        
+        if (updateError) throw updateError;
+      }
+
+      setShowAddDialog(false);
+      window.location.reload(); // Temporary solution to refresh data
+      toast({
+        title: "Sucesso",
+        description: "Ordem de fornecimento cadastrada com sucesso.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Erro",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
   };
 
   return (

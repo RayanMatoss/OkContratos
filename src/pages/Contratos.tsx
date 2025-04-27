@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,6 +17,8 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { FundoMunicipal } from "@/types";
+import { supabase } from "@/lib/supabase";
+import { toast } from "@/components/ui/toast";
 
 const Contratos = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -40,10 +41,33 @@ const Contratos = () => {
     );
   });
 
-  const handleAddContrato = () => {
-    setShowAddDialog(false);
-    // Aqui seria feita a lógica para adicionar o contrato
-    // Usando um serviço ou uma chamada de API
+  const handleAddContrato = async () => {
+    try {
+      const { error } = await supabase.from('contratos').insert([{
+        numero: newContrato.numero,
+        fornecedor_id: newContrato.fornecedorId,
+        fundo_municipal: newContrato.fundoMunicipal,
+        objeto: newContrato.objeto,
+        valor: parseFloat(newContrato.valor.replace(/[^\d.,]/g, '').replace(',', '.')),
+        data_inicio: newContrato.dataInicio.toISOString(),
+        data_termino: newContrato.dataTermino.toISOString()
+      }]);
+
+      if (error) throw error;
+
+      setShowAddDialog(false);
+      window.location.reload(); // Temporary solution to refresh data
+      toast({
+        title: "Sucesso",
+        description: "Contrato cadastrado com sucesso.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Erro",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
   };
 
   return (

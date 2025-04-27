@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,6 +6,8 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { Label } from "@/components/ui/label";
 import { fornecedores } from "@/data/mockData";
 import { Plus, Search } from "lucide-react";
+import { supabase } from "@/lib/supabase";
+import { toast } from "@/components/ui/toast";
 
 const Fornecedores = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -27,9 +28,31 @@ const Fornecedores = () => {
     );
   });
 
-  const handleAddFornecedor = () => {
-    setShowAddDialog(false);
-    // Aqui seria feita a lógica para adicionar o fornecedor
+  const handleAddFornecedor = async () => {
+    try {
+      const { error } = await supabase.from('fornecedores').insert([{
+        nome: newFornecedor.nome,
+        cnpj: newFornecedor.cnpj,
+        email: newFornecedor.email,
+        telefone: newFornecedor.telefone,
+        endereco: newFornecedor.endereco
+      }]);
+
+      if (error) throw error;
+
+      setShowAddDialog(false);
+      window.location.reload(); // Temporary solution to refresh data
+      toast({
+        title: "Sucesso",
+        description: "Fornecedor cadastrado com sucesso.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Erro",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
   };
 
   return (
