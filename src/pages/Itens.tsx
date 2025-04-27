@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from 'react';
+
+import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Plus, Search } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { ItemForm } from "@/components/itens/ItemForm";
-import { ItemsList } from "@/components/itens/ItemsList";
+import { SearchInput } from "@/components/itens/SearchInput";
+import { ItemsTable } from "@/components/itens/ItemsTable";
+import { AddItemsDialog } from "@/components/itens/AddItemsDialog";
 
 const Itens = () => {
   const { toast } = useToast();
@@ -17,8 +15,6 @@ const Itens = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [loading, setLoading] = useState(true);
   const [contratos, setContratos] = useState<any[]>([]);
-  const [selectedContrato, setSelectedContrato] = useState("");
-  const [itemsList, setItemsList] = useState<any[]>([]);
 
   useEffect(() => {
     fetchItens();
@@ -73,52 +69,6 @@ const Itens = () => {
     }
   }
 
-  const handleAddItem = (newItem: any) => {
-    setItemsList([...itemsList, newItem]);
-  };
-
-  const handleSubmitItems = async () => {
-    if (!selectedContrato || itemsList.length === 0) {
-      toast({
-        title: "Erro",
-        description: "Selecione um contrato e adicione pelo menos um item",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    try {
-      const itemsToAdd = itemsList.map(item => ({
-        contrato_id: selectedContrato,
-        descricao: item.descricao,
-        quantidade: parseFloat(item.quantidade),
-        unidade: item.unidade,
-        valor_unitario: parseFloat(item.valor_unitario),
-        quantidade_consumida: 0
-      }));
-
-      const { error } = await supabase.from('itens').insert(itemsToAdd);
-
-      if (error) throw error;
-
-      setShowAddDialog(false);
-      toast({
-        title: "Sucesso",
-        description: "Itens adicionados com sucesso."
-      });
-      
-      setItemsList([]);
-      setSelectedContrato("");
-      fetchItens();
-    } catch (error: any) {
-      toast({
-        title: "Erro",
-        description: error.message,
-        variant: "destructive"
-      });
-    }
-  };
-
   const filteredItens = itens.filter((item) => {
     return (
       item.descricao.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -144,106 +94,17 @@ const Itens = () => {
       </div>
 
       <div className="flex items-center gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Buscar itens..."
-            className="w-full pl-8"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
+        <SearchInput value={searchTerm} onChange={setSearchTerm} />
       </div>
 
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Descrição</TableHead>
-              <TableHead>Contrato</TableHead>
-              <TableHead>Fornecedor</TableHead>
-              <TableHead className="text-right">Quantidade</TableHead>
-              <TableHead className="text-right">Consumido</TableHead>
-              <TableHead>Unidade</TableHead>
-              <TableHead className="text-right">Valor Unit.</TableHead>
-              <TableHead className="text-right">Valor Total</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredItens.length > 0 ? (
-              filteredItens.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell className="font-medium">{item.descricao}</TableCell>
-                  <TableCell>{item.contratos?.numero}</TableCell>
-                  <TableCell>{item.contratos?.fornecedores?.nome}</TableCell>
-                  <TableCell className="text-right">{item.quantidade}</TableCell>
-                  <TableCell className="text-right">{item.quantidade_consumida}</TableCell>
-                  <TableCell>{item.unidade}</TableCell>
-                  <TableCell className="text-right">
-                    {new Intl.NumberFormat('pt-BR', {
-                      style: 'currency',
-                      currency: 'BRL'
-                    }).format(item.valor_unitario)}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    {new Intl.NumberFormat('pt-BR', {
-                      style: 'currency',
-                      currency: 'BRL'
-                    }).format(item.quantidade * item.valor_unitario)}
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={8} className="h-24 text-center">
-                  {loading ? "Carregando itens..." : "Nenhum item encontrado."}
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+      <ItemsTable items={filteredItens} loading={loading} />
 
-      <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-        <DialogContent className="sm:max-w-[600px]">
-          <DialogHeader>
-            <DialogTitle>Adicionar Novos Itens</DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="contrato">Contrato</Label>
-              <select
-                id="contrato"
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                value={selectedContrato}
-                onChange={(e) => setSelectedContrato(e.target.value)}
-              >
-                <option value="">Selecione um contrato</option>
-                {contratos.map(contrato => (
-                  <option key={contrato.id} value={contrato.id}>
-                    {contrato.numero} - {contrato.objeto}
-                  </option>
-                ))}
-              </select>
-            </div>
-            
-            <ItemForm onAdd={handleAddItem} />
-            
-            <ItemsList items={itemsList} />
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => {
-              setShowAddDialog(false);
-              setItemsList([]);
-              setSelectedContrato("");
-            }}>
-              Cancelar
-            </Button>
-            <Button onClick={handleSubmitItems}>Salvar Itens</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <AddItemsDialog
+        open={showAddDialog}
+        onOpenChange={setShowAddDialog}
+        onSuccess={fetchItens}
+        contratos={contratos}
+      />
     </div>
   );
 };
