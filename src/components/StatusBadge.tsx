@@ -1,6 +1,7 @@
 
 import { cn } from "@/lib/utils";
 import { StatusContrato, StatusOrdem } from "@/types";
+import { Badge } from "@/components/ui/badge";
 
 interface StatusBadgeProps {
   status: StatusContrato | StatusOrdem;
@@ -24,15 +25,37 @@ const getStatusColor = (status: StatusContrato | StatusOrdem) => {
   }
 };
 
+const getStatusIcon = (status: StatusContrato | StatusOrdem) => {
+  switch (status) {
+    case "Ativo":
+      return "●"; // Active dot
+    case "Concluída":
+      return "✓"; // Check mark
+    case "A Vencer":
+      return "⚠"; // Warning
+    case "Pendente":
+      return "⏳"; // Hourglass
+    case "Expirado":
+      return "⊗"; // X mark in circle
+    case "Em Aprovação":
+      return "⋯"; // Ellipsis
+    default:
+      return "";
+  }
+};
+
 const StatusBadge = ({ status, className }: StatusBadgeProps) => {
+  const icon = getStatusIcon(status);
+  
   return (
     <span
       className={cn(
-        "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border",
+        "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border",
         getStatusColor(status),
         className
       )}
     >
+      <span className="text-xs">{icon}</span>
       {status}
     </span>
   );
