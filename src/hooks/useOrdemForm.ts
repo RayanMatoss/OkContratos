@@ -78,6 +78,7 @@ export const useOrdemForm = (
         contrato_id: contratoId,
         data_emissao: data?.toISOString(),
         numero,
+        // Status is now managed by triggers, no need to set it here
       })
       .select("id")
       .single();
@@ -116,9 +117,10 @@ export const useOrdemForm = (
       .update({
         data_emissao: data?.toISOString(),
         contrato_id: contratoId
+        // Status is now managed by triggers, no need to update it here
       })
       .eq("id", ordemId)
-      .eq("status", "Pendente");
+      .eq("status", "Pendente"); // Can only update pending orders
 
     if (ordemError) {
       throw ordemError;

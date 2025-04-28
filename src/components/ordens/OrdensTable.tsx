@@ -49,7 +49,9 @@ const OrdensTable = ({
         <TableBody>
           {filteredOrdens.length > 0 ? (
             filteredOrdens.map((ordem) => {
+              // Can only edit orders that are still pending
               const canEdit = ordem.status === "Pendente";
+              // Can only delete orders that are still pending
               const canDelete = ordem.status === "Pendente";
               
               return (
@@ -74,12 +76,12 @@ const OrdensTable = ({
                         disableEdit={!canEdit}
                         deleteTooltip={
                           !canDelete 
-                            ? "Não é possível excluir uma ordem que não está com status Pendente" 
+                            ? "Não é possível excluir uma ordem que já foi concluída" 
                             : undefined
                         }
                         editTooltip={
                           !canEdit 
-                            ? "Não é possível editar uma ordem que não está com status Pendente" 
+                            ? "Não é possível editar uma ordem que já foi concluída" 
                             : undefined
                         }
                       />

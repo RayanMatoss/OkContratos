@@ -1,9 +1,11 @@
 
 export type FundoMunicipal = "Prefeitura" | "Educação" | "Saúde" | "Assistência";
 
+// Updated contract status values - only managed by database now
 export type StatusContrato = "Ativo" | "Expirado" | "A Vencer" | "Em Aprovação";
 
-export type StatusOrdem = "Pendente" | "Aprovada" | "Concluída" | "Cancelada";
+// Simplified order status values - only managed by database now
+export type StatusOrdem = "Pendente" | "Concluída";
 
 export interface Fornecedor {
   id: string;

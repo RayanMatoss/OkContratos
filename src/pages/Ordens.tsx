@@ -32,6 +32,7 @@ const Ordens = () => {
   };
 
   const handleEdit = (ordem: OrdemFornecimento) => {
+    // Status is now managed by database triggers, only allow editing Pendente orders
     if (ordem.status !== "Pendente") {
       toast({
         title: "Não é possível editar",
@@ -48,6 +49,7 @@ const Ordens = () => {
 
   const handleDelete = async (ordem: OrdemFornecimento) => {
     try {
+      // Only allow deleting orders with Pendente status
       const { error } = await supabase
         .from('ordens')
         .delete()

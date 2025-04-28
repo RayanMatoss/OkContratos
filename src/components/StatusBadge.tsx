@@ -10,14 +10,12 @@ interface StatusBadgeProps {
 const getStatusColor = (status: StatusContrato | StatusOrdem) => {
   switch (status) {
     case "Ativo":
-    case "Aprovada":
     case "Concluída":
       return "bg-success/20 text-success border-success/30";
     case "A Vencer":
     case "Pendente":
       return "bg-warning/20 text-warning border-warning/30";
     case "Expirado":
-    case "Cancelada":
       return "bg-destructive/20 text-destructive border-destructive/30";
     case "Em Aprovação":
       return "bg-info/20 text-info border-info/30";
