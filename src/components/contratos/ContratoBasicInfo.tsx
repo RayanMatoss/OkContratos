@@ -85,11 +85,11 @@ const ContratoBasicInfo = ({
               <SelectValue placeholder="Selecione o fornecedor" />
             </SelectTrigger>
             <SelectContent>
-              {fornecedores.map((fornecedor) => (
+              {fornecedores?.map((fornecedor) => (
                 <SelectItem key={fornecedor.id} value={fornecedor.id}>
                   {fornecedor.nome}
                 </SelectItem>
-              ))}
+              )) || <SelectItem value="">Carregando...</SelectItem>}
             </SelectContent>
           </Select>
         </div>
@@ -105,6 +105,7 @@ const ContratoBasicInfo = ({
                 role="combobox"
                 aria-expanded={open}
                 className="w-full justify-between"
+                type="button" 
               >
                 {selectedFundos.length === 0
                   ? "Selecione fundos..."
@@ -121,7 +122,10 @@ const ContratoBasicInfo = ({
                     <CommandItem
                       key={fundo.value}
                       value={fundo.value}
-                      onSelect={() => handleSelectFundo(fundo.value)}
+                      onSelect={() => {
+                        handleSelectFundo(fundo.value);
+                        setOpen(false);
+                      }}
                     >
                       <Check
                         className={cn(

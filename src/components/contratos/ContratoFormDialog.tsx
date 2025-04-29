@@ -55,16 +55,30 @@ export const ContratoFormDialog = ({
       }
       
       setFormData({
-        numero: contrato.numero,
-        objeto: contrato.objeto,
-        fornecedor_id: contrato.fornecedorId,
-        valor: contrato.valor.toString(),
+        numero: contrato.numero || "",
+        objeto: contrato.objeto || "",
+        fornecedor_id: contrato.fornecedorId || "",
+        valor: contrato.valor?.toString() || "",
         fundo_municipal: fundoArray,
-        data_inicio: contrato.dataInicio,
-        data_termino: contrato.dataTermino
+        data_inicio: contrato.dataInicio || new Date(),
+        data_termino: contrato.dataTermino || new Date()
+      });
+    } else {
+      // Reset form for create mode
+      setFormData({
+        numero: "",
+        objeto: "",
+        fornecedor_id: "",
+        valor: "",
+        fundo_municipal: [] as FundoMunicipal[],
+        data_inicio: new Date(),
+        data_termino: new Date()
       });
     }
-  }, [mode, contrato]);
+    
+    // Always reset to the first step when opening the dialog
+    setFormStep("basic");
+  }, [mode, contrato, open]);
 
   const handleNextStep = () => {
     if (formStep === "basic") {
@@ -97,10 +111,10 @@ export const ContratoFormDialog = ({
         numero: formData.numero,
         objeto: formData.objeto,
         fornecedor_id: formData.fornecedor_id,
-        valor: parseFloat(formData.valor),
+        valor: parseFloat(formData.valor) || 0,
         fundo_municipal: formattedFundos,
-        data_inicio: formData.data_inicio.toISOString(),
-        data_termino: formData.data_termino.toISOString()
+        data_inicio: formData.data_inicio instanceof Date ? formData.data_inicio.toISOString() : new Date().toISOString(),
+        data_termino: formData.data_termino instanceof Date ? formData.data_termino.toISOString() : new Date().toISOString()
       };
 
       let error;
@@ -147,7 +161,7 @@ export const ContratoFormDialog = ({
             fundoMunicipal={formData.fundo_municipal}
             objeto={formData.objeto}
             valor={formData.valor}
-            fornecedores={fornecedores}
+            fornecedores={fornecedores || []}
             onFieldChange={(field, value) => setFormData({
               ...formData,
               [field]: value
