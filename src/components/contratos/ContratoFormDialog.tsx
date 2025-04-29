@@ -45,10 +45,12 @@ export const ContratoFormDialog = ({
       let fundoArray: FundoMunicipal[] = [];
       
       if (Array.isArray(contrato.fundoMunicipal)) {
-        fundoArray = contrato.fundoMunicipal;
+        fundoArray = [...contrato.fundoMunicipal];
       } else if (typeof contrato.fundoMunicipal === 'string') {
         // Convert comma-separated string to array
-        fundoArray = contrato.fundoMunicipal.split(', ').filter(Boolean) as FundoMunicipal[];
+        fundoArray = contrato.fundoMunicipal.split(', ')
+          .filter(Boolean)
+          .map(item => item.trim() as FundoMunicipal);
       } else if (contrato.fundoMunicipal) {
         // Single value
         fundoArray = [contrato.fundoMunicipal as FundoMunicipal];

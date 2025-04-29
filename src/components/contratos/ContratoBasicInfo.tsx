@@ -44,7 +44,7 @@ const ContratoBasicInfo = ({
   fundoMunicipal = [], // Provide default empty array to prevent undefined
   objeto,
   valor,
-  fornecedores,
+  fornecedores = [], // Default empty array for fornecedores
   onFieldChange
 }: ContratoBasicInfoProps) => {
   const [open, setOpen] = useState(false);
