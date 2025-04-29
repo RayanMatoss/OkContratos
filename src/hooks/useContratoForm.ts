@@ -114,11 +114,11 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
     setLoading(true);
     
     try {
-      // Unir múltiplos fundos com vírgula, se houver múltiplos fundos selecionados
+      // Verificar se fundo_municipal é sempre um array
       const formattedFundos = Array.isArray(formData.fundo_municipal) 
-        ? formData.fundo_municipal.join(', ')
+        ? formData.fundo_municipal.join(', ') // Convertendo array em string separada por vírgulas
         : '';
-      
+
       const data = {
         numero: formData.numero,
         objeto: formData.objeto,
@@ -173,4 +173,5 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
     handleSubmit
   };
 };
+
 
