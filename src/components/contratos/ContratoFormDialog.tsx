@@ -38,6 +38,12 @@ export const ContratoFormDialog = ({
     onOpenChange
   });
 
+  // Ensure formData.fundo_municipal is always an array
+  const safeFormData = {
+    ...formData,
+    fundo_municipal: Array.isArray(formData.fundo_municipal) ? formData.fundo_municipal : []
+  };
+
   const formFooter = (
     <ContratoFormFooter
       formStep={formStep}
@@ -62,7 +68,7 @@ export const ContratoFormDialog = ({
     >
       <ContratoFormStepContent
         step={formStep}
-        formData={formData}
+        formData={safeFormData}
         fornecedores={fornecedores || []}
         onFieldChange={handleFieldChange}
       />

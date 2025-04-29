@@ -82,6 +82,11 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
   }, [mode, contrato]);
 
   const handleFieldChange = (field: keyof ContratoFormData, value: any) => {
+    // Special handling for fundo_municipal to ensure it's always an array
+    if (field === "fundo_municipal" && value === undefined) {
+      value = [];
+    }
+    
     setFormData({
       ...formData,
       [field]: value
