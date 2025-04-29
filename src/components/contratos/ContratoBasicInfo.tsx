@@ -52,14 +52,15 @@ const ContratoBasicInfo = ({
   // Ensure fundoMunicipal is always an array
   const selectedFundos = Array.isArray(fundoMunicipal) ? fundoMunicipal : [];
 
+  // Function to handle the selection and deselection of FundoMunicipal
   const handleSelectFundo = (value: FundoMunicipal) => {
-    if (selectedFundos.includes(value)) {
-      // Remove the value if already selected
-      onFieldChange("fundo_municipal", selectedFundos.filter(v => v !== value));
+    const updatedFundos = new Set(selectedFundos);
+    if (updatedFundos.has(value)) {
+      updatedFundos.delete(value); // Remove the fundo if already selected
     } else {
-      // Add the value if not selected
-      onFieldChange("fundo_municipal", [...selectedFundos, value]);
+      updatedFundos.add(value); // Add the fundo if not selected
     }
+    onFieldChange("fundo_municipal", Array.from(updatedFundos)); // Update the state with unique values
   };
 
   return (
@@ -177,3 +178,4 @@ const ContratoBasicInfo = ({
 };
 
 export default ContratoBasicInfo;
+
