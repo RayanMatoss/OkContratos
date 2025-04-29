@@ -1,4 +1,3 @@
-
 import { cn } from "@/lib/utils";
 import { StatusContrato, StatusOrdem } from "@/types";
 import { Badge } from "@/components/ui/badge";

@@ -1,6 +1,5 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import StatusBadge from "@/components/StatusBadge";
 import { format } from "date-fns";
 import { OrdemFornecimento } from "@/types";
 import { Loader } from "lucide-react";
@@ -42,7 +41,6 @@ const OrdensTable = ({
             <TableHead>Contrato</TableHead>
             <TableHead>Emissão</TableHead>
             <TableHead>Fornecedor</TableHead>
-            <TableHead>Status</TableHead>
             <TableHead className="text-right">Ações</TableHead>
           </TableRow>
         </TableHeader>
@@ -62,9 +60,6 @@ const OrdensTable = ({
                     {format(new Date(ordem.dataEmissao), 'dd/MM/yyyy')}
                   </TableCell>
                   <TableCell>{ordem.contrato?.fornecedor?.nome}</TableCell>
-                  <TableCell>
-                    <StatusBadge status={ordem.status} />
-                  </TableCell>
                   <TableCell className="text-right">
                     <TooltipProvider>
                       <TableActions
@@ -92,7 +87,7 @@ const OrdensTable = ({
             })
           ) : (
             <TableRow>
-              <TableCell colSpan={6} className="h-24 text-center">
+              <TableCell colSpan={5} className="h-24 text-center">
                 Nenhuma ordem encontrada.
               </TableCell>
             </TableRow>

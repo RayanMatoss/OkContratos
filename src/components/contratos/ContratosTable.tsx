@@ -2,7 +2,6 @@
 import { format } from "date-fns";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { TableActions } from "@/components/ui/table-actions";
-import StatusBadge from "@/components/StatusBadge";
 import { Contrato } from "@/types";
 
 interface ContratosTableProps {
@@ -22,7 +21,6 @@ const ContratosTable = ({ contratos, onEdit, onDelete }: ContratosTableProps) =>
             <TableHead>Fundo</TableHead>
             <TableHead>Valor</TableHead>
             <TableHead>Vigência</TableHead>
-            <TableHead>Status</TableHead>
             <TableHead className="text-right">Ações</TableHead>
           </TableRow>
         </TableHeader>
@@ -43,9 +41,6 @@ const ContratosTable = ({ contratos, onEdit, onDelete }: ContratosTableProps) =>
                   {format(new Date(contrato.dataInicio), 'dd/MM/yyyy')} a{' '}
                   {format(new Date(contrato.dataTermino), 'dd/MM/yyyy')}
                 </TableCell>
-                <TableCell>
-                  <StatusBadge status={contrato.status} />
-                </TableCell>
                 <TableCell className="text-right">
                   <TableActions
                     onEdit={() => onEdit?.(contrato)}
@@ -58,7 +53,7 @@ const ContratosTable = ({ contratos, onEdit, onDelete }: ContratosTableProps) =>
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={7} className="h-24 text-center">
+              <TableCell colSpan={6} className="h-24 text-center">
                 Nenhum contrato encontrado.
               </TableCell>
             </TableRow>

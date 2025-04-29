@@ -4,7 +4,6 @@ import DashboardCard from "@/components/DashboardCard";
 import ChartContainer from "@/components/ChartContainer";
 import StatisticsDonut from "@/components/StatisticsDonut";
 import BarChartComponent from "@/components/BarChartComponent";
-import StatusBadge from "@/components/StatusBadge";
 import { useDashboardData } from "@/hooks/useDashboardData";
 import { Loader } from "lucide-react";
 
@@ -96,7 +95,6 @@ const Dashboard = () => {
                       {contrato.fornecedor?.nome}
                     </p>
                   </div>
-                  <StatusBadge status={contrato.status} />
                 </div>
               ))}
             </div>
@@ -124,7 +122,6 @@ const Dashboard = () => {
                       {new Date(ordem.data_emissao).toLocaleDateString()}
                     </p>
                   </div>
-                  <StatusBadge status={ordem.status} />
                 </div>
               ))}
             </div>
