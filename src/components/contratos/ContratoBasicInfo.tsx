@@ -41,7 +41,7 @@ interface ContratoBasicInfoProps {
 const ContratoBasicInfo = ({
   numero,
   fornecedorId,
-  fundoMunicipal,
+  fundoMunicipal = [], // Provide default empty array to prevent undefined
   objeto,
   valor,
   fornecedores,
@@ -49,13 +49,16 @@ const ContratoBasicInfo = ({
 }: ContratoBasicInfoProps) => {
   const [open, setOpen] = useState(false);
 
+  // Ensure fundoMunicipal is always an array
+  const selectedFundos = Array.isArray(fundoMunicipal) ? fundoMunicipal : [];
+
   const handleSelectFundo = (value: FundoMunicipal) => {
-    if (fundoMunicipal.includes(value)) {
+    if (selectedFundos.includes(value)) {
       // Remove the value if already selected
-      onFieldChange("fundo_municipal", fundoMunicipal.filter(v => v !== value));
+      onFieldChange("fundo_municipal", selectedFundos.filter(v => v !== value));
     } else {
       // Add the value if not selected
-      onFieldChange("fundo_municipal", [...fundoMunicipal, value]);
+      onFieldChange("fundo_municipal", [...selectedFundos, value]);
     }
   };
 
@@ -103,9 +106,9 @@ const ContratoBasicInfo = ({
                 aria-expanded={open}
                 className="w-full justify-between"
               >
-                {fundoMunicipal.length === 0
+                {selectedFundos.length === 0
                   ? "Selecione fundos..."
-                  : `${fundoMunicipal.length} fundos selecionados`}
+                  : `${selectedFundos.length} fundos selecionados`}
                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>
@@ -123,7 +126,7 @@ const ContratoBasicInfo = ({
                       <Check
                         className={cn(
                           "mr-2 h-4 w-4",
-                          fundoMunicipal.includes(fundo.value) ? "opacity-100" : "opacity-0"
+                          selectedFundos.includes(fundo.value) ? "opacity-100" : "opacity-0"
                         )}
                       />
                       {fundo.label}
@@ -133,9 +136,9 @@ const ContratoBasicInfo = ({
               </Command>
             </PopoverContent>
           </Popover>
-          {fundoMunicipal.length > 0 && (
+          {selectedFundos.length > 0 && (
             <div className="flex flex-wrap gap-1 mt-2">
-              {fundoMunicipal.map(fundo => (
+              {selectedFundos.map(fundo => (
                 <Badge key={fundo} variant="secondary" className="mr-1 mb-1">
                   {FUNDOS_MUNICIPAIS.find(f => f.value === fundo)?.label || fundo}
                 </Badge>

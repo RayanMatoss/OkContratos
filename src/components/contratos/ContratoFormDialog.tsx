@@ -41,14 +41,25 @@ export const ContratoFormDialog = ({
 
   useEffect(() => {
     if (mode === 'edit' && contrato) {
+      // Ensure that fundo_municipal is always an array
+      let fundoArray: FundoMunicipal[] = [];
+      
+      if (Array.isArray(contrato.fundoMunicipal)) {
+        fundoArray = contrato.fundoMunicipal;
+      } else if (typeof contrato.fundoMunicipal === 'string') {
+        // Convert comma-separated string to array
+        fundoArray = contrato.fundoMunicipal.split(', ').filter(Boolean) as FundoMunicipal[];
+      } else if (contrato.fundoMunicipal) {
+        // Single value
+        fundoArray = [contrato.fundoMunicipal as FundoMunicipal];
+      }
+      
       setFormData({
         numero: contrato.numero,
         objeto: contrato.objeto,
         fornecedor_id: contrato.fornecedorId,
         valor: contrato.valor.toString(),
-        fundo_municipal: Array.isArray(contrato.fundoMunicipal) 
-          ? contrato.fundoMunicipal 
-          : [contrato.fundoMunicipal as FundoMunicipal],
+        fundo_municipal: fundoArray,
         data_inicio: contrato.dataInicio,
         data_termino: contrato.dataTermino
       });
@@ -77,7 +88,10 @@ export const ContratoFormDialog = ({
     
     try {
       // Join multiple funds with comma if there are multiple funds selected
-      const formattedFundos = formData.fundo_municipal.join(', ');
+      // Ensure fundo_municipal is always an array before joining
+      const formattedFundos = Array.isArray(formData.fundo_municipal) 
+        ? formData.fundo_municipal.join(', ')
+        : '';
       
       const data = {
         numero: formData.numero,
