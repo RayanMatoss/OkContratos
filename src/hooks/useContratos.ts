@@ -1,7 +1,8 @@
+
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Contrato } from "@/types";
+import { Contrato, FundoMunicipal } from "@/types";
 
 export const useContratos = () => {
   const { toast } = useToast();
@@ -65,12 +66,17 @@ export const useContratos = () => {
 
   const updateContrato = async (id: string, data: Partial<Omit<Contrato, 'id' | 'createdAt' | 'status'>>) => {
     try {
+      // Convert fundoMunicipal array to string if it's an array
+      const fundoMunicipalValue = Array.isArray(data.fundoMunicipal) 
+        ? data.fundoMunicipal.join(', ') 
+        : data.fundoMunicipal;
+
       const { error } = await supabase
         .from('contratos')
         .update({
           numero: data.numero,
           fornecedor_id: data.fornecedorId,
-          fundo_municipal: data.fundoMunicipal,
+          fundo_municipal: fundoMunicipalValue, // Fixed: Now properly formatted as string
           objeto: data.objeto,
           valor: data.valor,
           data_inicio: data.dataInicio?.toISOString(),
