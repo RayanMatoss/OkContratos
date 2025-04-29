@@ -32,7 +32,7 @@ export interface Contrato {
   numero: string;
   fornecedorId: string;
   fornecedor?: Fornecedor;
-  fundoMunicipal: FundoMunicipal;
+  fundoMunicipal: FundoMunicipal | FundoMunicipal[];
   objeto: string;
   valor: number;
   dataInicio: Date;

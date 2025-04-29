@@ -7,7 +7,8 @@ import ContratoBasicInfo from "./ContratoBasicInfo";
 import ContratoDates from "./ContratoDates";
 import ContratoItems from "./ContratoItems";
 import { useFornecedores } from "@/hooks/useFornecedores";
-import { Contrato } from "@/types";
+import { Button } from "@/components/ui/button";
+import { Contrato, FundoMunicipal } from "@/types";
 
 type ContratoFormDialogProps = {
   open: boolean;
@@ -33,7 +34,7 @@ export const ContratoFormDialog = ({
     objeto: "",
     fornecedor_id: "",
     valor: "",
-    fundo_municipal: "",
+    fundo_municipal: [] as FundoMunicipal[],
     data_inicio: new Date(),
     data_termino: new Date()
   });
@@ -45,24 +46,45 @@ export const ContratoFormDialog = ({
         objeto: contrato.objeto,
         fornecedor_id: contrato.fornecedorId,
         valor: contrato.valor.toString(),
-        fundo_municipal: contrato.fundoMunicipal,
+        fundo_municipal: Array.isArray(contrato.fundoMunicipal) 
+          ? contrato.fundoMunicipal 
+          : [contrato.fundoMunicipal as FundoMunicipal],
         data_inicio: contrato.dataInicio,
         data_termino: contrato.dataTermino
       });
     }
   }, [mode, contrato]);
 
+  const handleNextStep = () => {
+    if (formStep === "basic") {
+      setFormStep("dates");
+    } else if (formStep === "dates") {
+      setFormStep("items");
+    }
+  };
+
+  const handlePreviousStep = () => {
+    if (formStep === "dates") {
+      setFormStep("basic");
+    } else if (formStep === "items") {
+      setFormStep("dates");
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     
     try {
+      // Join multiple funds with comma if there are multiple funds selected
+      const formattedFundos = formData.fundo_municipal.join(', ');
+      
       const data = {
         numero: formData.numero,
         objeto: formData.objeto,
         fornecedor_id: formData.fornecedor_id,
         valor: parseFloat(formData.valor),
-        fundo_municipal: formData.fundo_municipal,
+        fundo_municipal: formattedFundos,
         data_inicio: formData.data_inicio.toISOString(),
         data_termino: formData.data_termino.toISOString()
       };
@@ -108,7 +130,7 @@ export const ContratoFormDialog = ({
           <ContratoBasicInfo 
             numero={formData.numero}
             fornecedorId={formData.fornecedor_id}
-            fundoMunicipal={formData.fundo_municipal as any}
+            fundoMunicipal={formData.fundo_municipal}
             objeto={formData.objeto}
             valor={formData.valor}
             fornecedores={fornecedores}
@@ -136,6 +158,44 @@ export const ContratoFormDialog = ({
     }
   };
 
+  const renderFormFooter = () => {
+    return (
+      <div className="flex justify-between w-full mt-6">
+        {formStep !== "basic" && (
+          <Button 
+            type="button" 
+            variant="outline" 
+            onClick={handlePreviousStep}
+            disabled={loading}
+          >
+            Voltar
+          </Button>
+        )}
+        
+        <div className="ml-auto flex gap-2">
+          <Button 
+            variant="outline" 
+            type="button"
+            onClick={() => onOpenChange(false)}
+            disabled={loading}
+          >
+            Cancelar
+          </Button>
+          
+          {formStep !== "items" ? (
+            <Button type="button" onClick={handleNextStep} disabled={loading}>
+              Próximo
+            </Button>
+          ) : (
+            <Button type="submit" disabled={loading}>
+              {loading ? "Salvando..." : "Salvar"}
+            </Button>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <FormSheet
       open={open}
@@ -144,6 +204,9 @@ export const ContratoFormDialog = ({
       title={mode === 'create' ? "Novo Contrato" : "Editar Contrato"}
       description={mode === 'create' ? "Preencha os dados do novo contrato" : "Edite os dados do contrato"}
       loading={loading}
+      footer={renderFormFooter()}
+      step={formStep === "basic" ? 1 : formStep === "dates" ? 2 : 3}
+      totalSteps={3}
     >
       {renderStepContent()}
     </FormSheet>

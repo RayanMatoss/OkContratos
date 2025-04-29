@@ -18,6 +18,9 @@ interface FormSheetProps {
   children: React.ReactNode;
   submitLabel?: string;
   loading?: boolean;
+  footer?: React.ReactNode;
+  step?: number;
+  totalSteps?: number;
 }
 
 export function FormSheet({
@@ -28,7 +31,10 @@ export function FormSheet({
   description,
   children,
   submitLabel = "Salvar",
-  loading = false
+  loading = false,
+  footer,
+  step,
+  totalSteps
 }: FormSheetProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,6 +48,24 @@ export function FormSheet({
           <SheetHeader className="space-y-2">
             <SheetTitle>{title}</SheetTitle>
             {description && <SheetDescription>{description}</SheetDescription>}
+            
+            {step && totalSteps && (
+              <div className="flex items-center justify-center mt-2">
+                <div className="flex gap-1">
+                  {Array.from({ length: totalSteps }).map((_, index) => (
+                    <div 
+                      key={index} 
+                      className={`h-2 w-10 rounded ${
+                        index + 1 === step ? 'bg-primary' : 'bg-muted'
+                      }`}
+                    />
+                  ))}
+                </div>
+                <span className="text-xs text-muted-foreground ml-2">
+                  Passo {step} de {totalSteps}
+                </span>
+              </div>
+            )}
           </SheetHeader>
           
           <div className="flex-1 py-6">
@@ -49,17 +73,23 @@ export function FormSheet({
           </div>
 
           <SheetFooter className="flex justify-end gap-2 pt-2">
-            <Button 
-              variant="outline" 
-              type="button"
-              onClick={() => onOpenChange(false)}
-              disabled={loading}
-            >
-              Cancelar
-            </Button>
-            <Button type="submit" disabled={loading}>
-              {loading ? "Salvando..." : submitLabel}
-            </Button>
+            {footer ? (
+              footer
+            ) : (
+              <>
+                <Button 
+                  variant="outline" 
+                  type="button"
+                  onClick={() => onOpenChange(false)}
+                  disabled={loading}
+                >
+                  Cancelar
+                </Button>
+                <Button type="submit" disabled={loading}>
+                  {loading ? "Salvando..." : submitLabel}
+                </Button>
+              </>
+            )}
           </SheetFooter>
         </form>
       </SheetContent>
