@@ -40,18 +40,18 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
 
   useEffect(() => {
     if (mode === 'edit' && contrato) {
-      // Ensure that fundo_municipal is always an array
+      // Garantir que fundo_municipal seja sempre um array
       let fundoArray: FundoMunicipal[] = [];
       
       if (Array.isArray(contrato.fundoMunicipal)) {
         fundoArray = [...contrato.fundoMunicipal];
       } else if (typeof contrato.fundoMunicipal === 'string') {
-        // Convert comma-separated string to array
+        // Converte a string separada por vírgulas em um array
         fundoArray = contrato.fundoMunicipal.split(', ')
           .filter(Boolean)
           .map(item => item.trim() as FundoMunicipal);
       } else if (contrato.fundoMunicipal) {
-        // Single value
+        // Se for um único valor, converta em um array
         fundoArray = [contrato.fundoMunicipal as FundoMunicipal];
       }
       
@@ -65,7 +65,7 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
         data_termino: contrato.dataTermino || new Date()
       });
     } else {
-      // Reset form for create mode
+      // Resetar o formulário para o modo de criação
       setFormData({
         numero: "",
         objeto: "",
@@ -77,12 +77,12 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
       });
     }
     
-    // Always reset to the first step when opening the dialog
+    // Sempre resetar para o primeiro passo ao abrir o modal
     setFormStep("basic");
   }, [mode, contrato]);
 
   const handleFieldChange = (field: keyof ContratoFormData, value: any) => {
-    // Special handling for fundo_municipal to ensure it's always an array
+    // Garantir que fundo_municipal seja sempre um array
     if (field === "fundo_municipal" && value === undefined) {
       value = [];
     }
@@ -114,8 +114,7 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
     setLoading(true);
     
     try {
-      // Join multiple funds with comma if there are multiple funds selected
-      // Ensure fundo_municipal is always an array before joining
+      // Unir múltiplos fundos com vírgula, se houver múltiplos fundos selecionados
       const formattedFundos = Array.isArray(formData.fundo_municipal) 
         ? formData.fundo_municipal.join(', ')
         : '';
@@ -125,7 +124,7 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
         objeto: formData.objeto,
         fornecedor_id: formData.fornecedor_id,
         valor: parseFloat(formData.valor) || 0,
-        fundo_municipal: formattedFundos,
+        fundo_municipal: formattedFundos, // Armazenar os fundos como uma string separada por vírgulas
         data_inicio: formData.data_inicio instanceof Date ? formData.data_inicio.toISOString() : new Date().toISOString(),
         data_termino: formData.data_termino instanceof Date ? formData.data_termino.toISOString() : new Date().toISOString()
       };
@@ -174,3 +173,4 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
     handleSubmit
   };
 };
+
