@@ -47,7 +47,8 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
         fundoArray = [...contrato.fundoMunicipal];
       } else if (typeof contrato.fundoMunicipal === 'string') {
         // Convert comma-separated string to an array
-        fundoArray = contrato.fundoMunicipal.split(', ')
+        const fundoString = contrato.fundoMunicipal as string;
+        fundoArray = fundoString.split(', ')
           .filter(Boolean)
           .map(item => item.trim() as FundoMunicipal);
       }
