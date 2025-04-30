@@ -41,7 +41,7 @@ interface ContratoBasicInfoProps {
 const ContratoBasicInfo = ({
   numero,
   fornecedorId,
-  fundoMunicipal = [], // Provide default empty array to prevent undefined
+  fundoMunicipal = [], // Always provide a default empty array
   objeto,
   valor,
   fornecedores = [], // Default empty array for fornecedores
@@ -50,17 +50,22 @@ const ContratoBasicInfo = ({
   const [open, setOpen] = useState(false);
 
   // Ensure fundoMunicipal is always an array
-  const selectedFundos = Array.isArray(fundoMunicipal) ? fundoMunicipal : [];
+  const selectedFundos = Array.isArray(fundoMunicipal) ? fundoMunicipal : 
+    fundoMunicipal ? [fundoMunicipal] : [];
 
   // Function to handle the selection and deselection of FundoMunicipal
   const handleSelectFundo = (value: FundoMunicipal) => {
-    const updatedFundos = new Set(selectedFundos);
-    if (updatedFundos.has(value)) {
-      updatedFundos.delete(value); // Remove the fundo if already selected
+    let updatedFundos: FundoMunicipal[];
+    
+    if (selectedFundos.includes(value)) {
+      // Remove the fundo if already selected
+      updatedFundos = selectedFundos.filter(fundo => fundo !== value);
     } else {
-      updatedFundos.add(value); // Add the fundo if not selected
+      // Add the fundo if not selected
+      updatedFundos = [...selectedFundos, value];
     }
-    onFieldChange("fundo_municipal", Array.from(updatedFundos)); // Update the state with unique values
+    
+    onFieldChange("fundo_municipal", updatedFundos);
   };
 
   return (
@@ -106,7 +111,7 @@ const ContratoBasicInfo = ({
                 role="combobox"
                 aria-expanded={open}
                 className="w-full justify-between"
-                type="button" 
+                type="button"
               >
                 {selectedFundos.length === 0
                   ? "Selecione fundos..."
@@ -125,7 +130,6 @@ const ContratoBasicInfo = ({
                       value={fundo.value}
                       onSelect={() => {
                         handleSelectFundo(fundo.value);
-                        setOpen(false);
                       }}
                     >
                       <Check
@@ -144,8 +148,14 @@ const ContratoBasicInfo = ({
           {selectedFundos.length > 0 && (
             <div className="flex flex-wrap gap-1 mt-2">
               {selectedFundos.map(fundo => (
-                <Badge key={fundo} variant="secondary" className="mr-1 mb-1">
+                <Badge 
+                  key={fundo} 
+                  variant="secondary" 
+                  className="mr-1 mb-1"
+                  onClick={() => handleSelectFundo(fundo)}
+                >
                   {FUNDOS_MUNICIPAIS.find(f => f.value === fundo)?.label || fundo}
+                  <span className="ml-1 cursor-pointer">×</span>
                 </Badge>
               ))}
             </div>
@@ -178,4 +188,3 @@ const ContratoBasicInfo = ({
 };
 
 export default ContratoBasicInfo;
-

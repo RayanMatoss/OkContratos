@@ -40,18 +40,18 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
 
   useEffect(() => {
     if (mode === 'edit' && contrato) {
-      // Garantir que fundo_municipal seja sempre um array
+      // Parse fundo_municipal to always ensure it's an array
       let fundoArray: FundoMunicipal[] = [];
       
       if (Array.isArray(contrato.fundoMunicipal)) {
         fundoArray = [...contrato.fundoMunicipal];
       } else if (typeof contrato.fundoMunicipal === 'string') {
-        // Converte a string separada por vírgulas em um array
+        // Convert comma-separated string to an array
         fundoArray = contrato.fundoMunicipal.split(', ')
           .filter(Boolean)
           .map(item => item.trim() as FundoMunicipal);
       } else if (contrato.fundoMunicipal) {
-        // Se for um único valor, converta em um array
+        // If it's a single value, convert to an array
         fundoArray = [contrato.fundoMunicipal as FundoMunicipal];
       }
       
@@ -65,7 +65,7 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
         data_termino: contrato.dataTermino || new Date()
       });
     } else {
-      // Resetar o formulário para o modo de criação
+      // Reset the form for creation mode
       setFormData({
         numero: "",
         objeto: "",
@@ -77,19 +77,26 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
       });
     }
     
-    // Sempre resetar para o primeiro passo ao abrir o modal
+    // Always reset to the first step when opening the modal
     setFormStep("basic");
   }, [mode, contrato]);
 
   const handleFieldChange = (field: keyof ContratoFormData, value: any) => {
-    // Garantir que fundo_municipal seja sempre um array
-    if (field === "fundo_municipal" && value === undefined) {
-      value = [];
-    }
-    
-    setFormData({
-      ...formData,
-      [field]: value
+    setFormData(prev => {
+      // For fundo_municipal, ensure it's always an array
+      if (field === "fundo_municipal") {
+        if (value === undefined || value === null) {
+          value = [];
+        } else if (!Array.isArray(value)) {
+          // If somehow a non-array value is passed, convert it
+          value = [value];
+        }
+      }
+      
+      return {
+        ...prev,
+        [field]: value
+      };
     });
   };
 
@@ -114,17 +121,19 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
     setLoading(true);
     
     try {
-      // Verificar se fundo_municipal é sempre um array
-      const formattedFundos = Array.isArray(formData.fundo_municipal) 
-        ? formData.fundo_municipal.join(', ') // Convertendo array em string separada por vírgulas
-        : '';
+      // Ensure fundo_municipal is always an array before converting to string
+      const fundoArray = Array.isArray(formData.fundo_municipal) 
+        ? formData.fundo_municipal 
+        : formData.fundo_municipal ? [formData.fundo_municipal] : [];
+      
+      const formattedFundos = fundoArray.join(', ');
 
       const data = {
         numero: formData.numero,
         objeto: formData.objeto,
         fornecedor_id: formData.fornecedor_id,
         valor: parseFloat(formData.valor) || 0,
-        fundo_municipal: formattedFundos, // Armazenar os fundos como uma string separada por vírgulas
+        fundo_municipal: formattedFundos, 
         data_inicio: formData.data_inicio instanceof Date ? formData.data_inicio.toISOString() : new Date().toISOString(),
         data_termino: formData.data_termino instanceof Date ? formData.data_termino.toISOString() : new Date().toISOString()
       };
@@ -173,5 +182,3 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
     handleSubmit
   };
 };
-
-

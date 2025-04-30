@@ -4,7 +4,7 @@ import { FormSheet } from "@/components/ui/form-sheet";
 import { ContratoFormStepContent } from "./ContratoFormStepContent";
 import { ContratoFormFooter } from "./ContratoFormFooter";
 import { useFornecedores } from "@/hooks/useFornecedores";
-import { Contrato } from "@/types";
+import { Contrato, FundoMunicipal } from "@/types";
 
 type ContratoFormDialogProps = {
   open: boolean;
@@ -41,7 +41,9 @@ export const ContratoFormDialog = ({
   // Ensure formData.fundo_municipal is always an array
   const safeFormData = {
     ...formData,
-    fundo_municipal: Array.isArray(formData.fundo_municipal) ? formData.fundo_municipal : []
+    fundo_municipal: Array.isArray(formData.fundo_municipal) ? 
+      formData.fundo_municipal : 
+      formData.fundo_municipal ? [formData.fundo_municipal as FundoMunicipal] : []
   };
 
   const formFooter = (

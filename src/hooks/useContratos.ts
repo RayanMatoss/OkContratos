@@ -9,6 +9,25 @@ export const useContratos = () => {
   const [contratos, setContratos] = useState<Contrato[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const parseFundoMunicipal = (fundo: string | null | undefined): FundoMunicipal[] => {
+    if (!fundo) return [];
+    
+    // Se for uma string com vírgula, divida em um array
+    if (typeof fundo === 'string' && fundo.includes(',')) {
+      return fundo.split(', ')
+        .map(item => item.trim())
+        .filter(Boolean) as FundoMunicipal[];
+    }
+    
+    // Se for um único valor string
+    if (typeof fundo === 'string') {
+      return [fundo as FundoMunicipal];
+    }
+    
+    // Caso não seja reconhecido, retorne array vazio
+    return [];
+  };
+
   const fetchContratos = async () => {
     try {
       setLoading(true);
@@ -33,7 +52,7 @@ export const useContratos = () => {
         id: contrato.id,
         numero: contrato.numero,
         fornecedorId: contrato.fornecedor_id,
-        fundoMunicipal: contrato.fundo_municipal as any,
+        fundoMunicipal: parseFundoMunicipal(contrato.fundo_municipal),
         objeto: contrato.objeto,
         valor: contrato.valor,
         dataInicio: new Date(contrato.data_inicio),

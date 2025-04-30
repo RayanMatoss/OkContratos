@@ -2,7 +2,8 @@
 import { format } from "date-fns";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { TableActions } from "@/components/ui/table-actions";
-import { Contrato } from "@/types";
+import { Contrato, FundoMunicipal } from "@/types";
+import { Badge } from "@/components/ui/badge";
 
 interface ContratosTableProps {
   contratos: Contrato[];
@@ -11,6 +12,18 @@ interface ContratosTableProps {
 }
 
 const ContratosTable = ({ contratos, onEdit, onDelete }: ContratosTableProps) => {
+  // Helper function to convert string or array to array
+  const getFundosArray = (fundos: string | FundoMunicipal | FundoMunicipal[]): FundoMunicipal[] => {
+    if (Array.isArray(fundos)) {
+      return fundos;
+    } else if (typeof fundos === 'string') {
+      return fundos.split(', ').filter(Boolean) as FundoMunicipal[];
+    } else if (fundos) {
+      return [fundos as FundoMunicipal];
+    }
+    return [];
+  };
+
   return (
     <div className="rounded-md border">
       <Table>
@@ -26,31 +39,47 @@ const ContratosTable = ({ contratos, onEdit, onDelete }: ContratosTableProps) =>
         </TableHeader>
         <TableBody>
           {contratos.length > 0 ? (
-            contratos.map((contrato) => (
-              <TableRow key={contrato.id}>
-                <TableCell className="font-medium">{contrato.numero}</TableCell>
-                <TableCell>{contrato.fornecedor?.nome}</TableCell>
-                <TableCell>{contrato.fundoMunicipal}</TableCell>
-                <TableCell>
-                  {new Intl.NumberFormat('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL',
-                  }).format(contrato.valor)}
-                </TableCell>
-                <TableCell>
-                  {format(new Date(contrato.dataInicio), 'dd/MM/yyyy')} a{' '}
-                  {format(new Date(contrato.dataTermino), 'dd/MM/yyyy')}
-                </TableCell>
-                <TableCell className="text-right">
-                  <TableActions
-                    onEdit={() => onEdit?.(contrato)}
-                    onDelete={() => onDelete?.(contrato)}
-                    showEdit={contrato.status === "Em Aprovação"}
-                    showDelete={contrato.status === "Em Aprovação"}
-                  />
-                </TableCell>
-              </TableRow>
-            ))
+            contratos.map((contrato) => {
+              const fundos = getFundosArray(contrato.fundoMunicipal);
+              
+              return (
+                <TableRow key={contrato.id}>
+                  <TableCell className="font-medium">{contrato.numero}</TableCell>
+                  <TableCell>{contrato.fornecedor?.nome}</TableCell>
+                  <TableCell>
+                    <div className="flex flex-wrap gap-1">
+                      {fundos.length > 0 ? (
+                        fundos.map((fundo, index) => (
+                          <Badge key={index} variant="secondary">
+                            {fundo}
+                          </Badge>
+                        ))
+                      ) : (
+                        <span className="text-muted-foreground text-sm">Não especificado</span>
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    {new Intl.NumberFormat('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    }).format(contrato.valor)}
+                  </TableCell>
+                  <TableCell>
+                    {format(new Date(contrato.dataInicio), 'dd/MM/yyyy')} a{' '}
+                    {format(new Date(contrato.dataTermino), 'dd/MM/yyyy')}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <TableActions
+                      onEdit={() => onEdit?.(contrato)}
+                      onDelete={() => onDelete?.(contrato)}
+                      showEdit={contrato.status === "Em Aprovação"}
+                      showDelete={contrato.status === "Em Aprovação"}
+                    />
+                  </TableCell>
+                </TableRow>
+              );
+            })
           ) : (
             <TableRow>
               <TableCell colSpan={6} className="h-24 text-center">
