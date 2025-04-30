@@ -50,9 +50,6 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
         fundoArray = contrato.fundoMunicipal.split(', ')
           .filter(Boolean)
           .map(item => item.trim() as FundoMunicipal);
-      } else if (contrato.fundoMunicipal) {
-        // If it's a single value, convert to an array
-        fundoArray = [contrato.fundoMunicipal as FundoMunicipal];
       }
       
       setFormData({
@@ -124,9 +121,10 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
       // Ensure fundo_municipal is always an array before converting to string
       const fundoArray = Array.isArray(formData.fundo_municipal) 
         ? formData.fundo_municipal 
-        : formData.fundo_municipal ? [formData.fundo_municipal] : [];
+        : [];
       
-      const formattedFundos = fundoArray.join(', ');
+      // Only join non-empty arrays
+      const formattedFundos = fundoArray.length > 0 ? fundoArray.join(', ') : '';
 
       const data = {
         numero: formData.numero,

@@ -32,7 +32,7 @@ export interface Contrato {
   numero: string;
   fornecedorId: string;
   fornecedor?: Fornecedor;
-  fundoMunicipal: FundoMunicipal | FundoMunicipal[];
+  fundoMunicipal: FundoMunicipal[]; // Changed to only accept array type
   objeto: string;
   valor: number;
   dataInicio: Date;

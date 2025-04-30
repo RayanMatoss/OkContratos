@@ -43,7 +43,7 @@ export const ContratoFormDialog = ({
     ...formData,
     fundo_municipal: Array.isArray(formData.fundo_municipal) ? 
       formData.fundo_municipal : 
-      formData.fundo_municipal ? [formData.fundo_municipal as FundoMunicipal] : []
+      []
   };
 
   const formFooter = (

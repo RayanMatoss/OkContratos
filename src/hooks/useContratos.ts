@@ -20,8 +20,8 @@ export const useContratos = () => {
     }
     
     // Se for um único valor string
-    if (typeof fundo === 'string') {
-      return [fundo as FundoMunicipal];
+    if (typeof fundo === 'string' && fundo.trim() !== '') {
+      return [fundo.trim() as FundoMunicipal];
     }
     
     // Caso não seja reconhecido, retorne array vazio
@@ -86,16 +86,16 @@ export const useContratos = () => {
   const updateContrato = async (id: string, data: Partial<Omit<Contrato, 'id' | 'createdAt' | 'status'>>) => {
     try {
       // Convert fundoMunicipal array to string if it's an array
-      const fundoMunicipalValue = Array.isArray(data.fundoMunicipal) 
+      const fundoMunicipalValue = Array.isArray(data.fundoMunicipal) && data.fundoMunicipal.length > 0
         ? data.fundoMunicipal.join(', ') 
-        : data.fundoMunicipal;
+        : '';
 
       const { error } = await supabase
         .from('contratos')
         .update({
           numero: data.numero,
           fornecedor_id: data.fornecedorId,
-          fundo_municipal: fundoMunicipalValue, // Fixed: Now properly formatted as string
+          fundo_municipal: fundoMunicipalValue,
           objeto: data.objeto,
           valor: data.valor,
           data_inicio: data.dataInicio?.toISOString(),

@@ -50,11 +50,16 @@ const ContratoBasicInfo = ({
   const [open, setOpen] = useState(false);
 
   // Ensure fundoMunicipal is always an array
-  const selectedFundos = Array.isArray(fundoMunicipal) ? fundoMunicipal : 
-    fundoMunicipal ? [fundoMunicipal] : [];
+  const selectedFundos = Array.isArray(fundoMunicipal) ? fundoMunicipal : [];
 
   // Function to handle the selection and deselection of FundoMunicipal
   const handleSelectFundo = (value: FundoMunicipal) => {
+    if (!Array.isArray(fundoMunicipal)) {
+      // If not an array, start with an empty array
+      onFieldChange("fundo_municipal", value ? [value] : []);
+      return;
+    }
+    
     let updatedFundos: FundoMunicipal[];
     
     if (selectedFundos.includes(value)) {
@@ -130,19 +135,31 @@ const ContratoBasicInfo = ({
                       value={fundo.value}
                       onSelect={() => {
                         handleSelectFundo(fundo.value);
+                        // Don't close the popover automatically - let user select multiple items
                       }}
                     >
-                      <Check
-                        className={cn(
-                          "mr-2 h-4 w-4",
-                          selectedFundos.includes(fundo.value) ? "opacity-100" : "opacity-0"
-                        )}
-                      />
-                      {fundo.label}
+                      <div className="flex items-center">
+                        <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            selectedFundos.includes(fundo.value) ? "opacity-100" : "opacity-0"
+                          )}
+                        />
+                        {fundo.label}
+                      </div>
                     </CommandItem>
                   ))}
                 </CommandGroup>
               </Command>
+              <div className="border-t p-2 flex justify-end">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setOpen(false)}
+                >
+                  Concluir
+                </Button>
+              </div>
             </PopoverContent>
           </Popover>
           {selectedFundos.length > 0 && (

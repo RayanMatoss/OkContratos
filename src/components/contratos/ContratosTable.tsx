@@ -12,18 +12,6 @@ interface ContratosTableProps {
 }
 
 const ContratosTable = ({ contratos, onEdit, onDelete }: ContratosTableProps) => {
-  // Helper function to convert string or array to array
-  const getFundosArray = (fundos: string | FundoMunicipal | FundoMunicipal[]): FundoMunicipal[] => {
-    if (Array.isArray(fundos)) {
-      return fundos;
-    } else if (typeof fundos === 'string') {
-      return fundos.split(', ').filter(Boolean) as FundoMunicipal[];
-    } else if (fundos) {
-      return [fundos as FundoMunicipal];
-    }
-    return [];
-  };
-
   return (
     <div className="rounded-md border">
       <Table>
@@ -40,7 +28,7 @@ const ContratosTable = ({ contratos, onEdit, onDelete }: ContratosTableProps) =>
         <TableBody>
           {contratos.length > 0 ? (
             contratos.map((contrato) => {
-              const fundos = getFundosArray(contrato.fundoMunicipal);
+              const fundos = Array.isArray(contrato.fundoMunicipal) ? contrato.fundoMunicipal : [];
               
               return (
                 <TableRow key={contrato.id}>
