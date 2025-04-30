@@ -12,6 +12,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandList,
 } from "@/components/ui/command";
 import {
   Popover,
@@ -127,29 +128,31 @@ const ContratoBasicInfo = ({
             <PopoverContent className="w-full p-0">
               <Command>
                 <CommandInput placeholder="Buscar fundos..." />
-                <CommandEmpty>Nenhum fundo encontrado.</CommandEmpty>
-                <CommandGroup>
-                  {FUNDOS_MUNICIPAIS.map((fundo) => (
-                    <CommandItem
-                      key={fundo.value}
-                      value={fundo.value}
-                      onSelect={() => {
-                        handleSelectFundo(fundo.value);
-                        // Don't close the popover automatically - let user select multiple items
-                      }}
-                    >
-                      <div className="flex items-center">
-                        <Check
-                          className={cn(
-                            "mr-2 h-4 w-4",
-                            selectedFundos.includes(fundo.value) ? "opacity-100" : "opacity-0"
-                          )}
-                        />
-                        {fundo.label}
-                      </div>
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
+                <CommandList>
+                  <CommandEmpty>Nenhum fundo encontrado.</CommandEmpty>
+                  <CommandGroup>
+                    {FUNDOS_MUNICIPAIS.map((fundo) => (
+                      <CommandItem
+                        key={fundo.value}
+                        value={fundo.value}
+                        onSelect={() => {
+                          handleSelectFundo(fundo.value);
+                          // Don't close the popover automatically - let user select multiple items
+                        }}
+                      >
+                        <div className="flex items-center">
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              selectedFundos.includes(fundo.value) ? "opacity-100" : "opacity-0"
+                            )}
+                          />
+                          {fundo.label}
+                        </div>
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
               </Command>
               <div className="border-t p-2 flex justify-end">
                 <Button 

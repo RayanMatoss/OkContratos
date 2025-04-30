@@ -4,7 +4,7 @@ import { FormSheet } from "@/components/ui/form-sheet";
 import { ContratoFormStepContent } from "./ContratoFormStepContent";
 import { ContratoFormFooter } from "./ContratoFormFooter";
 import { useFornecedores } from "@/hooks/useFornecedores";
-import { Contrato, FundoMunicipal } from "@/types";
+import { Contrato } from "@/types";
 
 type ContratoFormDialogProps = {
   open: boolean;
