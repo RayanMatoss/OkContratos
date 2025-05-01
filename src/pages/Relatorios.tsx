@@ -1,7 +1,6 @@
-
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useRelatoriosData } from "@/hooks/useRelatoriosData";
+import { useRelatoriosData } from "@/hooks/relatorios/useRelatoriosData";
 import { RelatoriosHeader } from "@/components/relatorios/RelatoriosHeader";
 import { PeriodoSelector } from "@/components/relatorios/PeriodoSelector";
 import { RelatoriosCards } from "@/components/relatorios/RelatoriosCards";
