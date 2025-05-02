@@ -38,27 +38,32 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
     data_termino: new Date()
   });
 
+  // Helper function to parse fundo_municipal from various formats to FundoMunicipal[]
+  const parseFundoMunicipal = (value: unknown): FundoMunicipal[] => {
+    // Handle array case
+    if (Array.isArray(value)) {
+      return value as FundoMunicipal[];
+    }
+    
+    // Handle string case: "Educação, Saúde" -> ["Educação", "Saúde"]
+    if (typeof value === 'string' && value.trim() !== '') {
+      return value.split(', ')
+        .map(item => item.trim() as FundoMunicipal)
+        .filter(Boolean);
+    }
+    
+    // Default: return empty array
+    return [];
+  };
+
   useEffect(() => {
     if (mode === 'edit' && contrato) {
-      // Parse fundo_municipal to always ensure it's an array
-      let fundoArray: FundoMunicipal[] = [];
-      
-      if (Array.isArray(contrato.fundoMunicipal)) {
-        fundoArray = [...contrato.fundoMunicipal];
-      } else if (typeof contrato.fundoMunicipal === 'string') {
-        // Convert comma-separated string to an array
-        const fundoString = contrato.fundoMunicipal as string;
-        fundoArray = fundoString.split(', ')
-          .filter(Boolean)
-          .map(item => item.trim() as FundoMunicipal);
-      }
-      
       setFormData({
         numero: contrato.numero || "",
         objeto: contrato.objeto || "",
         fornecedor_id: contrato.fornecedorId || "",
         valor: contrato.valor?.toString() || "",
-        fundo_municipal: fundoArray,
+        fundo_municipal: parseFundoMunicipal(contrato.fundoMunicipal),
         data_inicio: contrato.dataInicio || new Date(),
         data_termino: contrato.dataTermino || new Date()
       });
@@ -83,12 +88,10 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
     setFormData(prev => {
       // For fundo_municipal, ensure it's always an array
       if (field === "fundo_municipal") {
-        if (value === undefined || value === null) {
-          value = [];
-        } else if (!Array.isArray(value)) {
-          // If somehow a non-array value is passed, convert it
-          value = [value];
-        }
+        return {
+          ...prev,
+          [field]: Array.isArray(value) ? value : []
+        };
       }
       
       return {

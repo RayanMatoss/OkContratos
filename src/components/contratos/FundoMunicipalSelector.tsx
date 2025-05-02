@@ -33,19 +33,29 @@ interface FundoMunicipalSelectorProps {
 
 const FundoMunicipalSelector = ({ selectedFundos, onChange }: FundoMunicipalSelectorProps) => {
   const [open, setOpen] = useState(false);
+  
+  // Ensure selectedFundos is always an array
+  const safeSelectedFundos = Array.isArray(selectedFundos) ? selectedFundos : [];
 
   // Function to handle the selection and deselection of FundoMunicipal
   const handleSelectFundo = (value: FundoMunicipal) => {
     let updatedFundos: FundoMunicipal[];
     
-    if (selectedFundos.includes(value)) {
+    if (safeSelectedFundos.includes(value)) {
       // Remove the fundo if already selected
-      updatedFundos = selectedFundos.filter(fundo => fundo !== value);
+      updatedFundos = safeSelectedFundos.filter(fundo => fundo !== value);
     } else {
       // Add the fundo if not selected
-      updatedFundos = [...selectedFundos, value];
+      updatedFundos = [...safeSelectedFundos, value];
     }
     
+    onChange(updatedFundos);
+  };
+
+  // Function to remove a fundo when clicking on badge
+  const handleRemoveFundo = (value: FundoMunicipal, e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent the event from bubbling up
+    const updatedFundos = safeSelectedFundos.filter(fundo => fundo !== value);
     onChange(updatedFundos);
   };
 
@@ -60,9 +70,9 @@ const FundoMunicipalSelector = ({ selectedFundos, onChange }: FundoMunicipalSele
             className="w-full justify-between"
             type="button"
           >
-            {selectedFundos.length === 0
+            {safeSelectedFundos.length === 0
               ? "Selecione fundos..."
-              : `${selectedFundos.length} fundos selecionados`}
+              : `${safeSelectedFundos.length} fundos selecionados`}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -85,7 +95,7 @@ const FundoMunicipalSelector = ({ selectedFundos, onChange }: FundoMunicipalSele
                       <Check
                         className={cn(
                           "mr-2 h-4 w-4",
-                          selectedFundos.includes(fundo.value) ? "opacity-100" : "opacity-0"
+                          safeSelectedFundos.includes(fundo.value) ? "opacity-100" : "opacity-0"
                         )}
                       />
                       {fundo.label}
@@ -107,19 +117,26 @@ const FundoMunicipalSelector = ({ selectedFundos, onChange }: FundoMunicipalSele
         </PopoverContent>
       </Popover>
 
-      {selectedFundos.length > 0 && (
+      {safeSelectedFundos.length > 0 && (
         <div className="flex flex-wrap gap-1 mt-2">
-          {selectedFundos.map(fundo => (
-            <Badge 
-              key={fundo} 
-              variant="secondary" 
-              className="mr-1 mb-1"
-              onClick={() => handleSelectFundo(fundo)}
-            >
-              {FUNDOS_MUNICIPAIS.find(f => f.value === fundo)?.label || fundo}
-              <span className="ml-1 cursor-pointer">×</span>
-            </Badge>
-          ))}
+          {safeSelectedFundos.map(fundo => {
+            const fundoDetails = FUNDOS_MUNICIPAIS.find(f => f.value === fundo);
+            return (
+              <Badge 
+                key={fundo} 
+                variant="secondary" 
+                className="mr-1 mb-1"
+              >
+                {fundoDetails?.label || fundo}
+                <span 
+                  className="ml-1 cursor-pointer" 
+                  onClick={(e) => handleRemoveFundo(fundo, e)}
+                >
+                  ×
+                </span>
+              </Badge>
+            );
+          })}
         </div>
       )}
     </div>
