@@ -10,7 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import Contratos from "./pages/Contratos";
 import Fornecedores from "./pages/Fornecedores";
 import Ordens from "./pages/Ordens";
-import Itens from "./pages/Itens";
+import Itens from "./pages/Itens"; // Adicionando a rota de Itens
 import Relatorios from "./pages/Relatorios";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
@@ -59,7 +59,7 @@ const App = () => {
               <Route path="contratos" element={<Contratos />} />
               <Route path="fornecedores" element={<Fornecedores />} />
               <Route path="ordens" element={<Ordens />} />
-              <Route path="itens" element={<Itens />} />
+              <Route path="itens" element={<Itens />} /> {/* Rota de Itens */}
               <Route path="relatorios" element={<Relatorios />} />
             </Route>
             <Route path="*" element={<NotFound />} />

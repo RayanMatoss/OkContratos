@@ -87,8 +87,7 @@ const SidebarNavigation = () => {
         <SidebarLink 
           key={link.to} 
           {...link} 
-          isActive={
-            link.to === "/dashboard" 
+          isActive={link.to === "/dashboard" 
               ? currentPath === "/dashboard" 
               : currentPath.startsWith(link.to)
           } 
@@ -99,3 +98,4 @@ const SidebarNavigation = () => {
 };
 
 export default SidebarNavigation;
+

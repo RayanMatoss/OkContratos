@@ -66,3 +66,4 @@ export const ContratoFormStepContent: React.FC<ContratoFormStepContentProps> = (
       return null;
   }
 };
+
