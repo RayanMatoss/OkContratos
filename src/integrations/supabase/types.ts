@@ -225,7 +225,11 @@ export type Database = {
           created_at?: string
           data_emissao: string
           id?: string
+<<<<<<< HEAD
           numero?: string
+=======
+          numero: string
+>>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
           status?: string
         }
         Update: {

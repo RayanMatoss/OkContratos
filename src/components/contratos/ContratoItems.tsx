@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState } from "react";
 import { FundoMunicipal } from "@/types";
 import Select from "react-select";
@@ -178,6 +179,16 @@ const ContratoItems: React.FC<ContratoItemsProps> = ({ items, onAddItem, onRemov
           </li>
         ))}
       </ul>
+=======
+
+const ContratoItems = () => {
+  return (
+    <div className="space-y-4">
+      <h3 className="text-lg font-medium">Itens do Contrato</h3>
+      <p className="text-sm text-muted-foreground">
+        Os itens podem ser adicionados após a criação do contrato.
+      </p>
+>>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
     </div>
   );
 };

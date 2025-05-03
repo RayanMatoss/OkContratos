@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,7 +17,10 @@ interface ContratoFormData {
   fundo_municipal: FundoMunicipal[];
   data_inicio: Date;
   data_termino: Date;
+<<<<<<< HEAD
   items?: { descricao: string; quantidade: number }[];
+=======
+>>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
 }
 
 interface UseContratoFormProps {
@@ -35,8 +42,12 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
     valor: "",
     fundo_municipal: [],
     data_inicio: new Date(),
+<<<<<<< HEAD
     data_termino: new Date(),
     items: []
+=======
+    data_termino: new Date()
+>>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
   });
 
   // Helper function to parse fundo_municipal from various formats to FundoMunicipal[]
@@ -66,8 +77,12 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
         valor: contrato.valor?.toString() || "",
         fundo_municipal: parseFundoMunicipal(contrato.fundoMunicipal),
         data_inicio: contrato.dataInicio || new Date(),
+<<<<<<< HEAD
         data_termino: contrato.dataTermino || new Date(),
         items: contrato.itens || []
+=======
+        data_termino: contrato.dataTermino || new Date()
+>>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
       });
     } else {
       // Reset the form for creation mode
@@ -78,8 +93,12 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
         valor: "",
         fundo_municipal: [],
         data_inicio: new Date(),
+<<<<<<< HEAD
         data_termino: new Date(),
         items: []
+=======
+        data_termino: new Date()
+>>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
       });
     }
     
@@ -89,12 +108,20 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
 
   const handleFieldChange = (field: keyof ContratoFormData, value: any) => {
     setFormData(prev => {
+<<<<<<< HEAD
+=======
+      // For fundo_municipal, ensure it's always an array
+>>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
       if (field === "fundo_municipal") {
         return {
           ...prev,
           [field]: Array.isArray(value) ? value : []
         };
       }
+<<<<<<< HEAD
+=======
+      
+>>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
       return {
         ...prev,
         [field]: value
@@ -121,6 +148,7 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+<<<<<<< HEAD
     try {
       // Exigir pelo menos um item antes de criar o contrato
       if (!formData.items || formData.items.length === 0) {
@@ -136,6 +164,18 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
         ? formData.fundo_municipal 
         : [];
       const formattedFundos = fundoArray.length > 0 ? fundoArray.join(', ') : '';
+=======
+    
+    try {
+      // Ensure fundo_municipal is always an array before converting to string
+      const fundoArray = Array.isArray(formData.fundo_municipal) 
+        ? formData.fundo_municipal 
+        : [];
+      
+      // Only join non-empty arrays
+      const formattedFundos = fundoArray.length > 0 ? fundoArray.join(', ') : '';
+
+>>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
       const data = {
         numero: formData.numero,
         objeto: formData.objeto,
@@ -145,6 +185,7 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
         data_inicio: formData.data_inicio instanceof Date ? formData.data_inicio.toISOString() : new Date().toISOString(),
         data_termino: formData.data_termino instanceof Date ? formData.data_termino.toISOString() : new Date().toISOString()
       };
+<<<<<<< HEAD
       let error;
       let contratoId;
       if (mode === 'create') {
@@ -166,6 +207,14 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
             throw itensResponse.error;
           }
         }
+=======
+
+      let error;
+
+      if (mode === 'create') {
+        const response = await supabase.from("contratos").insert([data]);
+        error = response.error;
+>>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
       } else if (mode === 'edit' && contrato) {
         const response = await supabase
           .from("contratos")
@@ -173,13 +222,24 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
           .eq('id', contrato.id)
           .eq('status', 'Em Aprovação');
         error = response.error;
+<<<<<<< HEAD
         // Atualização de itens pode ser implementada aqui se necessário
       }
       if (error) throw error;
+=======
+      }
+
+      if (error) throw error;
+
+>>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
       toast({
         title: mode === 'create' ? "Contrato criado" : "Contrato atualizado",
         description: mode === 'create' ? "Contrato criado com sucesso." : "Contrato atualizado com sucesso."
       });
+<<<<<<< HEAD
+=======
+      
+>>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
       onSuccess?.();
       onOpenChange(false);
     } catch (error: any) {

@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,6 +35,19 @@ const Ordens = () => {
   };
 
   const handleEdit = (ordem: OrdemFornecimento) => {
+<<<<<<< HEAD
+=======
+    // Status is now managed by database triggers, only allow editing Pendente orders
+    if (ordem.status !== "Pendente") {
+      toast({
+        title: "Não é possível editar",
+        description: "Apenas ordens com status 'Pendente' podem ser editadas",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+>>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
     setFormMode('edit');
     setEditingOrdem(ordem);
     setShowForm(true);
@@ -38,10 +55,19 @@ const Ordens = () => {
 
   const handleDelete = async (ordem: OrdemFornecimento) => {
     try {
+<<<<<<< HEAD
       const { error } = await supabase
         .from('ordens')
         .delete()
         .eq('id', ordem.id);
+=======
+      // Only allow deleting orders with Pendente status
+      const { error } = await supabase
+        .from('ordens')
+        .delete()
+        .eq('id', ordem.id)
+        .eq('status', 'Pendente');
+>>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
 
       if (error) throw error;
 

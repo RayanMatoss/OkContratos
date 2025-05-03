@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
 import React from "react";
 import { FormStep } from "@/hooks/useContratoForm";
 import ContratoBasicInfo from "./ContratoBasicInfo";
@@ -15,7 +19,10 @@ interface ContratoFormStepContentProps {
     fundo_municipal: FundoMunicipal[];
     data_inicio: Date;
     data_termino: Date;
+<<<<<<< HEAD
     items?: { descricao: string; quantidade: number }[];
+=======
+>>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
   };
   fornecedores: Fornecedor[];
   onFieldChange: (field: string, value: any) => void;
@@ -54,6 +61,7 @@ export const ContratoFormStepContent: React.FC<ContratoFormStepContentProps> = (
         />
       );
     case "items":
+<<<<<<< HEAD
       return (
         <ContratoItems
           items={formData.items || []}
@@ -62,6 +70,9 @@ export const ContratoFormStepContent: React.FC<ContratoFormStepContentProps> = (
           fundosMunicipais={fundoMunicipal}
         />
       );
+=======
+      return <ContratoItems />;
+>>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
     default:
       return null;
   }

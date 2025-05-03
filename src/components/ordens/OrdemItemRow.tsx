@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
 import { Input } from "@/components/ui/input";
 import { Item } from "@/types";
 import { Progress } from "@/components/ui/progress";
@@ -31,12 +35,24 @@ const OrdemItemRow = ({
         </div>
         <div className="w-24">
           <Input
+<<<<<<< HEAD
             type="text"
             value={selectedQuantity || ''}
             onChange={(e) => {
               // Permite apenas números
               const value = e.target.value.replace(/[^0-9]/g, "");
               onQuantityChange(item.id, value ? parseInt(value) : 0);
+=======
+            type="number"
+            min={0}
+            max={adjustedAvailable}
+            value={selectedQuantity || ''}
+            onChange={(e) => {
+              const value = parseInt(e.target.value) || 0;
+              if (value <= adjustedAvailable) {
+                onQuantityChange(item.id, value);
+              }
+>>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
             }}
             className="text-right"
             placeholder="Qtd"
