@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -14,10 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import Contratos from "./pages/Contratos";
 import Fornecedores from "./pages/Fornecedores";
 import Ordens from "./pages/Ordens";
-<<<<<<< HEAD
-=======
 import Itens from "./pages/Itens";
->>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
 import Relatorios from "./pages/Relatorios";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
@@ -66,10 +59,7 @@ const App = () => {
               <Route path="contratos" element={<Contratos />} />
               <Route path="fornecedores" element={<Fornecedores />} />
               <Route path="ordens" element={<Ordens />} />
-<<<<<<< HEAD
-=======
               <Route path="itens" element={<Itens />} />
->>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
               <Route path="relatorios" element={<Relatorios />} />
             </Route>
             <Route path="*" element={<NotFound />} />

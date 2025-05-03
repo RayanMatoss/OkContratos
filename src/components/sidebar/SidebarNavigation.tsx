@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { 
@@ -60,14 +56,11 @@ const sidebarLinks = [
     label: "Contratos"
   },
   {
-<<<<<<< HEAD
-=======
     to: "/dashboard/itens",
     icon: Package,
     label: "Itens"
   },
   {
->>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
     to: "/dashboard/ordens",
     icon: FileEdit,
     label: "Ordens"

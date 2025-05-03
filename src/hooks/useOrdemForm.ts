@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -39,11 +35,7 @@ export const useOrdemForm = (
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-<<<<<<< HEAD
-    if (!contratoId || !data) {
-=======
     if (!contratoId || !data || !numero) {
->>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
       toast({
         title: "Erro",
         description: "Preencha todos os campos obrigatórios",
@@ -62,14 +54,8 @@ export const useOrdemForm = (
       }
 
       toast({
-<<<<<<< HEAD
-        title: "Ordem criada com sucesso!",
-        description: `Número da ordem: ${numero}`,
-        variant: "default",
-=======
         title: mode === 'create' ? "Ordem de Fornecimento criada" : "Ordem de Fornecimento atualizada",
         description: mode === 'create' ? "A ordem foi criada com sucesso" : "A ordem foi atualizada com sucesso",
->>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
       });
 
       if (onSuccess) onSuccess();
@@ -90,17 +76,10 @@ export const useOrdemForm = (
       .insert({
         contrato_id: contratoId,
         data_emissao: data?.toISOString(),
-<<<<<<< HEAD
-        numero: numero,
-        status: "pendente"
-      })
-      .select("id, numero")
-=======
         numero,
         // Status is now managed by triggers, no need to set it here
       })
       .select("id")
->>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
       .single();
 
     if (ordemError) {
@@ -137,15 +116,10 @@ export const useOrdemForm = (
       .update({
         data_emissao: data?.toISOString(),
         contrato_id: contratoId
-<<<<<<< HEAD
-      })
-      .eq("id", ordemId);
-=======
         // Status is now managed by triggers, no need to update it here
       })
       .eq("id", ordemId)
       .eq("status", "Pendente"); // Can only update pending orders
->>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
 
     if (ordemError) {
       throw ordemError;
@@ -154,21 +128,6 @@ export const useOrdemForm = (
     await updateConsumedItems(ordemId);
   };
 
-<<<<<<< HEAD
-  const deleteOrdem = async (ordemId: string) => {
-    await supabase
-      .from('itens_consumidos')
-      .delete()
-      .eq('ordem_id', ordemId);
-
-    await supabase
-      .from('ordens')
-      .delete()
-      .eq('id', ordemId);
-  };
-
-=======
->>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
   return {
     data,
     setData,
@@ -182,11 +141,6 @@ export const useOrdemForm = (
     setSelectedItems,
     handleSubmit,
     loading,
-<<<<<<< HEAD
-    loadingNumero,
-    deleteOrdem
-=======
     loadingNumero
->>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
   };
 };

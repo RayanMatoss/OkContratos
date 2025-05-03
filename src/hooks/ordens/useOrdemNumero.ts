@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
