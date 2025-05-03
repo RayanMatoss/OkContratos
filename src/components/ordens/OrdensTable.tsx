@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { format } from "date-fns";
 import { OrdemFornecimento } from "@/types";
@@ -50,16 +46,10 @@ const OrdensTable = ({
         <TableBody>
           {filteredOrdens.length > 0 ? (
             filteredOrdens.map((ordem) => {
-<<<<<<< HEAD
-              // Permitir editar e excluir qualquer ordem
-              const canEdit = true;
-              const canDelete = true;
-=======
               // Can only edit orders that are still pending
               const canEdit = ordem.status === "Pendente";
               // Can only delete orders that are still pending
               const canDelete = ordem.status === "Pendente";
->>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
               
               return (
                 <TableRow key={ordem.id}>
@@ -76,12 +66,6 @@ const OrdensTable = ({
                         onDelete={() => onDelete(ordem)}
                         showEdit={true}
                         showDelete={true}
-<<<<<<< HEAD
-                        disableDelete={false}
-                        disableEdit={false}
-                        deleteTooltip={undefined}
-                        editTooltip={undefined}
-=======
                         disableDelete={!canDelete}
                         disableEdit={!canEdit}
                         deleteTooltip={
@@ -94,7 +78,6 @@ const OrdensTable = ({
                             ? "Não é possível editar uma ordem que já foi concluída" 
                             : undefined
                         }
->>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
                       />
                     </TooltipProvider>
                   </TableCell>
@@ -115,3 +98,4 @@ const OrdensTable = ({
 };
 
 export default OrdensTable;
+
