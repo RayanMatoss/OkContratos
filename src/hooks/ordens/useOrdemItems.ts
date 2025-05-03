@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -71,7 +70,16 @@ export const useOrdemItems = (
     try {
       const { data, error } = await supabase
         .from("itens_consumidos")
-        .select("id, item_id, quantidade")
+        .select(`
+          id,
+          item_id,
+          quantidade,
+          item: item_id (
+            descricao,
+            unidade,
+            valor_unitario
+          )
+        `)
         .eq("ordem_id", ordemId);
 
       if (error) throw error;
@@ -79,13 +87,19 @@ export const useOrdemItems = (
       const consumedItems = (data || []).map(item => ({
         id: item.id,
         itemId: item.item_id,
-        quantidade: item.quantidade
+        quantidade: item.quantidade,
+        descricao: item.item?.descricao,
+        unidade: item.item?.unidade,
+        valor_unitario: item.item?.valor_unitario
       }));
 
       setOriginalItemsConsumidos(consumedItems);
       setSelectedItems(consumedItems.map(item => ({
         itemId: item.itemId,
-        quantidade: item.quantidade
+        quantidade: item.quantidade,
+        descricao: item.descricao,
+        unidade: item.unidade,
+        valor_unitario: item.valor_unitario
       })));
     } catch (error: any) {
       toast({

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FundoMunicipal } from "@/types";
 import Select from "react-select";
+import { formatCurrency } from "@/lib/utils";
 
 // Novo tipo de item com todos os campos necessários
 type Item = {
@@ -109,7 +110,7 @@ const ContratoItems: React.FC<ContratoItemsProps> = ({ items, onAddItem, onRemov
               className="border rounded px-2 py-1 bg-background text-foreground w-full text-sm"
               type="text"
               placeholder="Valor Total"
-              value={isNaN(valorTotal) ? "" : valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+              value={isNaN(valorTotal) ? "" : formatCurrency(valorTotal)}
               disabled
             />
           </div>
@@ -171,8 +172,8 @@ const ContratoItems: React.FC<ContratoItemsProps> = ({ items, onAddItem, onRemov
             <span className="flex-1 font-medium">{item.descricao}</span>
             <span className="w-20">Qtd: {item.quantidade}</span>
             <span className="w-20">Un: {item.unidade}</span>
-            <span className="w-32">V. Unit: {item.valor_unitario.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
-            <span className="w-32">Total: {(item.quantidade * item.valor_unitario).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+            <span className="w-32">V. Unit: {formatCurrency(item.valor_unitario)}</span>
+            <span className="w-32">Total: {formatCurrency(item.quantidade * item.valor_unitario)}</span>
             <span className="w-40">Fundos: {Array.isArray(item.fundos) ? item.fundos.join(", ") : item.fundos}</span>
             <button type="button" className="text-red-500 ml-2" onClick={() => onRemoveItem(idx)}>Remover</button>
           </li>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -25,6 +25,13 @@ export const useOrdemNumero = (mode: 'create' | 'edit' = 'create', initialNumero
       setLoadingNumero(false);
     }
   };
+
+  // Chamar automaticamente ao abrir o formulário de criação
+  useEffect(() => {
+    if (mode === 'create') {
+      fetchNextNumero();
+    }
+  }, [mode]);
 
   return {
     numero,

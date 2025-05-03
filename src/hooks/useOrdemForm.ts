@@ -118,8 +118,7 @@ export const useOrdemForm = (
         contrato_id: contratoId
         // Status is now managed by triggers, no need to update it here
       })
-      .eq("id", ordemId)
-      .eq("status", "Pendente"); // Can only update pending orders
+      .eq("id", ordemId);
 
     if (ordemError) {
       throw ordemError;

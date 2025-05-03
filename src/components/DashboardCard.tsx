@@ -1,4 +1,3 @@
-
 import { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -9,6 +8,7 @@ interface DashboardCardProps {
   description: string;
   iconColor?: string;
   className?: string;
+  onClick?: () => void;
 }
 
 const DashboardCard = ({
@@ -17,13 +17,18 @@ const DashboardCard = ({
   icon: Icon,
   description,
   iconColor,
-  className
+  className,
+  onClick
 }: DashboardCardProps) => {
   return (
-    <div className={cn(
-      "bg-secondary rounded-lg p-5 border border-border hover-card",
-      className
-    )}>
+    <div
+      className={cn(
+        "bg-secondary rounded-lg p-5 border border-border hover-card",
+        className
+      )}
+      style={onClick ? { cursor: 'pointer' } : {}}
+      onClick={onClick}
+    >
       <div className="flex justify-between items-start">
         <div>
           <h3 className="text-sm font-medium text-muted-foreground">{title}</h3>

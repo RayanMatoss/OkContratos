@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -12,6 +11,7 @@ interface DashboardData {
   ordensData: { name: string; value: number }[];
   contratosRecentes: any[];
   ordensPendentesLista: any[];
+  itensAlerta: any[];
 }
 
 export const useDashboardData = () => {
@@ -24,7 +24,8 @@ export const useDashboardData = () => {
     statusContratosData: [],
     ordensData: [],
     contratosRecentes: [],
-    ordensPendentesLista: []
+    ordensPendentesLista: [],
+    itensAlerta: []
   });
   const [loading, setLoading] = useState(true);
 
@@ -130,6 +131,24 @@ export const useDashboardData = () => {
           });
       }
 
+      // Buscar itens em alerta (consumo > 90%)
+      const { data: itensAlerta, error: itensAlertaError } = await supabase
+        .from('itens')
+        .select(`
+          *,
+          contratos (
+            numero,
+            fornecedores ( nome )
+          )
+        `)
+        .gte('quantidade', 1)
+        .filter('quantidade_consumida', 'gte', 0);
+
+      if (itensAlertaError) throw itensAlertaError;
+      const itensAlertaFiltrados = (itensAlerta || []).filter(item =>
+        item.quantidade > 0 && item.quantidade_consumida / item.quantidade >= 0.9
+      );
+
       setData({
         totalContratos: contratos?.length || 0,
         contratosAVencer,
@@ -138,7 +157,8 @@ export const useDashboardData = () => {
         statusContratosData,
         ordensData,
         contratosRecentes,
-        ordensPendentesLista
+        ordensPendentesLista,
+        itensAlerta: itensAlertaFiltrados
       });
 
     } catch (error: any) {

@@ -150,7 +150,8 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
         valor: parseFloat(formData.valor) || 0,
         fundo_municipal: formattedFundos, 
         data_inicio: formData.data_inicio instanceof Date ? formData.data_inicio.toISOString() : new Date().toISOString(),
-        data_termino: formData.data_termino instanceof Date ? formData.data_termino.toISOString() : new Date().toISOString()
+        data_termino: formData.data_termino instanceof Date ? formData.data_termino.toISOString() : new Date().toISOString(),
+        status: 'Ativo'
       };
 
       let error;

@@ -1,9 +1,9 @@
-
 import { FormSheet } from "@/components/ui/form-sheet";
 import OrdemFormFields from "./OrdemFormFields";
 import OrdemItemsSelection from "./OrdemItemsSelection";
 import { useOrdemForm } from "@/hooks/useOrdemForm";
 import { OrdemFornecimento } from "@/types";
+import { gerarPdfOrdem } from "@/lib/pdf/gerarPdfOrdem";
 
 type OrdemFormDialogProps = {
   open: boolean;
@@ -53,6 +53,15 @@ export const OrdemFormDialog = ({
       submitLabel={submitLabel}
     >
       <div className="space-y-6">
+        {mode === 'edit' && ordem && (
+          <button
+            type="button"
+            className="bg-primary text-white rounded px-3 py-1 text-sm font-semibold hover:bg-primary/90 transition mb-2"
+            onClick={() => gerarPdfOrdem(ordem, ordem.contrato, ordem.contrato?.fornecedor, ordem.itens)}
+          >
+            Baixar PDF
+          </button>
+        )}
         <OrdemFormFields
           numero={numero}
           setNumero={setNumero}

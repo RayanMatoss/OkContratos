@@ -31,12 +31,14 @@ const OrdemItemRow = ({
         </div>
         <div className="w-24">
           <Input
-            type="number"
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
             min={0}
             max={adjustedAvailable}
             value={selectedQuantity || ''}
             onChange={(e) => {
-              const value = parseInt(e.target.value) || 0;
+              const value = parseInt(e.target.value.replace(/\D/g, '')) || 0;
               if (value <= adjustedAvailable) {
                 onQuantityChange(item.id, value);
               }

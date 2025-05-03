@@ -31,16 +31,6 @@ const Ordens = () => {
   };
 
   const handleEdit = (ordem: OrdemFornecimento) => {
-    // Status is now managed by database triggers, only allow editing Pendente orders
-    if (ordem.status !== "Pendente") {
-      toast({
-        title: "Não é possível editar",
-        description: "Apenas ordens com status 'Pendente' podem ser editadas",
-        variant: "destructive"
-      });
-      return;
-    }
-    
     setFormMode('edit');
     setEditingOrdem(ordem);
     setShowForm(true);
@@ -48,12 +38,10 @@ const Ordens = () => {
 
   const handleDelete = async (ordem: OrdemFornecimento) => {
     try {
-      // Only allow deleting orders with Pendente status
       const { error } = await supabase
         .from('ordens')
         .delete()
-        .eq('id', ordem.id)
-        .eq('status', 'Pendente');
+        .eq('id', ordem.id);
 
       if (error) throw error;
 
@@ -78,6 +66,24 @@ const Ordens = () => {
     refetch();
   };
 
+  const handleRecalcularConsumo = async () => {
+    const { error } = await supabase.rpc('recalcular_consumo_itens');
+    if (error) {
+      toast({
+        title: "Erro ao recalcular consumo",
+        description: error.message,
+        variant: "destructive"
+      });
+    } else {
+      toast({
+        title: "Consumo recalculado",
+        description: "O consumo dos itens foi recalculado com sucesso."
+      });
+      // Opcional: refetch dos dados
+      // await refetch();
+    }
+  };
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between">
@@ -87,10 +93,19 @@ const Ordens = () => {
             Gerenciamento das ordens de fornecimento e serviço
           </p>
         </div>
-        <Button onClick={handleAdd} className="flex items-center gap-2">
-          <Plus size={16} />
-          <span>Nova Ordem</span>
-        </Button>
+        <div className="flex flex-col items-end gap-1">
+          <Button onClick={handleAdd} className="flex items-center gap-2">
+            <Plus size={16} />
+            <span>Nova Ordem</span>
+          </Button>
+          <button
+            onClick={handleRecalcularConsumo}
+            className="text-xs text-muted-foreground hover:underline mt-1"
+            style={{ padding: 0, background: 'none', border: 'none', cursor: 'pointer' }}
+          >
+            Recalcular consumo dos itens
+          </button>
+        </div>
       </div>
 
       <div className="flex items-center gap-4">

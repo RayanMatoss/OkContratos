@@ -9,6 +9,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { gerarPdfOrdem } from "@/lib/pdf/gerarPdfOrdem";
+import { Download } from "lucide-react";
+import { buscarItensOrdemDetalhados } from "@/lib/pdf/buscarItensOrdemDetalhados";
 
 interface OrdensTableProps {
   filteredOrdens: OrdemFornecimento[];
@@ -46,11 +49,6 @@ const OrdensTable = ({
         <TableBody>
           {filteredOrdens.length > 0 ? (
             filteredOrdens.map((ordem) => {
-              // Can only edit orders that are still pending
-              const canEdit = ordem.status === "Pendente";
-              // Can only delete orders that are still pending
-              const canDelete = ordem.status === "Pendente";
-              
               return (
                 <TableRow key={ordem.id}>
                   <TableCell className="font-medium">{ordem.numero}</TableCell>
@@ -61,24 +59,39 @@ const OrdensTable = ({
                   <TableCell>{ordem.contrato?.fornecedor?.nome}</TableCell>
                   <TableCell className="text-right">
                     <TooltipProvider>
-                      <TableActions
-                        onEdit={() => onEdit(ordem)}
-                        onDelete={() => onDelete(ordem)}
-                        showEdit={true}
-                        showDelete={true}
-                        disableDelete={!canDelete}
-                        disableEdit={!canEdit}
-                        deleteTooltip={
-                          !canDelete 
-                            ? "Não é possível excluir uma ordem que já foi concluída" 
-                            : undefined
-                        }
-                        editTooltip={
-                          !canEdit 
-                            ? "Não é possível editar uma ordem que já foi concluída" 
-                            : undefined
-                        }
-                      />
+                      <div className="flex items-center justify-end gap-1">
+                        <TableActions
+                          onEdit={() => onEdit(ordem)}
+                          onDelete={() => onDelete(ordem)}
+                          showEdit={true}
+                          showDelete={true}
+                          disableDelete={false}
+                          disableEdit={false}
+                        />
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <button
+                              className="p-1 rounded hover:bg-muted transition"
+                              title="Baixar PDF"
+                              onClick={async () => {
+                                const itensDetalhados = await buscarItensOrdemDetalhados(ordem.id);
+                                gerarPdfOrdem(
+                                  {
+                                    ...ordem,
+                                    data_emissao: ordem.dataEmissao
+                                  },
+                                  ordem.contrato,
+                                  ordem.contrato?.fornecedor,
+                                  itensDetalhados
+                                );
+                              }}
+                            >
+                              <Download size={18} />
+                            </button>
+                          </TooltipTrigger>
+                          <TooltipContent>Baixar PDF</TooltipContent>
+                        </Tooltip>
+                      </div>
                     </TooltipProvider>
                   </TableCell>
                 </TableRow>
