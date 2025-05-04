@@ -91,6 +91,7 @@ export type Database = {
           contrato_id: string
           created_at: string
           descricao: string
+          fundos: string[] | null
           id: string
           quantidade: number
           quantidade_consumida: number
@@ -101,6 +102,7 @@ export type Database = {
           contrato_id: string
           created_at?: string
           descricao: string
+          fundos?: string[] | null
           id?: string
           quantidade: number
           quantidade_consumida?: number
@@ -111,6 +113,7 @@ export type Database = {
           contrato_id?: string
           created_at?: string
           descricao?: string
+          fundos?: string[] | null
           id?: string
           quantidade?: number
           quantidade_consumida?: number
@@ -150,6 +153,13 @@ export type Database = {
           quantidade?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "fk_ordem"
+            columns: ["ordem_id"]
+            isOneToOne: false
+            referencedRelation: "ordens"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "itens_consumidos_item_id_fkey"
             columns: ["item_id"]
@@ -225,11 +235,7 @@ export type Database = {
           created_at?: string
           data_emissao: string
           id?: string
-<<<<<<< HEAD
           numero?: string
-=======
-          numero: string
->>>>>>> e0ca1c6fde1a16023c05f05bc8be66564ad61935
           status?: string
         }
         Update: {
@@ -279,6 +285,10 @@ export type Database = {
       get_next_ordem_numero: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      recalcular_consumo_itens: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
       }
     }
     Enums: {
