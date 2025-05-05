@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -76,33 +75,35 @@ export const AddItemsDialog = ({ open, onOpenChange, onSuccess, contratos }: Add
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>Adicionar Novos Itens</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="space-y-2">
-            <Label htmlFor="contrato">Contrato</Label>
-            <select
-              id="contrato"
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              value={selectedContrato}
-              onChange={(e) => setSelectedContrato(e.target.value)}
-            >
-              <option value="">Selecione um contrato</option>
-              {contratos.map(contrato => (
-                <option key={contrato.id} value={contrato.id}>
-                  {contrato.numero} - {contrato.objeto}
-                </option>
-              ))}
-            </select>
+        <div className="flex-1 overflow-y-auto">
+          <div className="grid gap-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="contrato">Contrato</Label>
+              <select
+                id="contrato"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                value={selectedContrato}
+                onChange={(e) => setSelectedContrato(e.target.value)}
+              >
+                <option value="">Selecione um contrato</option>
+                {contratos.map(contrato => (
+                  <option key={contrato.id} value={contrato.id}>
+                    {contrato.numero} - {contrato.objeto}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            <ItemForm onAdd={handleAddItem} />
+            
+            <ItemsList items={itemsList} />
           </div>
-          
-          <ItemForm onAdd={handleAddItem} />
-          
-          <ItemsList items={itemsList} />
         </div>
-        <DialogFooter>
+        <DialogFooter className="mt-4">
           <Button variant="outline" onClick={() => {
             onOpenChange(false);
             setItemsList([]);

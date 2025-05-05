@@ -5,6 +5,8 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import FundoMunicipalSelector from "@/components/contratos/FundoMunicipalSelector";
+import { FundoMunicipal } from "@/types";
 
 interface EditItemDialogProps {
   open: boolean;
@@ -20,6 +22,7 @@ interface EditItemDialogProps {
     contratos?: {
       numero: string;
       objeto: string;
+      fundoMunicipal?: FundoMunicipal[];
     };
   };
 }
@@ -30,6 +33,7 @@ export const EditItemDialog = ({ open, onOpenChange, onSuccess, item }: EditItem
   const [quantidade, setQuantidade] = useState(String(item.quantidade));
   const [unidade, setUnidade] = useState(item.unidade);
   const [valorUnitario, setValorUnitario] = useState(String(item.valor_unitario));
+  const [fundos, setFundos] = useState<FundoMunicipal[]>(Array.isArray(item.contratos?.fundoMunicipal) ? item.contratos.fundoMunicipal : []);
 
   const handleSubmit = async () => {
     try {
@@ -43,7 +47,8 @@ export const EditItemDialog = ({ open, onOpenChange, onSuccess, item }: EditItem
           descricao,
           quantidade: Number(quantidade),
           unidade,
-          valor_unitario: Number(valorUnitario)
+          valor_unitario: Number(valorUnitario),
+          fundos: fundos.map(fundo => fundo.id).join(',')
         })
         .eq('id', item.id)
         .eq('quantidade_consumida', item.quantidade_consumida); // Extra safety check
@@ -127,6 +132,14 @@ export const EditItemDialog = ({ open, onOpenChange, onSuccess, item }: EditItem
                 onChange={(e) => setValorUnitario(e.target.value)}
               />
             </div>
+          </div>
+          <div className="space-y-2">
+            <Label>Fundos Relacionados</Label>
+            <FundoMunicipalSelector
+              selectedFundos={fundos}
+              onChange={setFundos}
+              fundosDisponiveis={item.contratos?.fundoMunicipal || []}
+            />
           </div>
         </div>
 

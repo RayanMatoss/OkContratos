@@ -24,10 +24,10 @@ const Contratos = () => {
   });
 
   const handleEdit = (contrato: Contrato) => {
-    if (contrato.status !== 'Em Aprovação') {
+    if (contrato.status === 'Expirado') {
       toast({
         title: "Edição não permitida",
-        description: "Apenas contratos em aprovação podem ser editados",
+        description: "Contratos expirados não podem ser editados",
         variant: "destructive"
       });
       return;

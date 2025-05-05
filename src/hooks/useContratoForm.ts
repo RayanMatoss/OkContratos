@@ -164,10 +164,13 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
         // Inserir itens se houver
         if (!error && contratoId && formData.items && formData.items.length > 0) {
           const itensToInsert = formData.items.map(item => ({
-            ...item,
             contrato_id: contratoId,
-            unidade: "un", // valor padrão
-            valor_unitario: 0 // valor padrão
+            descricao: item.descricao,
+            quantidade: item.quantidade,
+            unidade: item.unidade || 'un',
+            valor_unitario: item.valor_unitario || 0,
+            fundos: Array.isArray(item.fundos) ? item.fundos.join(',') : (item.fundos || null),
+            quantidade_consumida: 0
           }));
           const itensResponse = await supabase.from("itens").insert(itensToInsert);
           if (itensResponse.error) {

@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -102,7 +101,7 @@ export const useContratos = () => {
           data_termino: data.dataTermino?.toISOString(),
         })
         .eq('id', id)
-        .eq('status', 'Em Aprovação');
+        .neq('status', 'Expirado');
 
       if (error) throw error;
 
@@ -129,7 +128,7 @@ export const useContratos = () => {
         .from('contratos')
         .delete()
         .eq('id', id)
-        .eq('status', 'Em Aprovação');
+        .neq('status', 'Expirado');
 
       if (error) throw error;
 

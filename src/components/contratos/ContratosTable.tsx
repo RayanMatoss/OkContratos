@@ -1,4 +1,3 @@
-
 import { format } from "date-fns";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { TableActions } from "@/components/ui/table-actions";
@@ -61,8 +60,12 @@ const ContratosTable = ({ contratos, onEdit, onDelete }: ContratosTableProps) =>
                     <TableActions
                       onEdit={() => onEdit?.(contrato)}
                       onDelete={() => onDelete?.(contrato)}
-                      showEdit={contrato.status === "Em Aprovação"}
-                      showDelete={contrato.status === "Em Aprovação"}
+                      showEdit={contrato.status !== "Expirado"}
+                      showDelete={contrato.status !== "Expirado"}
+                      disableEdit={contrato.status === "Expirado"}
+                      disableDelete={contrato.status === "Expirado"}
+                      editTooltip={contrato.status === "Expirado" ? "Contratos expirados não podem ser editados" : undefined}
+                      deleteTooltip={contrato.status === "Expirado" ? "Contratos expirados não podem ser excluídos" : undefined}
                     />
                   </TableCell>
                 </TableRow>

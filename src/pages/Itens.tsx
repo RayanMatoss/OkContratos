@@ -65,29 +65,40 @@ const Itens = () => {
                     <th className="text-left">Descrição</th>
                     <th>Quantidade</th>
                     <th>Consumido</th>
+                    <th>Saldo</th>
                     <th>Unidade</th>
+                    <th>Fundo</th>
                     <th>Valor Unit.</th>
                     <th>Valor Total</th>
+                    <th>Valor Restante</th>
                     <th>Ações</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {contrato.itens.map(item => (
-                    <tr key={item.id}>
-                      <td className="font-medium">{item.descricao}</td>
-                      <td className="text-center">{item.quantidade}</td>
-                      <td className="text-center">{item.quantidade_consumida}</td>
-                      <td className="text-center">{item.unidade}</td>
-                      <td className="text-right">{formatCurrency(item.valor_unitario)}</td>
-                      <td className="text-right">{formatCurrency(item.quantidade * item.valor_unitario)}</td>
-                      <td className="text-center">
-                        <button className="text-primary" onClick={() => onEdit(item)}>
-                          <span className="sr-only">Editar</span>
-                          <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16.474 5.34a2.25 2.25 0 1 1 3.182 3.182L8.94 19.238a4 4 0 0 1-1.687 1.01l-3.13.94.94-3.13a4 4 0 0 1 1.01-1.687L16.474 5.34Z"/></svg>
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                  {contrato.itens.map(item => {
+                    const saldo = item.quantidade - item.quantidade_consumida;
+                    const valorRestante = saldo * item.valor_unitario;
+                    const fundos = Array.isArray(contrato.fundoMunicipal) ? contrato.fundoMunicipal.join(', ') : contrato.fundoMunicipal || '-';
+                    return (
+                      <tr key={item.id}>
+                        <td className="font-medium">{item.descricao}</td>
+                        <td className="text-center">{item.quantidade}</td>
+                        <td className="text-center">{item.quantidade_consumida}</td>
+                        <td className="text-center">{saldo}</td>
+                        <td className="text-center">{item.unidade}</td>
+                        <td className="text-center">{fundos}</td>
+                        <td className="text-right">{formatCurrency(item.valor_unitario)}</td>
+                        <td className="text-right">{formatCurrency(item.quantidade * item.valor_unitario)}</td>
+                        <td className="text-right">{formatCurrency(valorRestante)}</td>
+                        <td className="text-center">
+                          <button className="text-primary" onClick={() => onEdit(item)}>
+                            <span className="sr-only">Editar</span>
+                            <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16.474 5.34a2.25 2.25 0 1 1 3.182 3.182L8.94 19.238a4 4 0 0 1-1.687 1.01l-3.13.94.94-3.13a4 4 0 0 1 1.01-1.687L16.474 5.34Z"/></svg>
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </AccordionContent>
