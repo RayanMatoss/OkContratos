@@ -175,7 +175,14 @@
   color: #fff;
 }
 
-/* Força cursor pointer nos itens do dropdown de fundos municipais */
+/* Garante que os itens do dropdown aceitam clique */
 [data-radix-collection-item], .select__option, .command-item, .dropdown-item {
+  pointer-events: auto !important;
   cursor: pointer !important;
+  z-index: 9999 !important;
+}
+
+/* Tenta esconder overlays que possam estar cobrindo o dropdown */
+div[style*="z-index"], .overlay, .modal-backdrop {
+  pointer-events: none !important;
 }
