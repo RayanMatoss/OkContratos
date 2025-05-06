@@ -174,3 +174,8 @@
 .dark .notebook-textarea {
   color: #fff;
 }
+
+/* Força cursor pointer nos itens do dropdown de fundos municipais */
+[data-radix-collection-item], .select__option, .command-item, .dropdown-item {
+  cursor: pointer !important;
+}
