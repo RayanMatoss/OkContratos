@@ -14,6 +14,7 @@ import Itens from "./pages/Itens"; // Adicionando a rota de Itens
 import Relatorios from "./pages/Relatorios";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import Configuracoes from "./pages/Configuracoes";
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth();
@@ -61,6 +62,7 @@ const App = () => {
               <Route path="ordens" element={<Ordens />} />
               <Route path="itens" element={<Itens />} /> {/* Rota de Itens */}
               <Route path="relatorios" element={<Relatorios />} />
+              <Route path="configuracoes" element={<Configuracoes />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>

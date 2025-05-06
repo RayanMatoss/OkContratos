@@ -43,7 +43,7 @@ const sidebarLinks = [
   {
     to: "/dashboard",
     icon: LayoutDashboard,
-    label: "Dashboard"
+    label: "Página Inicial"
   },
   {
     to: "/dashboard/fornecedores",
