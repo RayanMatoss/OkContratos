@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -90,6 +89,7 @@ const FundoMunicipalSelector = ({ selectedFundos, onChange }: FundoMunicipalSele
                       handleSelectFundo(fundo.value);
                       // Don't close the popover automatically - let user select multiple items
                     }}
+                    style={{ cursor: 'pointer' }}
                   >
                     <div className="flex items-center">
                       <Check
