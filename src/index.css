@@ -101,13 +101,18 @@
 }
 
 #lovable-badge {
-  opacity: 0.2 !important;
-  transform: scale(0.6) !important;
+  opacity: 0.08 !important;
+  transform: scale(0.4) !important;
   transition: opacity 0.3s;
+  position: fixed !important;
+  left: 50% !important;
+  bottom: -30px !important;
+  z-index: 9999 !important;
+  translate: -50% 0;
 }
 
 #lovable-badge:hover {
-  opacity: 0.6 !important;
+  opacity: 0.25 !important;
 }
 
 /* Bloco de notas tipo caderno */

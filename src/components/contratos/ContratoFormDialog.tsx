@@ -1,4 +1,3 @@
-
 import { useContratoForm } from "@/hooks/useContratoForm";
 import { FormSheet } from "@/components/ui/form-sheet";
 import { ContratoFormStepContent } from "./ContratoFormStepContent";
@@ -57,8 +56,8 @@ export const ContratoFormDialog = ({
       description={mode === 'create' ? "Preencha os dados do novo contrato" : "Edite os dados do contrato"}
       loading={loading}
       footer={formFooter}
-      step={formStep === "basic" ? 1 : formStep === "dates" ? 2 : 3}
-      totalSteps={3}
+      step={formStep === "basic" ? 1 : 2}
+      totalSteps={2}
     >
       <ContratoFormStepContent
         step={formStep}

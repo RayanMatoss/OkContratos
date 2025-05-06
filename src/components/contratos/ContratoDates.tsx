@@ -1,4 +1,3 @@
-
 import DatePickerField from "./DatePickerField";
 
 interface ContratoDatesProps {

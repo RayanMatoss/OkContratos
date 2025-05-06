@@ -47,6 +47,8 @@ export const useContratos = () => {
 
       if (error) throw error;
 
+      console.log('Dados brutos do Supabase:', data);
+
       const formattedContratos: Contrato[] = data.map(contrato => ({
         id: contrato.id,
         numero: contrato.numero,
@@ -69,6 +71,8 @@ export const useContratos = () => {
         } : undefined,
         itens: []
       }));
+
+      console.log('Contratos formatados:', formattedContratos);
 
       setContratos(formattedContratos);
     } catch (error: any) {

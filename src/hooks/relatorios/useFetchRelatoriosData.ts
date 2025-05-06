@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { format, subMonths } from "date-fns";
@@ -30,8 +29,9 @@ export const useFetchRelatoriosData = (periodoSelecionado: string) => {
             data_termino,
             status,
             created_at
-          `)
-          .gte('created_at', format(dataInicial, 'yyyy-MM-dd'));
+          `);
+        
+        console.log('Contratos retornados:', contratos);
         
         if (contratosError) throw new Error(`Erro ao buscar contratos: ${contratosError.message}`);
 
@@ -46,7 +46,7 @@ export const useFetchRelatoriosData = (periodoSelecionado: string) => {
             created_at,
             contrato_id
           `)
-          .gte('created_at', format(dataInicial, 'yyyy-MM-dd'));
+          .gte('data_emissao', format(dataInicial, 'yyyy-MM-dd'));
         
         if (ordensError) throw new Error(`Erro ao buscar ordens: ${ordensError.message}`);
 
@@ -131,12 +131,13 @@ function processRelatoriosData(
   // Iterar pelos últimos n meses
   for (let i = 0; i < numMeses; i++) {
     const dataRef = subMonths(dataAtual, i);
+    console.log('Processando mês:', dataRef.toISOString());
     const mes = dataRef.getMonth() + 1;
     const ano = dataRef.getFullYear();
     
     // Filtrar contratos do mês
     const contratosMes = contratos.filter(c => {
-      const dataContrato = new Date(c.created_at);
+      const dataContrato = new Date(c.data_inicio);
       return dataContrato.getMonth() + 1 === mes && dataContrato.getFullYear() === ano;
     });
     

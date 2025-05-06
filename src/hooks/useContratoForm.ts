@@ -124,17 +124,6 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
     e.preventDefault();
     setLoading(true);
     try {
-      // Exigir pelo menos um item antes de criar o contrato
-      if (!formData.items || formData.items.length === 0) {
-        toast({
-          title: "Adicione pelo menos um item",
-          description: "Inclua ao menos um item ao contrato antes de salvar.",
-          variant: "destructive"
-        });
-        setLoading(false);
-        return;
-      }
-
       // Ensure fundo_municipal is always an array before converting to string
       const fundoArray = Array.isArray(formData.fundo_municipal) 
         ? formData.fundo_municipal 

@@ -48,7 +48,7 @@ export const EditItemDialog = ({ open, onOpenChange, onSuccess, item }: EditItem
           quantidade: Number(quantidade),
           unidade,
           valor_unitario: Number(valorUnitario),
-          fundos: fundos.map(fundo => fundo.id).join(',')
+          fundos: fundos
         })
         .eq('id', item.id)
         .eq('quantidade_consumida', item.quantidade_consumida); // Extra safety check

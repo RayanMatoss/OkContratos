@@ -48,7 +48,8 @@ export const AddItemsDialog = ({ open, onOpenChange, onSuccess, contratos }: Add
         quantidade: parseFloat(item.quantidade),
         unidade: item.unidade,
         valor_unitario: parseFloat(item.valor_unitario),
-        quantidade_consumida: 0
+        quantidade_consumida: 0,
+        fundos: item.fundos ? item.fundos.join(',') : null
       }));
 
       const { error } = await supabase.from('itens').insert(itemsToAdd);

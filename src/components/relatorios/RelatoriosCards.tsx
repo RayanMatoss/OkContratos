@@ -1,13 +1,18 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
 import { RelatorioMensal } from "@/types";
 
 interface RelatoriosCardsProps {
   ultimoRelatorio: RelatorioMensal;
+  relatoriosFiltrados: RelatorioMensal[];
 }
 
-export const RelatoriosCards = ({ ultimoRelatorio }: RelatoriosCardsProps) => {
+export const RelatoriosCards = ({ ultimoRelatorio, relatoriosFiltrados }: RelatoriosCardsProps) => {
+  const totalContratosPeriodo = relatoriosFiltrados.reduce((acc, r) => acc + r.totalContratos, 0);
+  const totalAtivosPeriodo = relatoriosFiltrados.reduce((acc, r) => acc + r.contratosAtivos, 0);
+  const totalVencidosPeriodo = relatoriosFiltrados.reduce((acc, r) => acc + r.contratosVencidos, 0);
+  const valorTotalContratosPeriodo = relatoriosFiltrados.reduce((acc, r) => acc + r.valorTotalContratos, 0);
+  const valorTotalOrdensPeriodo = relatoriosFiltrados.reduce((acc, r) => acc + r.valorTotalOrdens, 0);
   return (
     <div className="grid gap-6 md:grid-cols-3">
       <Card>
@@ -16,9 +21,9 @@ export const RelatoriosCards = ({ ultimoRelatorio }: RelatoriosCardsProps) => {
           <CardDescription>No período selecionado</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="text-3xl font-bold">{ultimoRelatorio.totalContratos}</div>
+          <div className="text-3xl font-bold">{totalContratosPeriodo}</div>
           <p className="text-xs text-muted-foreground mt-1">
-            {ultimoRelatorio.contratosAtivos} ativos | {ultimoRelatorio.contratosVencidos} vencidos
+            {totalAtivosPeriodo} ativos | {totalVencidosPeriodo} vencidos
           </p>
         </CardContent>
       </Card>
@@ -43,10 +48,10 @@ export const RelatoriosCards = ({ ultimoRelatorio }: RelatoriosCardsProps) => {
         </CardHeader>
         <CardContent>
           <div className="text-3xl font-bold">
-            {formatCurrency(ultimoRelatorio.valorTotalContratos)}
+            {formatCurrency(valorTotalContratosPeriodo)}
           </div>
           <p className="text-xs text-muted-foreground mt-1">
-            Ordens: {formatCurrency(ultimoRelatorio.valorTotalOrdens)}
+            Ordens: {formatCurrency(valorTotalOrdensPeriodo)}
           </p>
         </CardContent>
       </Card>

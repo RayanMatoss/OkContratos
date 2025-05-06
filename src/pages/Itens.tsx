@@ -53,43 +53,45 @@ const Itens = () => {
           <AccordionItem key={contrato.id} value={contrato.id}>
             <AccordionTrigger>
               <div className="flex flex-col md:flex-row md:items-center gap-2 w-full">
+                {contrato.fornecedor?.nome && (
+                  <span className="font-semibold">{contrato.fornecedor.nome}</span>
+                )}
                 <span className="font-semibold">{contrato.numero}</span>
                 <span className="text-muted-foreground text-sm">{contrato.objeto}</span>
-                <span className="text-muted-foreground text-sm">{contrato.fornecedor?.nome}</span>
               </div>
             </AccordionTrigger>
             <AccordionContent>
-              <table className="w-full text-sm mt-2">
+              <table className="w-full text-sm mt-2 border border-border">
                 <thead>
-                  <tr>
-                    <th className="text-left">Descrição</th>
-                    <th>Quantidade</th>
-                    <th>Consumido</th>
-                    <th>Saldo</th>
-                    <th>Unidade</th>
-                    <th>Fundo</th>
-                    <th>Valor Unit.</th>
-                    <th>Valor Total</th>
-                    <th>Valor Restante</th>
-                    <th>Ações</th>
+                  <tr className="bg-muted">
+                    <th className="text-left border-b border-r border-border">Descrição</th>
+                    <th className="text-center border-b border-r border-border">Quantidade</th>
+                    <th className="text-center border-b border-r border-border">Consumido</th>
+                    <th className="text-center border-b border-r border-border">Saldo</th>
+                    <th className="text-center border-b border-r border-border">Unidade</th>
+                    <th className="text-center border-b border-r border-border">Fundo</th>
+                    <th className="text-center border-b border-r border-border">Valor Unit.</th>
+                    <th className="text-center border-b border-r border-border">Valor Total</th>
+                    <th className="text-center border-b border-r border-border">Valor Restante</th>
+                    <th className="text-center border-b border-border">Ações</th>
                   </tr>
                 </thead>
                 <tbody>
                   {contrato.itens.map(item => {
                     const saldo = item.quantidade - item.quantidade_consumida;
                     const valorRestante = saldo * item.valor_unitario;
-                    const fundos = Array.isArray(contrato.fundoMunicipal) ? contrato.fundoMunicipal.join(', ') : contrato.fundoMunicipal || '-';
+                    const fundos = Array.isArray(item.fundos) ? item.fundos.join(', ') : (item.fundos || '-');
                     return (
-                      <tr key={item.id}>
-                        <td className="font-medium">{item.descricao}</td>
-                        <td className="text-center">{item.quantidade}</td>
-                        <td className="text-center">{item.quantidade_consumida}</td>
-                        <td className="text-center">{saldo}</td>
-                        <td className="text-center">{item.unidade}</td>
-                        <td className="text-center">{fundos}</td>
-                        <td className="text-right">{formatCurrency(item.valor_unitario)}</td>
-                        <td className="text-right">{formatCurrency(item.quantidade * item.valor_unitario)}</td>
-                        <td className="text-right">{formatCurrency(valorRestante)}</td>
+                      <tr key={item.id} className="border-b border-border">
+                        <td className="font-medium border-r border-border">{item.descricao}</td>
+                        <td className="text-center border-r border-border">{item.quantidade}</td>
+                        <td className="text-center border-r border-border">{item.quantidade_consumida}</td>
+                        <td className="text-center border-r border-border">{saldo}</td>
+                        <td className="text-center border-r border-border">{item.unidade}</td>
+                        <td className="text-center border-r border-border">{fundos}</td>
+                        <td className="text-center border-r border-border">{formatCurrency(item.valor_unitario)}</td>
+                        <td className="text-center border-r border-border">{formatCurrency(item.quantidade * item.valor_unitario)}</td>
+                        <td className="text-center border-r border-border">{formatCurrency(valorRestante)}</td>
                         <td className="text-center">
                           <button className="text-primary" onClick={() => onEdit(item)}>
                             <span className="sr-only">Editar</span>

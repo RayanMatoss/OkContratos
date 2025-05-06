@@ -1,15 +1,17 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
+import FundoMunicipalSelector from "@/components/contratos/FundoMunicipalSelector";
+import { FundoMunicipal } from "@/types";
 
 interface NewItem {
   descricao: string;
   quantidade: string;
   unidade: string;
   valor_unitario: string;
+  fundos?: FundoMunicipal[];
 }
 
 interface ItemFormProps {
@@ -21,7 +23,8 @@ export const ItemForm = ({ onAdd }: ItemFormProps) => {
     descricao: "",
     quantidade: "",
     unidade: "",
-    valor_unitario: ""
+    valor_unitario: "",
+    fundos: []
   });
 
   const handleAdd = () => {
@@ -30,7 +33,8 @@ export const ItemForm = ({ onAdd }: ItemFormProps) => {
       descricao: "",
       quantidade: "",
       unidade: "",
-      valor_unitario: ""
+      valor_unitario: "",
+      fundos: []
     });
   };
 
@@ -77,6 +81,13 @@ export const ItemForm = ({ onAdd }: ItemFormProps) => {
               onChange={(e) => setItem({ ...item, valor_unitario: e.target.value })}
             />
           </div>
+        </div>
+        <div className="space-y-2">
+          <Label>Fundos Municipais</Label>
+          <FundoMunicipalSelector
+            selectedFundos={item.fundos || []}
+            onChange={(fundos) => setItem({ ...item, fundos })}
+          />
         </div>
       </div>
       <Button 

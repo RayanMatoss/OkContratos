@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -12,7 +11,7 @@ export const useContratos = () => {
     try {
       const { data, error } = await supabase
         .from('contratos')
-        .select('id, numero, objeto, fornecedor_id, fundo_municipal, valor, data_inicio, data_termino, status, created_at')
+        .select('id, numero, objeto, fornecedor_id, fornecedores (nome), fundo_municipal, valor, data_inicio, data_termino, status, created_at')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -22,6 +21,7 @@ export const useContratos = () => {
         id: contrato.id,
         numero: contrato.numero,
         fornecedorId: contrato.fornecedor_id,
+        fornecedor: contrato.fornecedores ? { nome: contrato.fornecedores.nome } : undefined,
         fundoMunicipal: contrato.fundo_municipal as any,
         objeto: contrato.objeto,
         valor: contrato.valor,

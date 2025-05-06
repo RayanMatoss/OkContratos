@@ -12,7 +12,7 @@ const Contratos = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editingContrato, setEditingContrato] = useState<Contrato | undefined>();
-  const { contratos, loading, deleteContrato } = useContratos();
+  const { contratos, loading, deleteContrato, fetchContratos } = useContratos();
   const { toast } = useToast();
 
   const filteredContratos = contratos.filter((contrato) => {
@@ -43,6 +43,13 @@ const Contratos = () => {
 
   const handleDelete = async (contrato: Contrato) => {
     await deleteContrato(contrato.id);
+  };
+
+  // Função de sucesso para edição/criação
+  const handleSuccess = () => {
+    setShowForm(false);
+    setEditingContrato(undefined);
+    fetchContratos();
   };
 
   return (
@@ -84,6 +91,7 @@ const Contratos = () => {
         onOpenChange={handleCloseForm}
         mode={editingContrato ? 'edit' : 'create'}
         contrato={editingContrato}
+        onSuccess={handleSuccess}
       />
     </div>
   );

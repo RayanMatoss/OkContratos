@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRelatoriosData } from "@/hooks/relatorios/useRelatoriosData";
@@ -57,7 +56,7 @@ const Relatorios = () => {
         />
       </RelatoriosHeader>
 
-      <RelatoriosCards ultimoRelatorio={ultimoRelatorio} />
+      <RelatoriosCards ultimoRelatorio={ultimoRelatorio} relatoriosFiltrados={relatoriosFiltrados} />
 
       {relatoriosFiltrados.length === 0 ? (
         <Alert className="my-6">

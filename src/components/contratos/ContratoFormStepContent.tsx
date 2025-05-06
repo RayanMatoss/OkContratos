@@ -53,15 +53,6 @@ export const ContratoFormStepContent: React.FC<ContratoFormStepContentProps> = (
           onDateChange={(field, date) => onFieldChange(field, date)}
         />
       );
-    case "items":
-      return (
-        <ContratoItems
-          items={formData.items || []}
-          onAddItem={item => onFieldChange("items", [...(formData.items || []), item])}
-          onRemoveItem={idx => onFieldChange("items", (formData.items || []).filter((_, i) => i !== idx))}
-          fundosMunicipais={fundoMunicipal}
-        />
-      );
     default:
       return null;
   }
