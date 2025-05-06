@@ -179,7 +179,11 @@
 [data-radix-collection-item], .select__option, .command-item, .dropdown-item {
   pointer-events: auto !important;
   cursor: pointer !important;
-  z-index: 9999 !important;
+}
+
+/* Garante que o modal está acima dos outros elementos */
+[role="dialog"], .modal, .DialogContent {
+  z-index: 1050 !important;
 }
 
 /* Tenta esconder overlays que possam estar cobrindo o dropdown */
