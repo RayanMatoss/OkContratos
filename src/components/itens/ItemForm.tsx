@@ -28,7 +28,12 @@ export const ItemForm = ({ onAdd }: ItemFormProps) => {
   });
 
   const handleAdd = () => {
-    onAdd(item);
+    onAdd({
+      ...item,
+      fundos: Array.isArray(item.fundos)
+        ? item.fundos
+        : (typeof item.fundos === "string" && item.fundos ? [item.fundos] : []),
+    });
     setItem({
       descricao: "",
       quantidade: "",
