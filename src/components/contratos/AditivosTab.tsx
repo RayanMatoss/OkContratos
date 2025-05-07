@@ -6,9 +6,10 @@ import AditivoFormDialog from "./AditivoFormDialog";
 
 interface AditivosTabProps {
   contratoId: string;
+  onAditivoCriado?: () => void;
 }
 
-const AditivosTab = ({ contratoId }: AditivosTabProps) => {
+const AditivosTab = ({ contratoId, onAditivoCriado }: AditivosTabProps) => {
   const { aditivos, loading, fetchAditivos } = useAditivos(contratoId);
   const [openForm, setOpenForm] = useState(false);
 
@@ -16,6 +17,12 @@ const AditivosTab = ({ contratoId }: AditivosTabProps) => {
     fetchAditivos();
     // eslint-disable-next-line
   }, [contratoId]);
+
+  const handleAditivoCriado = () => {
+    fetchAditivos();
+    setOpenForm(false);
+    if (onAditivoCriado) onAditivoCriado();
+  };
 
   return (
     <div className="space-y-4">
@@ -27,7 +34,7 @@ const AditivosTab = ({ contratoId }: AditivosTabProps) => {
         contratoId={contratoId}
         open={openForm}
         onOpenChange={setOpenForm}
-        onSuccess={fetchAditivos}
+        onSuccess={handleAditivoCriado}
       />
       <div className="overflow-x-auto">
         <table className="min-w-full text-sm border">

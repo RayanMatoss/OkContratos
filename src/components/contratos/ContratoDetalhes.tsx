@@ -8,9 +8,10 @@ interface ContratoDetalhesProps {
   contrato: Contrato;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onAditivoCriado?: () => void;
 }
 
-const ContratoDetalhes = ({ contrato, open, onOpenChange }: ContratoDetalhesProps) => {
+const ContratoDetalhes = ({ contrato, open, onOpenChange, onAditivoCriado }: ContratoDetalhesProps) => {
   console.log("Contrato recebido no modal:", contrato);
   const fundos =
     Array.isArray(contrato.fundoMunicipal) && contrato.fundoMunicipal.length > 0
@@ -21,51 +22,48 @@ const ContratoDetalhes = ({ contrato, open, onOpenChange }: ContratoDetalhesProp
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl">
+      <DialogContent className="max-w-3xl">
         <DialogHeader>
           <DialogTitle>Detalhes do Contrato</DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-6">
+        <div className="space-y-4">
           {/* Informações Básicas */}
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground">Número</h3>
-              <p className="text-lg font-medium">{contrato.numero}</p>
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 items-start">
+            <div className="md:col-span-4">
+              <h3 className="text-xs font-semibold text-muted-foreground mb-1">Número</h3>
+              <p className="text-base font-bold">{contrato.numero}</p>
             </div>
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground">Fornecedor</h3>
-              <p className="text-lg font-medium">{contrato.fornecedor?.nome}</p>
+            <div className="md:col-span-4">
+              <h3 className="text-xs font-semibold text-muted-foreground mb-1">Fornecedor</h3>
+              <p className="text-base font-bold">{contrato.fornecedor?.nome}</p>
             </div>
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground">Objeto</h3>
-              <p className="text-lg font-medium">{contrato.objeto}</p>
-            </div>
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground">Valor</h3>
-              <p className="text-lg font-medium">
+            <div className="md:col-span-4">
+              <h3 className="text-xs font-semibold text-muted-foreground mb-1">Valor</h3>
+              <p className="text-base font-bold">
                 {new Intl.NumberFormat('pt-BR', {
                   style: 'currency',
                   currency: 'BRL',
                 }).format(contrato.valor)}
               </p>
             </div>
-            {/* Fundos - só exibe se houver */}
-            {fundos.length > 0 && (
-              <div>
-                <h3 className="text-sm font-medium text-muted-foreground">Fundos</h3>
-                <div className="flex flex-wrap gap-1 mt-1">
-                  {fundos.map((fundo, index) => (
-                    <Badge key={index} variant="secondary">
-                      {fundo}
-                    </Badge>
-                  ))}
-                </div>
+            <div className="md:col-span-8 mt-2">
+              <h3 className="text-xs font-semibold text-muted-foreground mb-1">Objeto</h3>
+              <p className="text-sm leading-snug">{contrato.objeto}</p>
+            </div>
+            <div className="md:col-span-2 mt-2">
+              <h3 className="text-xs font-semibold text-muted-foreground mb-1">Fundos</h3>
+              <div className="flex flex-wrap gap-1 mt-1">
+                {fundos.map((fundo, index) => (
+                  <Badge key={index} variant="secondary">
+                    {fundo}
+                  </Badge>
+                ))}
               </div>
-            )}
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground">Vigência</h3>
-              <p className="text-lg font-medium">
+            </div>
+            <div className="md:col-span-2 mt-2">
+              <h3 className="text-xs font-semibold text-muted-foreground mb-1">Vigência</h3>
+              <p className="text-sm font-medium">
                 {format(new Date(contrato.dataInicio), 'dd/MM/yyyy')} a{' '}
                 {format(new Date(contrato.dataTermino), 'dd/MM/yyyy')}
               </p>
@@ -74,9 +72,9 @@ const ContratoDetalhes = ({ contrato, open, onOpenChange }: ContratoDetalhesProp
 
           {/* Itens do Contrato */}
           <div>
-            <h3 className="text-lg font-medium mb-4">Itens do Contrato</h3>
-            <div className="border rounded-lg">
-              <table className="w-full">
+            <h3 className="text-base font-semibold mb-2">Itens do Contrato</h3>
+            <div className="border rounded-lg overflow-x-auto">
+              <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b">
                     <th className="text-left p-2">Descrição</th>
@@ -113,8 +111,8 @@ const ContratoDetalhes = ({ contrato, open, onOpenChange }: ContratoDetalhesProp
 
           {/* Aditivos */}
           <div>
-            <h3 className="text-lg font-medium mb-4">Aditivos</h3>
-            <AditivosTab contratoId={contrato.id} />
+            <h3 className="text-base font-semibold mb-2">Aditivos</h3>
+            <AditivosTab contratoId={contrato.id} onAditivoCriado={onAditivoCriado} />
           </div>
         </div>
       </DialogContent>

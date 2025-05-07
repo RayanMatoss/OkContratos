@@ -8,6 +8,7 @@ import ContratoDetalhes from "@/components/contratos/ContratoDetalhes";
 import { useContratos } from "@/hooks/useContratos";
 import { useToast } from "@/hooks/use-toast";
 import { Contrato } from "@/types";
+import { supabase } from "@/integrations/supabase/client";
 
 const Contratos = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -58,6 +59,38 @@ const Contratos = () => {
     fetchContratos();
   };
 
+  // Função para buscar contrato atualizado
+  const fetchContratoById = async (id: string) => {
+    const { data, error } = await supabase
+      .from("contratos")
+      .select(`*, fornecedor:fornecedor_id(id, nome, cnpj, email, telefone, endereco)`)
+      .eq("id", id)
+      .single();
+    if (error) return undefined;
+    return {
+      id: data.id,
+      numero: data.numero,
+      fornecedorId: data.fornecedor_id,
+      fundoMunicipal: Array.isArray(data.fundo_municipal) ? data.fundo_municipal : [],
+      objeto: data.objeto,
+      valor: data.valor,
+      dataInicio: new Date(data.data_inicio),
+      dataTermino: new Date(data.data_termino),
+      status: data.status,
+      createdAt: new Date(data.created_at),
+      fornecedor: data.fornecedor ? {
+        id: data.fornecedor.id,
+        nome: data.fornecedor.nome,
+        cnpj: data.fornecedor.cnpj,
+        email: data.fornecedor.email || "",
+        telefone: data.fornecedor.telefone || "",
+        endereco: data.fornecedor.endereco || "",
+        createdAt: new Date()
+      } : undefined,
+      itens: []
+    };
+  };
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between">
@@ -105,7 +138,19 @@ const Contratos = () => {
         <ContratoDetalhes
           contrato={selectedContrato}
           open={!!selectedContrato}
-          onOpenChange={(open) => !open && setSelectedContrato(undefined)}
+          onOpenChange={async (open) => {
+            if (!open) setSelectedContrato(undefined);
+            else if (selectedContrato) {
+              const atualizado = await fetchContratoById(selectedContrato.id);
+              if (atualizado) setSelectedContrato(atualizado);
+            }
+          }}
+          onAditivoCriado={async () => {
+            if (selectedContrato) {
+              const atualizado = await fetchContratoById(selectedContrato.id);
+              if (atualizado) setSelectedContrato(atualizado);
+            }
+          }}
         />
       )}
     </div>
