@@ -8,22 +8,17 @@ export const useContratos = () => {
   const [contratos, setContratos] = useState<Contrato[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const parseFundoMunicipal = (fundo: string | null | undefined): FundoMunicipal[] => {
+  const parseFundoMunicipal = (fundo: string[] | string | null | undefined): FundoMunicipal[] => {
+    if (Array.isArray(fundo)) return fundo as FundoMunicipal[];
     if (!fundo) return [];
-    
-    // Se for uma string com vírgula, divida em um array
     if (typeof fundo === 'string' && fundo.includes(',')) {
       return fundo.split(', ')
         .map(item => item.trim())
         .filter(Boolean) as FundoMunicipal[];
     }
-    
-    // Se for um único valor string
     if (typeof fundo === 'string' && fundo.trim() !== '') {
       return [fundo.trim() as FundoMunicipal];
     }
-    
-    // Caso não seja reconhecido, retorne array vazio
     return [];
   };
 
