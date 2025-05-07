@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Plus, Search } from "lucide-react";
 import { ContratoFormDialog } from "@/components/contratos/ContratoFormDialog";
 import ContratosTable from "@/components/contratos/ContratosTable";
+import ContratoDetalhes from "@/components/contratos/ContratoDetalhes";
 import { useContratos } from "@/hooks/useContratos";
 import { useToast } from "@/hooks/use-toast";
 import { Contrato } from "@/types";
@@ -12,6 +13,7 @@ const Contratos = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editingContrato, setEditingContrato] = useState<Contrato | undefined>();
+  const [selectedContrato, setSelectedContrato] = useState<Contrato | undefined>();
   const { contratos, loading, deleteContrato, fetchContratos } = useContratos();
   const { toast } = useToast();
 
@@ -43,6 +45,10 @@ const Contratos = () => {
 
   const handleDelete = async (contrato: Contrato) => {
     await deleteContrato(contrato.id);
+  };
+
+  const handleView = (contrato: Contrato) => {
+    setSelectedContrato(contrato);
   };
 
   // Função de sucesso para edição/criação
@@ -84,6 +90,7 @@ const Contratos = () => {
         contratos={filteredContratos} 
         onEdit={handleEdit}
         onDelete={handleDelete}
+        onView={handleView}
       />
 
       <ContratoFormDialog
@@ -93,6 +100,14 @@ const Contratos = () => {
         contrato={editingContrato}
         onSuccess={handleSuccess}
       />
+
+      {selectedContrato && (
+        <ContratoDetalhes
+          contrato={selectedContrato}
+          open={!!selectedContrato}
+          onOpenChange={(open) => !open && setSelectedContrato(undefined)}
+        />
+      )}
     </div>
   );
 };

@@ -1,4 +1,3 @@
-
 export type FundoMunicipal = "Prefeitura" | "Educação" | "Saúde" | "Assistência";
 
 // Updated contract status values - only managed by database now
@@ -86,4 +85,15 @@ export interface RelatorioMensal {
   ordensConcluidas: number;
   valorTotalContratos: number;
   valorTotalOrdens: number;
+}
+
+export type TipoAditivo = "periodo" | "valor";
+
+export interface Aditivo {
+  id: string;
+  contrato_id: string;
+  tipo: TipoAditivo;
+  nova_data_termino?: string; // ISO date string
+  percentual_itens?: number;  // Ex: 10.00 para 10%
+  criado_em: string;          // ISO date string
 }

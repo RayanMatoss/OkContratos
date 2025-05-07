@@ -3,14 +3,17 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { TableActions } from "@/components/ui/table-actions";
 import { Contrato, FundoMunicipal } from "@/types";
 import { Badge } from "@/components/ui/badge";
+import { Eye } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface ContratosTableProps {
   contratos: Contrato[];
   onEdit?: (contrato: Contrato) => void;
   onDelete?: (contrato: Contrato) => void;
+  onView?: (contrato: Contrato) => void;
 }
 
-const ContratosTable = ({ contratos, onEdit, onDelete }: ContratosTableProps) => {
+const ContratosTable = ({ contratos, onEdit, onDelete, onView }: ContratosTableProps) => {
   return (
     <div className="rounded-md border">
       <Table>
@@ -57,16 +60,26 @@ const ContratosTable = ({ contratos, onEdit, onDelete }: ContratosTableProps) =>
                     {format(new Date(contrato.dataTermino), 'dd/MM/yyyy')}
                   </TableCell>
                   <TableCell className="text-right">
-                    <TableActions
-                      onEdit={() => onEdit?.(contrato)}
-                      onDelete={() => onDelete?.(contrato)}
-                      showEdit={contrato.status !== "Expirado"}
-                      showDelete={contrato.status !== "Expirado"}
-                      disableEdit={contrato.status === "Expirado"}
-                      disableDelete={contrato.status === "Expirado"}
-                      editTooltip={contrato.status === "Expirado" ? "Contratos expirados não podem ser editados" : undefined}
-                      deleteTooltip={contrato.status === "Expirado" ? "Contratos expirados não podem ser excluídos" : undefined}
-                    />
+                    <div className="flex justify-end gap-2">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => onView?.(contrato)}
+                        title="Ver detalhes"
+                      >
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                      <TableActions
+                        onEdit={() => onEdit?.(contrato)}
+                        onDelete={() => onDelete?.(contrato)}
+                        showEdit={contrato.status !== "Expirado"}
+                        showDelete={contrato.status !== "Expirado"}
+                        disableEdit={contrato.status === "Expirado"}
+                        disableDelete={contrato.status === "Expirado"}
+                        editTooltip={contrato.status === "Expirado" ? "Contratos expirados não podem ser editados" : undefined}
+                        deleteTooltip={contrato.status === "Expirado" ? "Contratos expirados não podem ser excluídos" : undefined}
+                      />
+                    </div>
                   </TableCell>
                 </TableRow>
               );

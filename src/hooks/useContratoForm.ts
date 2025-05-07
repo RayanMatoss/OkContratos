@@ -124,20 +124,17 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
     e.preventDefault();
     setLoading(true);
     try {
-      // Ensure fundo_municipal is always an array before converting to string
+      // Envie fundo_municipal como array, não como string
       const fundoArray = Array.isArray(formData.fundo_municipal) 
         ? formData.fundo_municipal 
         : [];
-      
-      // Only join non-empty arrays
-      const formattedFundos = fundoArray.length > 0 ? fundoArray.join(', ') : '';
 
       const data = {
         numero: formData.numero,
         objeto: formData.objeto,
         fornecedor_id: formData.fornecedor_id,
         valor: parseFloat(formData.valor) || 0,
-        fundo_municipal: formattedFundos, 
+        fundo_municipal: fundoArray, // Enviar como array!
         data_inicio: formData.data_inicio instanceof Date ? formData.data_inicio.toISOString() : new Date().toISOString(),
         data_termino: formData.data_termino instanceof Date ? formData.data_termino.toISOString() : new Date().toISOString(),
         status: 'Ativo'
@@ -158,7 +155,7 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
             quantidade: item.quantidade,
             unidade: item.unidade || 'un',
             valor_unitario: item.valor_unitario || 0,
-            fundos: Array.isArray(item.fundos) ? item.fundos.join(',') : (item.fundos || null),
+            fundos: Array.isArray(item.fundos) ? item.fundos : (item.fundos ? [item.fundos] : []),
             quantidade_consumida: 0
           }));
           const itensResponse = await supabase.from("itens").insert(itensToInsert);
