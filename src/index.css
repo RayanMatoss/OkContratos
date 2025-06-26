@@ -187,6 +187,6 @@
 }
 
 /* Tenta esconder overlays que possam estar cobrindo o dropdown */
-div[style*="z-index"], .overlay, .modal-backdrop {
+.overlay, .modal-backdrop {
   pointer-events: none !important;
 }

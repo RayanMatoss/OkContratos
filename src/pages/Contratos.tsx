@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Search } from "lucide-react";
@@ -9,6 +9,15 @@ import { useContratos } from "@/hooks/useContratos";
 import { useToast } from "@/hooks/use-toast";
 import { Contrato } from "@/types";
 import { supabase } from "@/integrations/supabase/client";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+
+function useFixPointerEvents(open: boolean) {
+  useEffect(() => {
+    if (!open) {
+      document.body.style.pointerEvents = "auto";
+    }
+  }, [open]);
+}
 
 const Contratos = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -90,6 +99,8 @@ const Contratos = () => {
       itens: []
     };
   };
+
+  useFixPointerEvents(showForm);
 
   return (
     <div className="space-y-6 animate-fade-in">

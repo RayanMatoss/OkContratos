@@ -1,4 +1,3 @@
-
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Fornecedor } from "@/types";
 
@@ -17,7 +16,7 @@ const FornecedorSelector = ({ value, onChange, fornecedores }: FornecedorSelecto
       <SelectTrigger>
         <SelectValue placeholder="Selecione o fornecedor" />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent disablePortal>
         {fornecedores?.map((fornecedor) => (
           <SelectItem key={fornecedor.id} value={fornecedor.id}>
             {fornecedor.nome}

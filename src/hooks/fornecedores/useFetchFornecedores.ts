@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -23,6 +22,7 @@ export const useFetchFornecedores = (shouldFetch: boolean = false) => {
       const formattedFornecedores = data.map(formatFornecedor);
       setFornecedores(formattedFornecedores);
     } catch (error: any) {
+      console.error("Erro ao buscar fornecedores:", error);
       toast({
         title: "Erro ao carregar fornecedores",
         description: error.message,

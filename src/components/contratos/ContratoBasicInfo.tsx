@@ -1,9 +1,9 @@
-
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import FornecedorSelector from "./FornecedorSelector";
 import FundoMunicipalSelector from "./FundoMunicipalSelector";
 import { FundoMunicipal, Fornecedor } from "@/types";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 
 interface ContratoBasicInfoProps {
   numero: string;
