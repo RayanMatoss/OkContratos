@@ -1,37 +1,29 @@
-import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
+import { useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import type { Fornecedor } from "@/types";
-import { formatFornecedor } from "./types";
+import { useMunicipioFilter } from "../useMunicipioFilter";
 
-export const useFetchFornecedores = (shouldFetch: boolean = false) => {
-  const { toast } = useToast();
-  const [fornecedores, setFornecedores] = useState<Fornecedor[]>([]);
+export const useFetchFornecedores = () => {
+  const [fornecedores, setFornecedores] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const { filterByMunicipio } = useMunicipioFilter();
 
-  const fetchFornecedores = async () => {
+  const fetchFornecedores = useCallback(async () => {
+    setLoading(true);
     try {
-      setLoading(true);
+      // Buscar fornecedores do Supabase
       const { data, error } = await supabase
         .from("fornecedores")
-        .select("*")
-        .order("nome");
-
+        .select("*");
       if (error) throw error;
-
-      const formattedFornecedores = data.map(formatFornecedor);
-      setFornecedores(formattedFornecedores);
-    } catch (error: any) {
-      console.error("Erro ao buscar fornecedores:", error);
-      toast({
-        title: "Erro ao carregar fornecedores",
-        description: error.message,
-        variant: "destructive"
-      });
+      // Filtrar pelo município do usuário (caso necessário)
+      const filteredFornecedores = filterByMunicipio(data || []);
+      setFornecedores(filteredFornecedores);
+    } catch (error) {
+      console.error('Erro ao buscar fornecedores:', error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [filterByMunicipio]);
 
   return { fornecedores, loading, fetchFornecedores };
 };

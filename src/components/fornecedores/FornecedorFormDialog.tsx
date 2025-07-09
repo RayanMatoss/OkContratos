@@ -1,10 +1,10 @@
-
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import type { Fornecedor } from "@/types";
 import type { NewFornecedor } from "@/hooks/fornecedores/types";
+import InputMask from 'react-input-mask';
 
 interface FornecedorFormDialogProps {
   open: boolean;
@@ -46,13 +46,20 @@ export const FornecedorFormDialog = ({
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="cnpj">CNPJ</Label>
-            <Input
-              id="cnpj"
-              placeholder="00.000.000/0000-00"
+            <Label htmlFor="cnpj">CPF ou CNPJ</Label>
+            <InputMask
+              mask={fornecedor.cnpj.replace(/\D/g, '').length > 11 ? '99.999.999/9999-99' : '999.999.999-99'}
               value={fornecedor.cnpj}
               onChange={(e) => onFornecedorChange("cnpj", e.target.value)}
-            />
+            >
+              {(inputProps) => (
+                <Input
+                  {...inputProps}
+                  id="cnpj"
+                  placeholder="CPF ou CNPJ"
+                />
+              )}
+            </InputMask>
           </div>
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>

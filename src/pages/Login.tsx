@@ -5,40 +5,60 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { usuarios } from "@/data/mockData";
+import { useAuth } from "@/hooks/useAuth";
+import { municipios } from "@/data/mockData";
 import { FileText, Lock } from "lucide-react";
 
 const Login = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [municipioId, setMunicipioId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = (event: React.FormEvent) => {
+  const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
+    
+    if (!municipioId) {
+      toast({
+        title: "Seleção obrigatória",
+        description: "Por favor, selecione um município.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
 
-    // Simulação de login com os usuários mockados
-    setTimeout(() => {
-      const user = usuarios.find(u => u.email === email);
+    try {
+      const success = await login(email, password, municipioId);
       
-      if (user && password === "senha123") {
+      if (success) {
         toast({
           title: "Login realizado com sucesso",
-          description: `Bem-vindo, ${user.nome}!`,
+          description: "Bem-vindo ao sistema!",
         });
         navigate("/");
       } else {
         toast({
           title: "Erro ao fazer login",
-          description: "Email ou senha inválidos.",
+          description: "Email, senha ou município inválidos.",
           variant: "destructive",
         });
       }
+    } catch (error) {
+      toast({
+        title: "Erro ao fazer login",
+        description: "Ocorreu um erro inesperado.",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -91,6 +111,22 @@ const Login = () => {
             />
           </div>
 
+          <div className="space-y-2">
+            <Label htmlFor="municipio">Município</Label>
+            <Select value={municipioId} onValueChange={setMunicipioId} required>
+              <SelectTrigger>
+                <SelectValue placeholder="Selecione seu município" />
+              </SelectTrigger>
+              <SelectContent>
+                {municipios.map((municipio) => (
+                  <SelectItem key={municipio.id} value={municipio.id}>
+                    {municipio.nome} - {municipio.uf}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
           <div className="flex items-center space-x-2">
             <Checkbox id="remember" />
             <Label htmlFor="remember" className="text-sm">
@@ -115,10 +151,6 @@ const Login = () => {
             )}
           </Button>
         </form>
-
-        <div className="text-center text-xs text-muted-foreground">
-          <p>Dica: Use o email "admin@sistema.gov.br" e senha "senha123"</p>
-        </div>
       </div>
     </div>
   );

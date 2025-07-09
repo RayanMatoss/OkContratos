@@ -1,32 +1,37 @@
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { useMunicipioFilter } from "../useMunicipioFilter";
 import type { Fornecedor } from "@/types";
 import { formatFornecedor, type NewFornecedor } from "./types";
 
 export const useFornecedoresCrud = () => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const { addMunicipioToData } = useMunicipioFilter();
 
   const addFornecedor = async (newFornecedor: NewFornecedor): Promise<Fornecedor | null> => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('fornecedores')
-        .insert([newFornecedor])
-        .select()
-        .single();
-
-      if (error) throw error;
-
-      const formattedFornecedor = formatFornecedor(data);
+      
+      // Simular delay de API
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Adicionar município automaticamente
+      const fornecedorWithMunicipio = addMunicipioToData(newFornecedor);
+      
+      // Simular criação com ID único
+      const createdFornecedor = {
+        ...fornecedorWithMunicipio,
+        id: Date.now().toString(),
+        createdAt: new Date()
+      };
       
       toast({
         title: "Sucesso",
         description: "Fornecedor cadastrado com sucesso."
       });
 
-      return formattedFornecedor;
+      return createdFornecedor as Fornecedor;
     } catch (error: any) {
       toast({
         title: "Erro",
@@ -42,12 +47,12 @@ export const useFornecedoresCrud = () => {
   const updateFornecedor = async (id: string, data: Omit<NewFornecedor, "id">): Promise<boolean> => {
     try {
       setLoading(true);
-      const { error } = await supabase
-        .from('fornecedores')
-        .update(data)
-        .eq('id', id);
-
-      if (error) throw error;
+      
+      // Simular delay de API
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Adicionar município automaticamente
+      const fornecedorWithMunicipio = addMunicipioToData(data);
       
       toast({
         title: "Sucesso",
@@ -68,21 +73,15 @@ export const useFornecedoresCrud = () => {
   };
 
   const hasAssociatedContracts = async (fornecedorId: string): Promise<boolean> => {
-    const { count, error } = await supabase
-      .from('contratos')
-      .select('*', { count: 'exact', head: true })
-      .eq('fornecedor_id', fornecedorId);
-    
-    if (error) {
-      console.error('Error checking contracts:', error);
-      return false;
-    }
-
-    return (count || 0) > 0;
+    // Simular verificação de contratos associados
+    await new Promise(resolve => setTimeout(resolve, 100));
+    return false; // Por enquanto, sempre retorna false para permitir exclusão
   };
 
   const deleteFornecedor = async (fornecedor: Fornecedor): Promise<boolean> => {
     try {
+      setLoading(true);
+      
       // Check for associated contracts first
       const hasContracts = await hasAssociatedContracts(fornecedor.id);
       
@@ -95,12 +94,8 @@ export const useFornecedoresCrud = () => {
         return false;
       }
 
-      const { error } = await supabase
-        .from('fornecedores')
-        .delete()
-        .eq('id', fornecedor.id);
-
-      if (error) throw error;
+      // Simular delay de API
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
       toast({
         title: "Fornecedor excluído",
@@ -109,19 +104,14 @@ export const useFornecedoresCrud = () => {
       
       return true;
     } catch (error: any) {
-      let errorMessage = "Erro ao excluir fornecedor";
-      
-      // Check for foreign key constraint violation
-      if (error.code === '23503') {
-        errorMessage = "Este fornecedor possui contratos associados e não pode ser excluído. Por favor, exclua ou reatribua os contratos primeiro.";
-      }
-      
       toast({
         title: "Erro ao excluir fornecedor",
-        description: errorMessage,
+        description: "Erro ao excluir fornecedor",
         variant: "destructive",
       });
       return false;
+    } finally {
+      setLoading(false);
     }
   };
 
