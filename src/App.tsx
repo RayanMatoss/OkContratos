@@ -20,13 +20,10 @@ import { MunicipioGuard } from "@/components/MunicipioGuard";
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, municipio, loading } = useAuth();
-  
   if (loading) return null;
-  
   if (!user || !municipio) {
     return <Navigate to="/login" />;
   }
-  
   return (
     <MunicipioGuard>
       {children}

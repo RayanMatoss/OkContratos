@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
-import { municipios } from "@/data/mockData";
+import { supabase } from "@/integrations/supabase/client";
 import { FileText, Lock } from "lucide-react";
 
 const Login = () => {
@@ -19,6 +19,21 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [municipioId, setMunicipioId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [municipios, setMunicipios] = useState([]);
+
+  useEffect(() => {
+    const fetchMunicipios = async () => {
+      const { data, error } = await supabase
+        .from("municipios")
+        .select("id, nome, uf");
+      if (error) {
+        setMunicipios([]);
+      } else {
+        setMunicipios(data || []);
+      }
+    };
+    fetchMunicipios();
+  }, []);
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -42,7 +57,9 @@ const Login = () => {
           title: "Login realizado com sucesso",
           description: "Bem-vindo ao sistema!",
         });
-        navigate("/");
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 100);
       } else {
         toast({
           title: "Erro ao fazer login",

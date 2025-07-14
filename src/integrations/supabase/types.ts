@@ -276,7 +276,46 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
-      }
+      },
+      user_profiles: {
+        Row: {
+          user_id: string;
+          municipio_id: string;
+          nome: string;
+          perfil: string;
+        };
+        Insert: {
+          user_id: string;
+          municipio_id: string;
+          nome: string;
+          perfil?: string;
+        };
+        Update: {
+          user_id?: string;
+          municipio_id?: string;
+          nome?: string;
+          perfil?: string;
+        };
+        Relationships: [];
+      },
+      municipios: {
+        Row: {
+          id: string;
+          nome: string;
+          uf: string;
+        };
+        Insert: {
+          id: string;
+          nome: string;
+          uf: string;
+        };
+        Update: {
+          id?: string;
+          nome?: string;
+          uf?: string;
+        };
+        Relationships: [];
+      },
     }
     Views: {
       [_ in never]: never

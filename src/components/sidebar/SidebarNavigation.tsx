@@ -9,6 +9,7 @@ import {
   ChartBar, 
   Settings 
 } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 interface SidebarLinkProps {
   to: string;
@@ -80,6 +81,7 @@ const sidebarLinks = [
 const SidebarNavigation = () => {
   const location = useLocation();
   const currentPath = location.pathname;
+  const { perfil } = useAuth();
 
   return (
     <div className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
@@ -93,6 +95,15 @@ const SidebarNavigation = () => {
           } 
         />
       ))}
+      {/* Menu exclusivo para admin */}
+      {perfil === 'admin' && (
+        <SidebarLink
+          to="/admin"
+          icon={Settings}
+          label="Administração"
+          isActive={currentPath.startsWith("/admin")}
+        />
+      )}
     </div>
   );
 };

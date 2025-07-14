@@ -3,13 +3,15 @@ import { useEffect, useState, createContext, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
-import { usuarios, municipios } from '@/data/mockData';
+// Remover importação de mockData
+// import { usuarios, municipios } from '@/data/mockData';
 
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
   municipio: any | null;
+  perfil: string | null;
   login: (email: string, password: string, municipioId: string) => Promise<boolean>;
   logout: () => void;
 }
@@ -21,6 +23,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [municipio, setMunicipio] = useState<any | null>(null);
+  const [perfil, setPerfil] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -45,28 +48,47 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (email: string, password: string, municipioId: string) => {
     setLoading(true);
-    
     try {
-      // Simulação de login com verificação de município
-      const user = usuarios.find(u => u.email === email);
-      const selectedMunicipio = municipios.find(m => m.id === municipioId);
-      
-      if (user && password === "senha123" && selectedMunicipio) {
-        // Verificar se o usuário tem acesso ao município selecionado
-        if (user.municipioId === municipioId) {
-          setMunicipio(selectedMunicipio);
-          // Salvar no localStorage para persistir
-          localStorage.setItem('municipio', JSON.stringify(selectedMunicipio));
-          setLoading(false);
-          return true;
-        } else {
-          setLoading(false);
-          return false;
-        }
-      } else {
+      // Autentica no Supabase
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error || !data.session) {
         setLoading(false);
         return false;
       }
+
+      setUser(data.user); // Garante atualização do contexto
+
+      // Busca o perfil do usuário
+      const { data: profile, error: profileError } = await supabase
+        .from('user_profiles')
+        .select('municipio_id, permissao')
+        .eq('user_id', data.user.id)
+        .single();
+
+      if (profileError || !profile) {
+        setLoading(false);
+        return false;
+      }
+
+      // Verifica se o município bate
+      if ((profile as any).municipio_id !== municipioId) {
+        setLoading(false);
+        return false;
+      }
+
+      setPerfil((profile as any).permissao || null);
+      localStorage.setItem('perfil', (profile as any).permissao || '');
+
+      // Busca os dados do município
+      const { data: municipio, error: municipioError } = await supabase
+        .from('municipios')
+        .select('id, nome, uf')
+        .eq('id', municipioId)
+        .single();
+      setMunicipio(municipio);
+      localStorage.setItem('municipio', JSON.stringify(municipio));
+      setLoading(false);
+      return true;
     } catch (error) {
       setLoading(false);
       return false;
@@ -81,16 +103,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     navigate('/login');
   };
 
-  // Carregar município do localStorage ao inicializar
+  // Carregar município e perfil do localStorage ao inicializar
   useEffect(() => {
     const savedMunicipio = localStorage.getItem('municipio');
     if (savedMunicipio) {
       setMunicipio(JSON.parse(savedMunicipio));
     }
+    const savedPerfil = localStorage.getItem('perfil');
+    if (savedPerfil) {
+      setPerfil(savedPerfil);
+    }
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, municipio, login, logout }}>
+    <AuthContext.Provider value={{ user, session, loading, municipio, perfil, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
