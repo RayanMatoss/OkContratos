@@ -3,16 +3,16 @@ import { useAuth } from './useAuth';
 export function useMunicipioFilter() {
   const { municipio } = useAuth();
 
-  const filterByMunicipio = <T extends { municipioId?: string }>(data: T[]): T[] => {
+  const filterByMunicipio = <T extends Record<string, any>>(data: T[], municipioField: string = 'municipioId'): T[] => {
     if (!municipio) return [];
     
-    return data.filter(item => item.municipioId === municipio.id);
+    return data.filter(item => item[municipioField] === municipio.id);
   };
 
-  const addMunicipioToData = <T extends Record<string, any>>(data: T): T & { municipioId: string } => {
+  const addMunicipioToData = <T extends Record<string, any>>(data: T): T & { municipio_id: string } => {
     return {
       ...data,
-      municipioId: municipio?.id || ''
+      municipio_id: municipio?.id || ''
     };
   };
 

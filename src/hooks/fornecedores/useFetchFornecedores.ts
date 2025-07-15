@@ -15,8 +15,8 @@ export const useFetchFornecedores = () => {
         .from("fornecedores")
         .select("*");
       if (error) throw error;
-      // Filtrar pelo município do usuário (caso necessário)
-      const filteredFornecedores = filterByMunicipio(data || []);
+      // Filtrar pelo município do usuário usando o campo correto
+      const filteredFornecedores = filterByMunicipio(data || [], 'municipio_id');
       setFornecedores(filteredFornecedores);
     } catch (error) {
       console.error('Erro ao buscar fornecedores:', error);

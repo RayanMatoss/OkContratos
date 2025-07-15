@@ -3,6 +3,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useMunicipioFilter } from "../useMunicipioFilter";
 import type { Fornecedor } from "@/types";
 import { formatFornecedor, type NewFornecedor } from "./types";
+import { supabase } from "@/integrations/supabase/client";
 
 export const useFornecedoresCrud = () => {
   const [loading, setLoading] = useState(false);
@@ -12,26 +13,20 @@ export const useFornecedoresCrud = () => {
   const addFornecedor = async (newFornecedor: NewFornecedor): Promise<Fornecedor | null> => {
     try {
       setLoading(true);
-      
-      // Simular delay de API
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
       // Adicionar município automaticamente
       const fornecedorWithMunicipio = addMunicipioToData(newFornecedor);
-      
-      // Simular criação com ID único
-      const createdFornecedor = {
-        ...fornecedorWithMunicipio,
-        id: Date.now().toString(),
-        createdAt: new Date()
-      };
-      
+      // Inserir no Supabase
+      const { data, error } = await supabase
+        .from('fornecedores')
+        .insert([fornecedorWithMunicipio])
+        .select()
+        .single();
+      if (error) throw error;
       toast({
         title: "Sucesso",
         description: "Fornecedor cadastrado com sucesso."
       });
-
-      return createdFornecedor as Fornecedor;
+      return data as Fornecedor;
     } catch (error: any) {
       toast({
         title: "Erro",
@@ -81,10 +76,8 @@ export const useFornecedoresCrud = () => {
   const deleteFornecedor = async (fornecedor: Fornecedor): Promise<boolean> => {
     try {
       setLoading(true);
-      
       // Check for associated contracts first
       const hasContracts = await hasAssociatedContracts(fornecedor.id);
-      
       if (hasContracts) {
         toast({
           title: "Não é possível excluir o fornecedor",
@@ -93,20 +86,21 @@ export const useFornecedoresCrud = () => {
         });
         return false;
       }
-
-      // Simular delay de API
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      // Remover do Supabase
+      const { error } = await supabase
+        .from('fornecedores')
+        .delete()
+        .eq('id', fornecedor.id);
+      if (error) throw error;
       toast({
         title: "Fornecedor excluído",
         description: "O fornecedor foi excluído com sucesso",
       });
-      
       return true;
     } catch (error: any) {
       toast({
         title: "Erro ao excluir fornecedor",
-        description: "Erro ao excluir fornecedor",
+        description: error.message || "Erro ao excluir fornecedor",
         variant: "destructive",
       });
       return false;
