@@ -1,9 +1,10 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Search } from "lucide-react";
 import { ItemFormDialog } from "@/components/itens/ItemFormDialog";
-import ItemsTable from "@/components/itens/ItemsTable";
+import { ItemsTable } from "@/components/itens/ItemsTable";
 import { useItens } from "@/hooks/useItens";
 import { useToast } from "@/hooks/use-toast";
 import { Item, Contrato, FundoMunicipal } from "@/types";
@@ -30,7 +31,20 @@ const Itens = () => {
         }
 
         if (data) {
-          setContratos(data as Contrato[]);
+          const contratosFormatados: Contrato[] = data.map((contrato) => ({
+            id: contrato.id,
+            numero: contrato.numero,
+            fornecedorId: contrato.fornecedor_id,
+            fundoMunicipal: Array.isArray(contrato.fundo_municipal) ? contrato.fundo_municipal as FundoMunicipal[] : [],
+            objeto: contrato.objeto,
+            valor: contrato.valor,
+            dataInicio: new Date(contrato.data_inicio),
+            dataTermino: new Date(contrato.data_termino),
+            status: contrato.status as any,
+            createdAt: new Date(contrato.created_at),
+            itens: []
+          }));
+          setContratos(contratosFormatados);
         }
       } catch (error: any) {
         toast({
@@ -92,48 +106,6 @@ const Itens = () => {
     refetch();
   };
 
-  useEffect(() => {
-    const fetchItens = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('itens')
-          .select(`
-            *,
-            contratos (
-              numero
-            )
-          `);
-  
-        if (error) {
-          throw new Error(error.message);
-        }
-  
-        if (data) {
-          const itensFormatados: Item[] = data.map((item) => ({
-            id: item.id,
-            contratoId: item.contrato_id,
-            descricao: item.descricao,
-            quantidade: item.quantidade,
-            unidade: item.unidade,
-            valorUnitario: item.valor_unitario,
-            quantidadeConsumida: item.quantidade_consumida,
-            createdAt: new Date(item.created_at),
-            fundoMunicipal: Array.isArray(item.fundos) ? item.fundos as FundoMunicipal[] : []
-          }));
-          // setItens(itensFormatados);
-        }
-      } catch (error: any) {
-        toast({
-          title: "Erro ao buscar itens",
-          description: error.message,
-          variant: "destructive",
-        });
-      }
-    };
-
-    fetchItens();
-  }, [toast]);
-
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between">
@@ -163,7 +135,7 @@ const Itens = () => {
       </div>
 
       <ItemsTable 
-        filteredItens={filteredItens} 
+        items={filteredItens} 
         loading={loading} 
         onEdit={handleEdit}
         onDelete={handleDelete}

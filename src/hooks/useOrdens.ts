@@ -47,7 +47,7 @@ export const useOrdens = () => {
           id: ordem.contrato.id,
           numero: ordem.contrato.numero,
           fornecedorId: ordem.contrato.fornecedor_id,
-          fundoMunicipal: ordem.contrato.fundo_municipal as any,
+          fundoMunicipal: Array.isArray(ordem.contrato.fundo_municipal) ? ordem.contrato.fundo_municipal : [],
           objeto: ordem.contrato.objeto,
           valor: ordem.contrato.valor,
           dataInicio: new Date(ordem.contrato.data_inicio),
@@ -66,6 +66,7 @@ export const useOrdens = () => {
           } : undefined
         } : undefined,
         dataEmissao: new Date(ordem.data_emissao),
+        observacoes: "", // Add default empty observacoes
         status: ordem.status as any,
         itensConsumidos: [],
         createdAt: new Date(ordem.created_at)

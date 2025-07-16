@@ -1,3 +1,4 @@
+
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { format } from "date-fns";
@@ -27,31 +28,32 @@ export function gerarPdfOrdem(ordem, contrato, fornecedor, itens) {
     item.descricao,
     item.quantidade,
     item.unidade,
-    `R$ ${Number(item.valor_unitario).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`,
-    `R$ ${(item.quantidade * item.valor_unitario).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`
+    `R$ ${Number(item.valor_unitario || item.valorUnitario).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`,
+    `R$ ${(item.quantidade * (item.valor_unitario || item.valorUnitario)).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`
   ]);
 
-  autoTable(doc, {
+  const tableConfig = {
     startY: 73,
     head: [["ITEM", "DESCRIÇÃO", "QUANT.", "UND.", "V. UNIT", "V. TOTAL"]],
     body: tableData,
     theme: "grid",
     headStyles: { fillColor: [60, 60, 60], textColor: 255, fontStyle: 'bold' },
     styles: { fontSize: 10, cellPadding: 2 },
-    alternateRowStyles: { fillColor: [230, 230, 230] },
-    rowStyles: { fillColor: [255, 255, 255] },
-    didDrawPage: (data) => {
-      // Nada extra
-    }
-  });
+    alternateRowStyles: { fillColor: [230, 230, 230] }
+  };
+
+  autoTable(doc, tableConfig);
+
+  // Get the final Y position from the table
+  const finalY = (doc as any).lastAutoTable?.finalY || 100;
 
   // Total geral
-  const totalGeral = (itens || []).reduce((acc, item) => acc + (item.quantidade * item.valor_unitario), 0);
+  const totalGeral = (itens || []).reduce((acc, item) => acc + (item.quantidade * (item.valor_unitario || item.valorUnitario)), 0);
   doc.setFontSize(12);
   doc.text(
     `TOTAL GERAL: R$ ${totalGeral.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`,
     120,
-    doc.lastAutoTable.finalY + 10
+    finalY + 10
   );
 
   // Data de emissão (logo abaixo do valor total, com espaçamento)
@@ -62,7 +64,7 @@ export function gerarPdfOrdem(ordem, contrato, fornecedor, itens) {
   doc.text(
     `Data de Emissão: ${dataEmissao}`,
     15,
-    doc.lastAutoTable.finalY + 25
+    finalY + 25
   );
 
   // Linha para responsável
@@ -70,8 +72,8 @@ export function gerarPdfOrdem(ordem, contrato, fornecedor, itens) {
   doc.text(
     "Responsável: ____________________________________________",
     15,
-    doc.lastAutoTable.finalY + 35
+    finalY + 35
   );
 
   doc.save(`Ordem_${ordem.numero}.pdf`);
-} 
+}

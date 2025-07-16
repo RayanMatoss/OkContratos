@@ -7,7 +7,7 @@ import ContratosTable from "@/components/contratos/ContratosTable";
 import ContratoDetalhes from "@/components/contratos/ContratoDetalhes";
 import { useContratos } from "@/hooks/useContratos";
 import { useToast } from "@/hooks/use-toast";
-import { Contrato, FundoMunicipal } from "@/types";
+import { Contrato, FundoMunicipal, StatusContrato } from "@/types";
 import { supabase } from "@/integrations/supabase/client";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 

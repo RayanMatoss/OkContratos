@@ -45,6 +45,8 @@ export interface OrdemFornecimento {
   contrato?: Contrato;
   dataEmissao: Date;
   observacoes: string;
+  status: StatusOrdem;
+  itensConsumidos: { itemId: string; quantidade: number }[];
   createdAt: Date;
   itens?: Item[];
 }
