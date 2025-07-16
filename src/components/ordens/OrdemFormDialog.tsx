@@ -1,3 +1,4 @@
+
 import { FormSheet } from "@/components/ui/form-sheet";
 import OrdemFormFields from "./OrdemFormFields";
 import OrdemItemsSelection from "./OrdemItemsSelection";
@@ -57,7 +58,7 @@ export const OrdemFormDialog = ({
           <button
             type="button"
             className="bg-primary text-white rounded px-3 py-1 text-sm font-semibold hover:bg-primary/90 transition mb-2"
-            onClick={() => gerarPdfOrdem(ordem, ordem.contrato, ordem.contrato?.fornecedor, ordem.itens)}
+            onClick={() => gerarPdfOrdem(ordem, ordem.contrato, ordem.contrato?.fornecedor, ordem.itens || [])}
           >
             Baixar PDF
           </button>

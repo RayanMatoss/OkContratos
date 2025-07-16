@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Aditivo, TipoAditivo } from "@/types";
@@ -21,7 +22,17 @@ export function useAditivos(contratoId: string) {
       toast({ title: "Erro ao buscar aditivos", description: error.message, variant: "destructive" });
       return;
     }
-    setAditivos(data || []);
+    
+    const formattedAditivos: Aditivo[] = (data || []).map(item => ({
+      id: item.id,
+      contrato_id: item.contrato_id,
+      tipo: item.tipo as TipoAditivo,
+      nova_data_termino: item.nova_data_termino,
+      percentual_itens: item.percentual_itens,
+      criado_em: item.criado_em
+    }));
+    
+    setAditivos(formattedAditivos);
   };
 
   // Criar novo aditivo e aplicar lógica
@@ -56,4 +67,4 @@ export function useAditivos(contratoId: string) {
   };
 
   return { aditivos, loading, fetchAditivos, criarAditivo };
-} 
+}

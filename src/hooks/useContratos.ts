@@ -83,10 +83,10 @@ export const useContratos = () => {
 
   const updateContrato = async (id: string, data: Partial<Omit<Contrato, 'id' | 'createdAt' | 'status'>>) => {
     try {
-      // Convert fundoMunicipal array to string if it's an array
+      // Convert fundoMunicipal array to array format for database
       const fundoMunicipalValue = Array.isArray(data.fundoMunicipal) && data.fundoMunicipal.length > 0
-        ? data.fundoMunicipal.join(', ') 
-        : '';
+        ? data.fundoMunicipal
+        : [];
 
       const { error } = await supabase
         .from('contratos')

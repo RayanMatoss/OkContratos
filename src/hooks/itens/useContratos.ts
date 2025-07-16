@@ -1,7 +1,8 @@
+
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Contrato } from "@/types";
+import { Contrato, FundoMunicipal } from "@/types";
 
 export const useContratos = () => {
   const { toast } = useToast();
@@ -11,7 +12,7 @@ export const useContratos = () => {
     try {
       const { data, error } = await supabase
         .from('contratos')
-        .select('id, numero, objeto, fornecedor_id, fornecedores (nome), fundo_municipal, valor, data_inicio, data_termino, status, created_at')
+        .select('id, numero, objeto, fornecedor_id, fornecedores (id, nome, cnpj, email, telefone, endereco, created_at), fundo_municipal, valor, data_inicio, data_termino, status, created_at')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -21,8 +22,16 @@ export const useContratos = () => {
         id: contrato.id,
         numero: contrato.numero,
         fornecedorId: contrato.fornecedor_id,
-        fornecedor: contrato.fornecedores ? { nome: contrato.fornecedores.nome } : undefined,
-        fundoMunicipal: contrato.fundo_municipal as any,
+        fornecedor: contrato.fornecedores ? {
+          id: contrato.fornecedores.id,
+          nome: contrato.fornecedores.nome,
+          cnpj: contrato.fornecedores.cnpj,
+          email: contrato.fornecedores.email || "",
+          telefone: contrato.fornecedores.telefone || "",
+          endereco: contrato.fornecedores.endereco || "",
+          createdAt: new Date(contrato.fornecedores.created_at)
+        } : undefined,
+        fundoMunicipal: Array.isArray(contrato.fundo_municipal) ? contrato.fundo_municipal as FundoMunicipal[] : [],
         objeto: contrato.objeto,
         valor: contrato.valor,
         dataInicio: new Date(contrato.data_inicio),

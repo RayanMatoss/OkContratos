@@ -7,7 +7,7 @@ import ContratosTable from "@/components/contratos/ContratosTable";
 import ContratoDetalhes from "@/components/contratos/ContratoDetalhes";
 import { useContratos } from "@/hooks/useContratos";
 import { useToast } from "@/hooks/use-toast";
-import { Contrato } from "@/types";
+import { Contrato, FundoMunicipal } from "@/types";
 import { supabase } from "@/integrations/supabase/client";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 
@@ -24,7 +24,7 @@ const Contratos = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingContrato, setEditingContrato] = useState<Contrato | undefined>();
   const [selectedContrato, setSelectedContrato] = useState<Contrato | undefined>();
-  const { contratos, loading, deleteContrato, fetchContratos } = useContratos();
+  const { contratos, loading, deleteContrato, fetchContratos, updateContrato } = useContratos();
   const { toast } = useToast();
 
   const filteredContratos = contratos.filter((contrato) => {
@@ -80,7 +80,7 @@ const Contratos = () => {
       id: data.id,
       numero: data.numero,
       fornecedorId: data.fornecedor_id,
-      fundoMunicipal: Array.isArray(data.fundo_municipal) ? data.fundo_municipal : [],
+      fundoMunicipal: Array.isArray(data.fundo_municipal) ? data.fundo_municipal as FundoMunicipal[] : [],
       objeto: data.objeto,
       valor: data.valor,
       dataInicio: new Date(data.data_inicio),

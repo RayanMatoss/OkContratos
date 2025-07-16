@@ -7,6 +7,7 @@ import ContratoBasicInfo from "./ContratoBasicInfo";
 import ContratoDates from "./ContratoDates";
 import ContratoItems from "./ContratoItems";
 import { useFornecedores } from "@/hooks/useFornecedores";
+import { FundoMunicipal } from "@/types";
 
 type AddContratoFormProps = {
   open: boolean;
@@ -28,9 +29,16 @@ export const AddContratoForm = ({
     objeto: "",
     fornecedor_id: "",
     valor: "",
-    fundo_municipal: "",
+    fundo_municipal: [] as FundoMunicipal[],
     data_inicio: new Date(),
-    data_termino: new Date()
+    data_termino: new Date(),
+    items: [] as Array<{
+      descricao: string;
+      quantidade: number;
+      unidade: string;
+      valor_unitario: number;
+      fundos: FundoMunicipal[];
+    }>
   });
 
   const handleNextStep = () => {
@@ -91,7 +99,7 @@ export const AddContratoForm = ({
           <ContratoBasicInfo 
             numero={formData.numero}
             fornecedorId={formData.fornecedor_id}
-            fundoMunicipal={formData.fundo_municipal as any}
+            fundoMunicipal={formData.fundo_municipal}
             objeto={formData.objeto}
             valor={formData.valor}
             fornecedores={fornecedores}
@@ -113,7 +121,20 @@ export const AddContratoForm = ({
           />
         );
       case "items":
-        return <ContratoItems />;
+        return (
+          <ContratoItems 
+            items={formData.items}
+            onAddItem={(item) => setFormData({
+              ...formData,
+              items: [...formData.items, item]
+            })}
+            onRemoveItem={(index) => setFormData({
+              ...formData,
+              items: formData.items.filter((_, i) => i !== index)
+            })}
+            fundosMunicipais={formData.fundo_municipal}
+          />
+        );
       default:
         return null;
     }

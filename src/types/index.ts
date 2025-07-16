@@ -1,3 +1,4 @@
+
 export type FundoMunicipal = "Prefeitura" | "Educação" | "Saúde" | "Assistência";
 
 // Updated contract status values - only managed by database now
@@ -24,6 +25,18 @@ export interface Item {
   valorUnitario: number;
   unidade: string;
   quantidadeConsumida: number;
+  fundos?: FundoMunicipal[];
+}
+
+export interface ItemResponse {
+  id: string;
+  contrato_id: string;
+  descricao: string;
+  quantidade: number;
+  valor_unitario: number;
+  unidade: string;
+  quantidade_consumida: number;
+  fundos?: FundoMunicipal[];
 }
 
 export interface Contrato {
@@ -53,6 +66,7 @@ export interface OrdemFornecimento {
     quantidade: number;
   }[];
   createdAt: Date;
+  itens?: ItemResponse[]; // Add missing property
 }
 
 export interface Usuario {
