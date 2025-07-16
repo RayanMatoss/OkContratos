@@ -85,7 +85,7 @@ const Contratos = () => {
       valor: data.valor,
       dataInicio: new Date(data.data_inicio),
       dataTermino: new Date(data.data_termino),
-      status: data.status,
+      status: data.status as StatusContrato,
       createdAt: new Date(data.created_at),
       fornecedor: data.fornecedor ? {
         id: data.fornecedor.id,

@@ -1,8 +1,22 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { format } from "date-fns";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import { format, formatDistanceToNow } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { Contrato } from "@/types";
-import AditivosTab from "./AditivosTab";
+import { Button } from "@/components/ui/button";
+import { Edit, Eye, Plus } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+import AditivoForm from "./AditivoForm";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface ContratoDetalhesProps {
   contrato: Contrato;
@@ -12,112 +26,160 @@ interface ContratoDetalhesProps {
 }
 
 const ContratoDetalhes = ({ contrato, open, onOpenChange, onAditivoCriado }: ContratoDetalhesProps) => {
-  console.log("Contrato recebido no modal:", contrato);
-  const fundos =
-    Array.isArray(contrato.fundoMunicipal) && contrato.fundoMunicipal.length > 0
-      ? contrato.fundoMunicipal
-      : Array.isArray(contrato.fundo_municipal) && contrato.fundo_municipal.length > 0
-      ? contrato.fundo_municipal
-      : [];
+  const fundosString = Array.isArray(contrato.fundoMunicipal) 
+    ? contrato.fundoMunicipal.map(f => typeof f === 'string' ? f : f.toString()).join(', ')
+    : contrato.fundoMunicipal?.toString() || '';
+
+  const { toast } = useToast();
+  const [showAditivoForm, setShowAditivoForm] = useState(false);
+
+  const handleAditivoSuccess = () => {
+    setShowAditivoForm(false);
+    toast({
+      title: "Aditivo criado",
+      description: "O aditivo foi criado com sucesso",
+    });
+    onAditivoCriado?.();
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl">
+      <DialogContent className="max-w-4xl">
         <DialogHeader>
           <DialogTitle>Detalhes do Contrato</DialogTitle>
+          <DialogDescription>
+            Informações detalhadas sobre o contrato selecionado.
+          </DialogDescription>
         </DialogHeader>
-
-        <div className="space-y-4">
-          {/* Informações Básicas */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 items-start">
-            <div className="md:col-span-4">
-              <h3 className="text-xs font-semibold text-muted-foreground mb-1">Número</h3>
-              <p className="text-base font-bold">{contrato.numero}</p>
+        <div className="grid gap-4 py-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <div className="text-sm font-medium leading-none">Número do Contrato</div>
+              <p className="text-sm text-muted-foreground">{contrato.numero}</p>
             </div>
-            <div className="md:col-span-4">
-              <h3 className="text-xs font-semibold text-muted-foreground mb-1">Fornecedor</h3>
-              <p className="text-base font-bold">{contrato.fornecedor?.nome}</p>
+            <div>
+              <div className="text-sm font-medium leading-none">Fornecedor</div>
+              <p className="text-sm text-muted-foreground">{contrato.fornecedor?.nome}</p>
             </div>
-            <div className="md:col-span-4">
-              <h3 className="text-xs font-semibold text-muted-foreground mb-1">Valor</h3>
-              <p className="text-base font-bold">
-                {new Intl.NumberFormat('pt-BR', {
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <div className="text-sm font-medium leading-none">Objeto</div>
+              <p className="text-sm text-muted-foreground">{contrato.objeto}</p>
+            </div>
+            <div>
+              <div className="text-sm font-medium leading-none">Valor</div>
+              <p className="text-sm text-muted-foreground">
+                {contrato.valor?.toLocaleString('pt-BR', {
                   style: 'currency',
                   currency: 'BRL',
-                }).format(contrato.valor)}
-              </p>
-            </div>
-            <div className="md:col-span-8 mt-2">
-              <h3 className="text-xs font-semibold text-muted-foreground mb-1">Objeto</h3>
-              <p className="text-sm leading-snug">{contrato.objeto}</p>
-            </div>
-            <div className="md:col-span-2 mt-2">
-              <h3 className="text-xs font-semibold text-muted-foreground mb-1">Fundos</h3>
-              <div className="flex flex-wrap gap-1 mt-1">
-                {fundos.map((fundo, index) => (
-                  <Badge key={index} variant="secondary">
-                    {fundo}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-            <div className="md:col-span-2 mt-2">
-              <h3 className="text-xs font-semibold text-muted-foreground mb-1">Vigência</h3>
-              <p className="text-sm font-medium">
-                {format(new Date(contrato.dataInicio), 'dd/MM/yyyy')} a{' '}
-                {format(new Date(contrato.dataTermino), 'dd/MM/yyyy')}
+                })}
               </p>
             </div>
           </div>
-
-          {/* Itens do Contrato */}
-          <div>
-            <h3 className="text-base font-semibold mb-2">Itens do Contrato</h3>
-            <div className="border rounded-lg overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b">
-                    <th className="text-left p-2">Descrição</th>
-                    <th className="text-center p-2">Quantidade</th>
-                    <th className="text-center p-2">Unidade</th>
-                    <th className="text-right p-2">Valor Unitário</th>
-                    <th className="text-right p-2">Total</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {contrato.itens?.map((item, index) => (
-                    <tr key={index} className="border-b last:border-0">
-                      <td className="p-2">{item.descricao}</td>
-                      <td className="text-center p-2">{item.quantidade}</td>
-                      <td className="text-center p-2">{item.unidade}</td>
-                      <td className="text-right p-2">
-                        {new Intl.NumberFormat('pt-BR', {
-                          style: 'currency',
-                          currency: 'BRL',
-                        }).format(item.valorUnitario)}
-                      </td>
-                      <td className="text-right p-2">
-                        {new Intl.NumberFormat('pt-BR', {
-                          style: 'currency',
-                          currency: 'BRL',
-                        }).format(item.quantidade * item.valorUnitario)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <div className="text-sm font-medium leading-none">Data de Início</div>
+              <p className="text-sm text-muted-foreground">
+                {format(contrato.dataInicio, "dd/MM/yyyy", { locale: ptBR })}
+              </p>
+            </div>
+            <div>
+              <div className="text-sm font-medium leading-none">Data de Término</div>
+              <p className="text-sm text-muted-foreground">
+                {format(contrato.dataTermino, "dd/MM/yyyy", { locale: ptBR })}
+              </p>
             </div>
           </div>
-
-          {/* Aditivos */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <div className="text-sm font-medium leading-none">Status</div>
+              <Badge
+                variant="secondary"
+                className={
+                  contrato.status === "Ativo"
+                    ? "bg-green-500 text-white"
+                    : contrato.status === "Expirado"
+                      ? "bg-red-500 text-white"
+                      : contrato.status === "Suspenso"
+                        ? "bg-yellow-500 text-black"
+                        : "bg-gray-500 text-white"
+                }
+              >
+                {contrato.status}
+              </Badge>
+            </div>
+            <div>
+              <div className="text-sm font-medium leading-none">Criado em</div>
+              <p className="text-sm text-muted-foreground">
+                {formatDistanceToNow(contrato.createdAt, {
+                  addSuffix: true,
+                  locale: ptBR,
+                })}
+              </p>
+            </div>
+          </div>
           <div>
-            <h3 className="text-base font-semibold mb-2">Aditivos</h3>
-            <AditivosTab contratoId={contrato.id} onAditivoCriado={onAditivoCriado} />
+            <div className="text-sm font-medium leading-none">Fundo Municipal</div>
+            <p className="text-sm text-muted-foreground">{fundosString}</p>
+          </div>
+          <div>
+            <div className="text-sm font-medium leading-none">Itens do Contrato</div>
+            <ScrollArea>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Descrição</TableHead>
+                    <TableHead>Quantidade</TableHead>
+                    <TableHead>Unidade</TableHead>
+                    <TableHead>Valor Unitário</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {contrato.itens && contrato.itens.length > 0 ? (
+                    contrato.itens.map((item) => (
+                      <TableRow key={item.id}>
+                        <TableCell>{item.descricao}</TableCell>
+                        <TableCell>{item.quantidade}</TableCell>
+                        <TableCell>{item.unidade}</TableCell>
+                        <TableCell>
+                          {item.valor_unitario?.toLocaleString('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL',
+                          })}
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={4} className="text-center">
+                        Nenhum item adicionado a este contrato.
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </ScrollArea>
           </div>
         </div>
+        <div className="flex justify-end gap-2">
+          <Button variant="outline" onClick={() => setShowAditivoForm(true)}>
+            <Plus size={16} className="mr-2" />
+            Novo Aditivo
+          </Button>
+          <Button variant="default" onClick={() => onOpenChange(false)}>
+            Fechar
+          </Button>
+        </div>
       </DialogContent>
+      <AditivoForm
+        contratoId={contrato.id}
+        open={showAditivoForm}
+        onOpenChange={setShowAditivoForm}
+        onSuccess={handleAditivoSuccess}
+      />
     </Dialog>
   );
 };
 
-export default ContratoDetalhes; 
+export default ContratoDetalhes;

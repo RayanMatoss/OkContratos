@@ -1,12 +1,3 @@
-
-export type FundoMunicipal = "Prefeitura" | "Educação" | "Saúde" | "Assistência";
-
-// Updated contract status values - only managed by database now
-export type StatusContrato = "Ativo" | "Expirado" | "A Vencer" | "Em Aprovação";
-
-// Simplified order status values - only managed by database now
-export type StatusOrdem = "Pendente" | "Concluída";
-
 export interface Fornecedor {
   id: string;
   nome: string;
@@ -17,42 +8,37 @@ export interface Fornecedor {
   createdAt: Date;
 }
 
-export interface Item {
-  id: string;
-  contratoId: string;
-  descricao: string;
-  quantidade: number;
-  valorUnitario: number;
-  unidade: string;
-  quantidadeConsumida: number;
-  fundos?: FundoMunicipal[];
-}
-
-export interface ItemResponse {
-  id: string;
-  contrato_id: string;
-  descricao: string;
-  quantidade: number;
-  valor_unitario: number;
-  unidade: string;
-  quantidade_consumida: number;
-  fundos?: FundoMunicipal[];
-}
-
 export interface Contrato {
   id: string;
   numero: string;
   fornecedorId: string;
   fornecedor?: Fornecedor;
-  fundoMunicipal: FundoMunicipal[]; // Changed to only accept array type
+  fundoMunicipal: FundoMunicipal[];
   objeto: string;
   valor: number;
   dataInicio: Date;
   dataTermino: Date;
   status: StatusContrato;
-  itens: Item[];
   createdAt: Date;
+  itens: Item[];
 }
+
+export interface Item {
+  id: string;
+  contratoId: string;
+  descricao: string;
+  quantidade: number;
+  unidade: string;
+  valorUnitario: number;
+  quantidadeConsumida: number;
+  createdAt: Date;
+  fundoMunicipal: FundoMunicipal[];
+}
+
+export type FundoMunicipal = {
+  id: string;
+  nome: string;
+};
 
 export interface OrdemFornecimento {
   id: string;
@@ -60,54 +46,8 @@ export interface OrdemFornecimento {
   contratoId: string;
   contrato?: Contrato;
   dataEmissao: Date;
-  status: StatusOrdem;
-  itensConsumidos: {
-    itemId: string;
-    quantidade: number;
-  }[];
-  createdAt: Date;
-  itens?: ItemResponse[]; // Add missing property
-}
-
-export interface Usuario {
-  id: string;
-  nome: string;
-  email: string;
-  cargo: string;
-  permissao: "admin" | "basico";
+  observacoes: string;
   createdAt: Date;
 }
 
-export interface Notificacao {
-  id: string;
-  titulo: string;
-  mensagem: string;
-  tipo: "contrato" | "ordem" | "sistema";
-  lida: boolean;
-  data: Date;
-  usuarioId: string;
-}
-
-export interface RelatorioMensal {
-  mes: number;
-  ano: number;
-  totalContratos: number;
-  contratosVencidos: number;
-  contratosAtivos: number;
-  ordensRealizadas: number;
-  ordensPendentes: number;
-  ordensConcluidas: number;
-  valorTotalContratos: number;
-  valorTotalOrdens: number;
-}
-
-export type TipoAditivo = "periodo" | "valor";
-
-export interface Aditivo {
-  id: string;
-  contrato_id: string;
-  tipo: TipoAditivo;
-  nova_data_termino?: string; // ISO date string
-  percentual_itens?: number;  // Ex: 10.00 para 10%
-  criado_em: string;          // ISO date string
-}
+export type StatusContrato = 'Ativo' | 'Expirado' | 'Suspenso' | 'Finalizado';

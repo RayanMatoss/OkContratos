@@ -1,131 +1,181 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Plus, Search } from "lucide-react";
+import { ItemFormDialog } from "@/components/itens/ItemFormDialog";
+import ItemsTable from "@/components/itens/ItemsTable";
+import { useItens } from "@/hooks/useItens";
 import { useToast } from "@/hooks/use-toast";
-import { ItemsTable } from "@/components/itens/ItemsTable";
-import { SearchInput } from "@/components/itens/SearchInput";
-import { AddItemsDialog } from "@/components/itens/AddItemsDialog";
-import { EditItemDialog } from "@/components/itens/EditItemDialog";
-import { ItensHeader } from "@/components/itens/ItensHeader";
-import { useItensCrud, ItemResponse } from "@/hooks/itens/useItensCrud";
-import { useContratos } from "@/hooks/itens/useContratos";
-import { useItensFilter } from "@/hooks/itens/useItensFilter";
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
-import { formatCurrency } from "@/lib/utils";
+import { Item, Contrato, FundoMunicipal } from "@/types";
+import { supabase } from "@/integrations/supabase/client";
 
 const Itens = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showForm, setShowForm] = useState(false);
+  const [editingItem, setEditingItem] = useState<Item | undefined>();
+  const [contratos, setContratos] = useState<Contrato[]>([]);
+  const [formMode, setFormMode] = useState<'create' | 'edit'>('create');
+  const { itens, loading, refetch } = useItens();
   const { toast } = useToast();
-  const { itens, loading, fetchItens, handleEdit, handleDelete } = useItensCrud();
-  const { contratos } = useContratos();
-  const { searchTerm, setSearchTerm, filteredItens } = useItensFilter(itens);
-  
-  const [showAddDialog, setShowAddDialog] = useState(false);
-  const [editingItem, setEditingItem] = useState<ItemResponse | null>(null);
 
   useEffect(() => {
-    fetchItens();
-  }, []);
+    const fetchContratos = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('contratos')
+          .select('*');
 
-  // Agrupar itens por contrato
-  const contratosComItens = contratos.map(contrato => ({
-    ...contrato,
-    itens: filteredItens.filter(item => item.contrato_id === contrato.id)
-  })).filter(contrato => contrato.itens.length > 0);
+        if (error) {
+          throw new Error(error.message);
+        }
 
-  const onEdit = (item: ItemResponse) => {
-    const editableItem = handleEdit(item);
-    if (editableItem) {
-      setEditingItem(editableItem);
+        if (data) {
+          setContratos(data as Contrato[]);
+        }
+      } catch (error: any) {
+        toast({
+          title: "Erro ao buscar contratos",
+          description: error.message,
+          variant: "destructive",
+        });
+      }
+    };
+
+    fetchContratos();
+  }, [toast]);
+
+  const filteredItens = itens.filter((item) => {
+    return (
+      item.descricao.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
+
+  const handleAdd = () => {
+    setFormMode('create');
+    setEditingItem(undefined);
+    setShowForm(true);
+  };
+
+  const handleEdit = (item: Item) => {
+    setFormMode('edit');
+    setEditingItem(item);
+    setShowForm(true);
+  };
+
+  const handleDelete = async (item: Item) => {
+    try {
+      const { error } = await supabase
+        .from('itens')
+        .delete()
+        .eq('id', item.id);
+
+      if (error) throw error;
+
+      await refetch();
+      
+      toast({
+        title: "Item excluído",
+        description: "O item foi excluído com sucesso",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Erro ao excluir item",
+        description: error.message,
+        variant: "destructive",
+      });
     }
   };
 
+  const handleFormSuccess = () => {
+    setShowForm(false);
+    setEditingItem(undefined);
+    refetch();
+  };
+
+  useEffect(() => {
+    const fetchItens = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('itens')
+          .select(`
+            *,
+            contratos (
+              numero
+            )
+          `);
+  
+        if (error) {
+          throw new Error(error.message);
+        }
+  
+        if (data) {
+          const itensFormatados: Item[] = data.map((item) => ({
+            id: item.id,
+            contratoId: item.contrato_id,
+            descricao: item.descricao,
+            quantidade: item.quantidade,
+            unidade: item.unidade,
+            valorUnitario: item.valor_unitario,
+            quantidadeConsumida: item.quantidade_consumida,
+            createdAt: new Date(item.created_at),
+            fundoMunicipal: Array.isArray(item.fundos) ? item.fundos as FundoMunicipal[] : []
+          }));
+          // setItens(itensFormatados);
+        }
+      } catch (error: any) {
+        toast({
+          title: "Erro ao buscar itens",
+          description: error.message,
+          variant: "destructive",
+        });
+      }
+    };
+
+    fetchItens();
+  }, [toast]);
+
   return (
     <div className="space-y-6 animate-fade-in">
-      <ItensHeader onAddItem={() => setShowAddDialog(true)} />
-
-      <div className="flex items-center gap-4">
-        <SearchInput value={searchTerm} onChange={setSearchTerm} />
+      <div className="flex justify-between">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Itens</h1>
+          <p className="text-muted-foreground">
+            Gerenciamento dos itens de contrato
+          </p>
+        </div>
+        <Button onClick={handleAdd} className="flex items-center gap-2">
+          <Plus size={16} />
+          <span>Novo Item</span>
+        </Button>
       </div>
 
-      <Accordion type="multiple" className="mt-4">
-        {contratosComItens.length === 0 && (
-          <div className="p-4 text-center text-muted-foreground">Nenhum item encontrado.</div>
-        )}
-        {contratosComItens.map(contrato => (
-          <AccordionItem key={contrato.id} value={contrato.id}>
-            <AccordionTrigger>
-              <div className="flex flex-col md:flex-row md:items-center gap-2 w-full">
-                {contrato.fornecedor?.nome && (
-                  <span className="font-semibold">{contrato.fornecedor.nome}</span>
-                )}
-                <span className="font-semibold">{contrato.numero}</span>
-                <span className="text-muted-foreground text-sm">{contrato.objeto}</span>
-              </div>
-            </AccordionTrigger>
-            <AccordionContent>
-              <table className="w-full text-sm mt-2 border border-border">
-                <thead>
-                  <tr className="bg-muted">
-                    <th className="text-left border-b border-r border-border">Descrição</th>
-                    <th className="text-center border-b border-r border-border">Quantidade</th>
-                    <th className="text-center border-b border-r border-border">Consumido</th>
-                    <th className="text-center border-b border-r border-border">Saldo</th>
-                    <th className="text-center border-b border-r border-border">Unidade</th>
-                    <th className="text-center border-b border-r border-border">Fundo</th>
-                    <th className="text-center border-b border-r border-border">Valor Unit.</th>
-                    <th className="text-center border-b border-r border-border">Valor Total</th>
-                    <th className="text-center border-b border-r border-border">Valor Restante</th>
-                    <th className="text-center border-b border-border">Ações</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {contrato.itens.map(item => {
-                    const saldo = item.quantidade - item.quantidade_consumida;
-                    const valorRestante = saldo * item.valor_unitario;
-                    const fundos = Array.isArray(item.fundos) ? item.fundos.join(', ') : (item.fundos || '-');
-                    return (
-                      <tr key={item.id} className="border-b border-border">
-                        <td className="font-medium border-r border-border">{item.descricao}</td>
-                        <td className="text-center border-r border-border">{item.quantidade}</td>
-                        <td className="text-center border-r border-border">{item.quantidade_consumida}</td>
-                        <td className="text-center border-r border-border">{saldo}</td>
-                        <td className="text-center border-r border-border">{item.unidade}</td>
-                        <td className="text-center border-r border-border">{fundos}</td>
-                        <td className="text-center border-r border-border">{formatCurrency(item.valor_unitario)}</td>
-                        <td className="text-center border-r border-border">{formatCurrency(item.quantidade * item.valor_unitario)}</td>
-                        <td className="text-center border-r border-border">{formatCurrency(valorRestante)}</td>
-                        <td className="text-center">
-                          <button className="text-primary" onClick={() => onEdit(item)}>
-                            <span className="sr-only">Editar</span>
-                            <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16.474 5.34a2.25 2.25 0 1 1 3.182 3.182L8.94 19.238a4 4 0 0 1-1.687 1.01l-3.13.94.94-3.13a4 4 0 0 1 1.01-1.687L16.474 5.34Z"/></svg>
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
+      <div className="flex items-center gap-4">
+        <div className="relative flex-1">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder="Buscar itens..."
+            className="w-full pl-8"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+      </div>
 
-      <AddItemsDialog
-        open={showAddDialog}
-        onOpenChange={setShowAddDialog}
-        onSuccess={() => {
-          setShowAddDialog(false);
-          fetchItens();
-        }}
-        contratos={contratos}
+      <ItemsTable 
+        filteredItens={filteredItens} 
+        loading={loading} 
+        onEdit={handleEdit}
+        onDelete={handleDelete}
       />
-
-      {editingItem && (
-        <EditItemDialog
-          open={!!editingItem}
-          onOpenChange={(open) => !open && setEditingItem(null)}
-          onSuccess={fetchItens}
-          item={editingItem}
-        />
-      )}
+      
+      <ItemFormDialog 
+        open={showForm}
+        onOpenChange={setShowForm}
+        onSuccess={handleFormSuccess}
+        item={editingItem}
+        mode={formMode}
+      />
     </div>
   );
 };

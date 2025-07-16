@@ -27,7 +27,8 @@ export const FUNDOS_MUNICIPAIS = [
 
 interface FundoMunicipalSelectorProps {
   selectedFundos: FundoMunicipal[];
-  onChange: (value: FundoMunicipal[]) => void;
+  onChange: (fundos: FundoMunicipal[]) => void;
+  fundosDisponiveis?: FundoMunicipal[];
 }
 
 const FundoMunicipalSelector = ({ selectedFundos, onChange }: FundoMunicipalSelectorProps) => {

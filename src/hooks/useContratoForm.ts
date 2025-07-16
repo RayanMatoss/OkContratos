@@ -1,207 +1,195 @@
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Contrato, FundoMunicipal } from "@/types";
+import { Contrato, Item, FundoMunicipal } from "@/types";
 
-export type FormStep = "basic" | "dates" | "items";
-
-interface ContratoFormData {
+interface ContratoFormValues {
   numero: string;
+  fornecedorId: string | undefined;
   objeto: string;
-  fornecedor_id: string;
-  valor: string;
-  fundo_municipal: FundoMunicipal[];
-  data_inicio: Date;
-  data_termino: Date;
-  items?: { descricao: string; quantidade: number }[];
+  valor: number;
+  dataInicio: Date | null;
+  dataTermino: Date | null;
+  fundoMunicipal: FundoMunicipal[];
+  itens: Item[];
 }
 
-interface UseContratoFormProps {
-  mode: 'create' | 'edit';
-  contrato?: Contrato;
-  onSuccess?: () => void;
-  onOpenChange: (open: boolean) => void;
-}
-
-export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: UseContratoFormProps) => {
+export const useContratoForm = (
+  initialValues?: Contrato,
+  onSuccess?: () => void
+) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
-  const [formStep, setFormStep] = useState<FormStep>("basic");
-  
-  const [formData, setFormData] = useState<ContratoFormData>({
-    numero: "",
-    objeto: "",
-    fornecedor_id: "",
-    valor: "",
-    fundo_municipal: [],
-    data_inicio: new Date(),
-    data_termino: new Date(),
-    items: []
+  const [formValues, setFormValues] = useState<ContratoFormValues>({
+    numero: initialValues?.numero || "",
+    fornecedorId: initialValues?.fornecedorId || undefined,
+    objeto: initialValues?.objeto || "",
+    valor: initialValues?.valor || 0,
+    dataInicio: initialValues?.dataInicio || null,
+    dataTermino: initialValues?.dataTermino || null,
+    fundoMunicipal: initialValues?.fundoMunicipal || [],
+    itens: initialValues?.itens || [],
   });
 
-  // Helper function to parse fundo_municipal from various formats to FundoMunicipal[]
-  const parseFundoMunicipal = (value: unknown): FundoMunicipal[] => {
-    // Handle array case
-    if (Array.isArray(value)) {
-      return value as FundoMunicipal[];
-    }
-    
-    // Handle string case: "Educação, Saúde" -> ["Educação", "Saúde"]
-    if (typeof value === 'string' && value.trim() !== '') {
-      return value.split(', ')
-        .map(item => item.trim() as FundoMunicipal)
-        .filter(Boolean);
-    }
-    
-    // Default: return empty array
-    return [];
+  const handleChange = (
+    key: keyof ContratoFormValues,
+    value: ContratoFormValues[keyof ContratoFormValues]
+  ) => {
+    setFormValues({ ...formValues, [key]: value });
   };
 
-  useEffect(() => {
-    if (mode === 'edit' && contrato) {
-      setFormData({
-        numero: contrato.numero || "",
-        objeto: contrato.objeto || "",
-        fornecedor_id: contrato.fornecedorId || "",
-        valor: contrato.valor?.toString() || "",
-        fundo_municipal: parseFundoMunicipal(contrato.fundoMunicipal),
-        data_inicio: contrato.dataInicio || new Date(),
-        data_termino: contrato.dataTermino || new Date(),
-        items: contrato.itens || []
-      });
-    } else {
-      // Reset the form for creation mode
-      setFormData({
-        numero: "",
-        objeto: "",
-        fornecedor_id: "",
-        valor: "",
-        fundo_municipal: [],
-        data_inicio: new Date(),
-        data_termino: new Date(),
-        items: []
-      });
-    }
-    
-    // Always reset to the first step when opening the modal
-    setFormStep("basic");
-  }, [mode, contrato]);
+  const handleSubmit = useCallback(
+    async (id?: string) => {
+      setLoading(true);
+      try {
+        const {
+          numero,
+          fornecedorId,
+          objeto,
+          valor,
+          dataInicio,
+          dataTermino,
+          fundoMunicipal,
+          itens,
+        } = formValues;
 
-  const handleFieldChange = (field: keyof ContratoFormData, value: any) => {
-    setFormData(prev => {
-      // For fundo_municipal, ensure it's always an array
-      if (field === "fundo_municipal") {
-        return {
-          ...prev,
-          [field]: Array.isArray(value) ? value : []
+        if (
+          !numero ||
+          !fornecedorId ||
+          !objeto ||
+          !valor ||
+          !dataInicio ||
+          !dataTermino
+        ) {
+          toast({
+            title: "Erro",
+            description: "Preencha todos os campos obrigatórios.",
+            variant: "destructive",
+          });
+          return;
+        }
+
+        const contratoData = {
+          numero,
+          fornecedor_id: fornecedorId,
+          objeto,
+          valor,
+          data_inicio: dataInicio.toISOString(),
+          data_termino: dataTermino.toISOString(),
+          fundo_municipal: fundoMunicipal,
         };
-      }
-      
-      return {
-        ...prev,
-        [field]: value
-      };
-    });
-  };
 
-  const handleNextStep = () => {
-    if (formStep === "basic") {
-      setFormStep("dates");
-    } else if (formStep === "dates") {
-      setFormStep("items");
-    }
-  };
+        const itensData = itens.map((item) => ({
+          descricao: item.descricao,
+          quantidade: item.quantidade,
+          unidade: item.unidade,
+          valor_unitario: item.valor_unitario,
+          fundos: item.fundos,
+        }));
 
-  const handlePreviousStep = () => {
-    if (formStep === "dates") {
-      setFormStep("basic");
-    } else if (formStep === "items") {
-      setFormStep("dates");
-    }
-  };
+        if (id) {
+          // Update existing contrato
+          const { error: contratoError } = await supabase
+            .from("contratos")
+            .update(contratoData)
+            .eq("id", id);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      // Envie fundo_municipal como array, não como string
-      const fundoArray = Array.isArray(formData.fundo_municipal) 
-        ? formData.fundo_municipal 
-        : [];
+          if (contratoError) throw contratoError;
 
-      const data = {
-        numero: formData.numero,
-        objeto: formData.objeto,
-        fornecedor_id: formData.fornecedor_id,
-        valor: parseFloat(formData.valor) || 0,
-        fundo_municipal: fundoArray, // Enviar como array!
-        data_inicio: formData.data_inicio instanceof Date ? formData.data_inicio.toISOString() : new Date().toISOString(),
-        data_termino: formData.data_termino instanceof Date ? formData.data_termino.toISOString() : new Date().toISOString(),
-        status: 'Ativo'
-      };
+          // Delete existing itens and insert new ones
+          const { error: deleteItensError } = await supabase
+            .from("itens")
+            .delete()
+            .eq("contrato_id", id);
 
-      let error;
-      let contratoId;
+          if (deleteItensError) throw deleteItensError;
 
-      if (mode === 'create') {
-        const response = await supabase.from("contratos").insert([data]).select('id').single();
-        error = response.error;
-        contratoId = response.data?.id;
-        // Inserir itens se houver
-        if (!error && contratoId && formData.items && formData.items.length > 0) {
-          const itensToInsert = formData.items.map(item => ({
-            contrato_id: contratoId,
-            descricao: item.descricao,
-            quantidade: item.quantidade,
-            unidade: item.unidade || 'un',
-            valor_unitario: item.valor_unitario || 0,
-            fundos: Array.isArray(item.fundos) ? item.fundos : (item.fundos ? [item.fundos] : []),
-            quantidade_consumida: 0
-          }));
-          const itensResponse = await supabase.from("itens").insert(itensToInsert);
-          if (itensResponse.error) {
-            // Remover o contrato criado se falhar a inserção dos itens
-            await supabase.from("contratos").delete().eq("id", contratoId);
-            throw itensResponse.error;
+          const { error: itensError } = await supabase
+            .from("itens")
+            .insert(
+              itensData.map((item) => ({ ...item, contrato_id: id }))
+            );
+
+          if (itensError) throw itensError;
+
+          toast({
+            title: "Sucesso",
+            description: "Contrato atualizado com sucesso.",
+          });
+        } else {
+          // Create new contrato
+          const { data, error: contratoError } = await supabase
+            .from("contratos")
+            .insert([contratoData])
+            .select()
+
+          if (contratoError) throw contratoError;
+
+          const newContrato = data?.[0];
+
+          if (newContrato) {
+            const { error: itensError } = await supabase
+              .from("itens")
+              .insert(
+                itensData.map((item) => ({ ...item, contrato_id: newContrato.id }))
+              );
+
+            if (itensError) throw itensError;
+
+            toast({
+              title: "Sucesso",
+              description: "Contrato criado com sucesso.",
+            });
+          } else {
+            throw new Error("Failed to create contrato");
           }
         }
-      } else if (mode === 'edit' && contrato) {
-        const response = await supabase
-          .from("contratos")
-          .update(data)
-          .eq('id', contrato.id)
-          .eq('status', 'Em Aprovação');
-        error = response.error;
-        // Atualização de itens pode ser implementada aqui se necessário
+
+        if (onSuccess) {
+          onSuccess();
+        }
+      } catch (error: any) {
+        toast({
+          title: "Erro",
+          description: error.message,
+          variant: "destructive",
+        });
+      } finally {
+        setLoading(false);
       }
+    },
+    [formValues, toast, supabase, onSuccess]
+  );
 
-      if (error) throw error;
+  const setContrato = useCallback((contrato: Contrato) => {
+    setFormValues({
+      numero: contrato.numero,
+      fornecedorId: contrato.fornecedorId,
+      objeto: contrato.objeto,
+      valor: contrato.valor,
+      dataInicio: contrato.dataInicio,
+      dataTermino: contrato.dataTermino,
+      fundoMunicipal: contrato.fundoMunicipal,
+      itens: contrato.itens,
+    });
 
-      toast({
-        title: mode === 'create' ? "Contrato criado" : "Contrato atualizado",
-        description: mode === 'create' ? "Contrato criado com sucesso." : "Contrato atualizado com sucesso."
-      });
-      
-      onSuccess?.();
-      onOpenChange(false);
-    } catch (error: any) {
-      toast({
-        title: "Erro",
-        description: error.message,
-        variant: "destructive"
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+    const itensFormatados = contrato.itens.map((item: any) => ({
+      descricao: item.descricao,
+      quantidade: item.quantidade,
+      unidade: item.unidade || 'un',
+      valor_unitario: item.valor_unitario || item.valorUnitario || 0,
+      fundos: Array.isArray(item.fundos) ? item.fundos : 
+             Array.isArray(item.fundoMunicipal) ? item.fundoMunicipal :
+             typeof item.fundos === 'string' ? [item.fundos] : []
+    }));
+
+  }, []);
 
   return {
-    formData,
-    formStep,
+    formValues,
     loading,
-    handleFieldChange,
-    handleNextStep,
-    handlePreviousStep,
-    handleSubmit
+    handleChange,
+    handleSubmit,
+    setContrato,
   };
 };
