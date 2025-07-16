@@ -23,17 +23,22 @@ export const ItemFormDialog = ({
     ? "Preencha os dados para criar um novo item"
     : "Edite os dados deste item";
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Form submission is handled by ItemForm component
+  };
+
   return (
     <FormSheet
       open={open}
       onOpenChange={onOpenChange}
+      onSubmit={handleSubmit}
       title={title}
       description={description}
     >
       <ItemForm 
-        item={item}
-        mode={mode}
-        onSuccess={() => {
+        onAdd={(newItem) => {
+          // Handle item creation/update
           onOpenChange(false);
           onSuccess?.();
         }}

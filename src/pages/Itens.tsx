@@ -5,19 +5,23 @@ import { Input } from "@/components/ui/input";
 import { Plus, Search } from "lucide-react";
 import { ItemFormDialog } from "@/components/itens/ItemFormDialog";
 import { ItemsTable } from "@/components/itens/ItemsTable";
-import { useItens } from "@/hooks/useItens";
+import { useItensCrud, ItemResponse } from "@/hooks/itens/useItensCrud";
 import { useToast } from "@/hooks/use-toast";
-import { Item, Contrato, FundoMunicipal } from "@/types";
+import { Contrato, FundoMunicipal } from "@/types";
 import { supabase } from "@/integrations/supabase/client";
 
 const Itens = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showForm, setShowForm] = useState(false);
-  const [editingItem, setEditingItem] = useState<Item | undefined>();
+  const [editingItem, setEditingItem] = useState<ItemResponse | undefined>();
   const [contratos, setContratos] = useState<Contrato[]>([]);
   const [formMode, setFormMode] = useState<'create' | 'edit'>('create');
-  const { itens, loading, refetch } = useItens();
+  const { itens, loading, fetchItens, handleEdit, handleDelete } = useItensCrud();
   const { toast } = useToast();
+
+  useEffect(() => {
+    fetchItens();
+  }, []);
 
   useEffect(() => {
     const fetchContratos = async () => {
@@ -70,40 +74,23 @@ const Itens = () => {
     setShowForm(true);
   };
 
-  const handleEdit = (item: Item) => {
-    setFormMode('edit');
-    setEditingItem(item);
-    setShowForm(true);
+  const handleEditItem = (item: ItemResponse) => {
+    const editableItem = handleEdit(item);
+    if (editableItem) {
+      setFormMode('edit');
+      setEditingItem(editableItem);
+      setShowForm(true);
+    }
   };
 
-  const handleDelete = async (item: Item) => {
-    try {
-      const { error } = await supabase
-        .from('itens')
-        .delete()
-        .eq('id', item.id);
-
-      if (error) throw error;
-
-      await refetch();
-      
-      toast({
-        title: "Item excluído",
-        description: "O item foi excluído com sucesso",
-      });
-    } catch (error: any) {
-      toast({
-        title: "Erro ao excluir item",
-        description: error.message,
-        variant: "destructive",
-      });
-    }
+  const handleDeleteItem = async (item: ItemResponse) => {
+    await handleDelete(item);
   };
 
   const handleFormSuccess = () => {
     setShowForm(false);
     setEditingItem(undefined);
-    refetch();
+    fetchItens();
   };
 
   return (
@@ -137,15 +124,15 @@ const Itens = () => {
       <ItemsTable 
         items={filteredItens} 
         loading={loading} 
-        onEdit={handleEdit}
-        onDelete={handleDelete}
+        onEdit={handleEditItem}
+        onDelete={handleDeleteItem}
       />
       
       <ItemFormDialog 
         open={showForm}
         onOpenChange={setShowForm}
         onSuccess={handleFormSuccess}
-        item={editingItem}
+        item={editingItem as any}
         mode={formMode}
       />
     </div>

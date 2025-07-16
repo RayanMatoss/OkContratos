@@ -2,7 +2,6 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
 
 export function gerarPdfOrdem(ordem, contrato, fornecedor, itens) {
   const doc = new jsPDF();
@@ -32,19 +31,17 @@ export function gerarPdfOrdem(ordem, contrato, fornecedor, itens) {
     `R$ ${(item.quantidade * (item.valor_unitario || item.valorUnitario)).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`
   ]);
 
-  const tableConfig = {
+  autoTable(doc, {
     startY: 73,
     head: [["ITEM", "DESCRIÇÃO", "QUANT.", "UND.", "V. UNIT", "V. TOTAL"]],
     body: tableData,
-    theme: "grid",
+    theme: "grid" as const,
     headStyles: { fillColor: [60, 60, 60], textColor: 255, fontStyle: 'bold' },
     styles: { fontSize: 10, cellPadding: 2 },
     alternateRowStyles: { fillColor: [230, 230, 230] }
-  };
+  });
 
-  autoTable(doc, tableConfig);
-
-  // Get the final Y position from the table
+  // Get the final Y position from the table using proper typing
   const finalY = (doc as any).lastAutoTable?.finalY || 100;
 
   // Total geral
@@ -56,7 +53,7 @@ export function gerarPdfOrdem(ordem, contrato, fornecedor, itens) {
     finalY + 10
   );
 
-  // Data de emissão (logo abaixo do valor total, com espaçamento)
+  // Data de emissão
   const dataEmissao = ordem.data_emissao
     ? format(new Date(ordem.data_emissao), "dd/MM/yyyy")
     : "";
