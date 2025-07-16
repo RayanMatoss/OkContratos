@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -83,7 +84,7 @@ export const AddContratoForm = ({
     try {
       // Convert FundoMunicipal[] to string[] for database
       const fundoMunicipalArray = selectedContrato.fundoMunicipal.map(fundo => 
-        typeof fundo === 'string' ? fundo : fundo.toString()
+        typeof fundo === 'string' ? fundo : String(fundo)
       );
 
       const contratoData = {

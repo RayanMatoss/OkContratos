@@ -1,3 +1,4 @@
+
 import {
   Dialog,
   DialogContent,
@@ -27,8 +28,8 @@ interface ContratoDetalhesProps {
 
 const ContratoDetalhes = ({ contrato, open, onOpenChange, onAditivoCriado }: ContratoDetalhesProps) => {
   const fundosString = Array.isArray(contrato.fundoMunicipal) 
-    ? contrato.fundoMunicipal.map(f => typeof f === 'string' ? f : f.toString()).join(', ')
-    : contrato.fundoMunicipal?.toString() || '';
+    ? contrato.fundoMunicipal.map(f => typeof f === 'string' ? f : String(f)).join(', ')
+    : String(contrato.fundoMunicipal) || '';
 
   const { toast } = useToast();
   const [showAditivoForm, setShowAditivoForm] = useState(false);
@@ -143,7 +144,7 @@ const ContratoDetalhes = ({ contrato, open, onOpenChange, onAditivoCriado }: Con
                         <TableCell>{item.quantidade}</TableCell>
                         <TableCell>{item.unidade}</TableCell>
                         <TableCell>
-                          {item.valor_unitario?.toLocaleString('pt-BR', {
+                          {item.valorUnitario?.toLocaleString('pt-BR', {
                             style: 'currency',
                             currency: 'BRL',
                           })}

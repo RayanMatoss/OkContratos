@@ -1,5 +1,6 @@
+
 import React from "react";
-import { FormStep } from "@/hooks/useContratoForm";
+import { FormStep } from "@/types";
 import ContratoBasicInfo from "./ContratoBasicInfo";
 import ContratoDates from "./ContratoDates";
 import ContratoItems from "./ContratoItems";
@@ -57,4 +58,3 @@ export const ContratoFormStepContent: React.FC<ContratoFormStepContentProps> = (
       return null;
   }
 };
-

@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { FormStep } from "@/hooks/useContratoForm";
+import { FormStep } from "@/types";
 
 interface ContratoFormFooterProps {
   formStep: FormStep;

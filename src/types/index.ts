@@ -65,8 +65,27 @@ export interface Aditivo {
 export type TipoAditivo = 'periodo' | 'valor';
 
 export interface RelatorioMensal {
-  mes: string;
-  contratos: number;
-  ordens: number;
-  valor_total: number;
+  mes: number;
+  ano: number;
+  totalContratos: number;
+  contratosAtivos: number;
+  contratosVencidos: number;
+  ordensRealizadas: number;
+  ordensConcluidas: number;
+  ordensPendentes: number;
+  valorTotalContratos: number;
+  valorTotalOrdens: number;
 }
+
+export interface ContratoFormValues {
+  numero: string;
+  objeto: string;
+  fornecedor_id: string;
+  valor: string;
+  fundo_municipal: FundoMunicipal[];
+  data_inicio: Date;
+  data_termino: Date;
+  items?: Item[];
+}
+
+export type FormStep = 'basic' | 'dates' | 'items';
