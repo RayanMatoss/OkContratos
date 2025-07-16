@@ -1,10 +1,12 @@
+
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import type { Fornecedor } from "@/types";
 import type { NewFornecedor } from "@/hooks/fornecedores/types";
-import InputMask from 'react-input-mask';
+import { useCpfCnpjMask } from "@/hooks/useCpfCnpjMask";
+import { useEffect } from "react";
 
 interface FornecedorFormDialogProps {
   open: boolean;
@@ -26,6 +28,21 @@ export const FornecedorFormDialog = ({
   mode
 }: FornecedorFormDialogProps) => {
   const isEditing = mode === 'edit';
+  const { value: cnpjValue, handleChange: handleCnpjChange, getPlaceholder } = useCpfCnpjMask(fornecedor.cnpj);
+
+  // Sincronizar o valor da máscara com o estado do formulário
+  useEffect(() => {
+    if (cnpjValue !== fornecedor.cnpj) {
+      onFornecedorChange("cnpj", cnpjValue);
+    }
+  }, [cnpjValue, fornecedor.cnpj, onFornecedorChange]);
+
+  // Sincronizar mudanças externas (como reset do formulário) com a máscara
+  useEffect(() => {
+    if (fornecedor.cnpj !== cnpjValue) {
+      handleCnpjChange(fornecedor.cnpj);
+    }
+  }, [fornecedor.cnpj]);
   
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -47,19 +64,12 @@ export const FornecedorFormDialog = ({
           </div>
           <div className="space-y-2">
             <Label htmlFor="cnpj">CPF ou CNPJ</Label>
-            <InputMask
-              mask={fornecedor.cnpj.replace(/\D/g, '').length > 11 ? '99.999.999/9999-99' : '999.999.999-99'}
-              value={fornecedor.cnpj}
-              onChange={(e) => onFornecedorChange("cnpj", e.target.value)}
-            >
-              {(inputProps) => (
-                <Input
-                  {...inputProps}
-                  id="cnpj"
-                  placeholder="CPF ou CNPJ"
-                />
-              )}
-            </InputMask>
+            <Input
+              id="cnpj"
+              placeholder={getPlaceholder()}
+              value={cnpjValue}
+              onChange={(e) => handleCnpjChange(e.target.value)}
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
