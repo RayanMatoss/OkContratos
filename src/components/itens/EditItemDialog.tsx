@@ -19,6 +19,7 @@ interface EditItemDialogProps {
     unidade: string;
     valor_unitario: number;
     quantidade_consumida: number;
+    fundos?: string[];
     contratos?: {
       numero: string;
       objeto: string;
@@ -33,7 +34,9 @@ export const EditItemDialog = ({ open, onOpenChange, onSuccess, item }: EditItem
   const [quantidade, setQuantidade] = useState(String(item.quantidade));
   const [unidade, setUnidade] = useState(item.unidade);
   const [valorUnitario, setValorUnitario] = useState(String(item.valor_unitario));
-  const [fundos, setFundos] = useState<FundoMunicipal[]>(Array.isArray(item.contratos?.fundoMunicipal) ? item.contratos.fundoMunicipal : []);
+  const [fundos, setFundos] = useState<string[]>(
+    Array.isArray(item.fundos) ? item.fundos : []
+  );
 
   const handleSubmit = async () => {
     try {
@@ -51,7 +54,7 @@ export const EditItemDialog = ({ open, onOpenChange, onSuccess, item }: EditItem
           fundos: fundos
         })
         .eq('id', item.id)
-        .eq('quantidade_consumida', item.quantidade_consumida); // Extra safety check
+        .eq('quantidade_consumida', item.quantidade_consumida);
 
       if (error) throw error;
 
@@ -71,6 +74,7 @@ export const EditItemDialog = ({ open, onOpenChange, onSuccess, item }: EditItem
     }
   };
 
+  
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px]">
@@ -86,6 +90,8 @@ export const EditItemDialog = ({ open, onOpenChange, onSuccess, item }: EditItem
         )}
 
         <div className="grid gap-4 py-4">
+          
+          
           <div className="space-y-2">
             <Label htmlFor="descricao">Descrição</Label>
             <Input
@@ -133,12 +139,13 @@ export const EditItemDialog = ({ open, onOpenChange, onSuccess, item }: EditItem
               />
             </div>
           </div>
+          
+          
           <div className="space-y-2">
             <Label>Fundos Relacionados</Label>
             <FundoMunicipalSelector
               selectedFundos={fundos}
               onChange={setFundos}
-              fundosDisponiveis={item.contratos?.fundoMunicipal || []}
             />
           </div>
         </div>

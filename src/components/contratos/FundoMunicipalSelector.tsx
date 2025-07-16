@@ -1,62 +1,39 @@
-import { useState } from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
-import { 
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { FundoMunicipal } from "@/types";
 
-export const FUNDOS_MUNICIPAIS = [
-  { label: "Prefeitura Municipal", value: "Prefeitura" as FundoMunicipal },
-  { label: "Fundo Municipal de Educação", value: "Educação" as FundoMunicipal },
-  { label: "Fundo Municipal de Saúde", value: "Saúde" as FundoMunicipal },
-  { label: "Fundo Municipal de Assistência", value: "Assistência" as FundoMunicipal },
-];
+import React, { useState } from "react";
+import { Check, ChevronsUpDown, X } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Badge } from "@/components/ui/badge";
 
 interface FundoMunicipalSelectorProps {
-  selectedFundos: FundoMunicipal[];
-  onChange: (fundos: FundoMunicipal[]) => void;
-  fundosDisponiveis?: FundoMunicipal[];
+  selectedFundos: string[];
+  onChange: (fundos: string[]) => void;
 }
 
-const FundoMunicipalSelector = ({ selectedFundos, onChange }: FundoMunicipalSelectorProps) => {
-  const [open, setOpen] = useState(false);
-  
-  // Ensure selectedFundos is always an array
-  const safeSelectedFundos = Array.isArray(selectedFundos) ? selectedFundos : [];
+const fundosDisponiveis = [
+  "Fundo Municipal de Educação",
+  "Fundo Municipal de Saúde", 
+  "Fundo Municipal de Assistência Social",
+  "Fundo Municipal de Obras",
+  "Fundo Municipal de Meio Ambiente"
+];
 
-  // Function to handle the selection and deselection of FundoMunicipal
-  const handleSelectFundo = (value: FundoMunicipal) => {
-    let updatedFundos: FundoMunicipal[];
-    
-    if (safeSelectedFundos.includes(value)) {
-      // Remove the fundo if already selected
-      updatedFundos = safeSelectedFundos.filter(fundo => fundo !== value);
+export default function FundoMunicipalSelector({ selectedFundos, onChange }: FundoMunicipalSelectorProps) {
+  const [open, setOpen] = useState(false);
+
+  const handleSelect = (fundo: string) => {
+    const isSelected = selectedFundos.includes(fundo);
+    if (isSelected) {
+      onChange(selectedFundos.filter(f => f !== fundo));
     } else {
-      // Add the fundo if not selected
-      updatedFundos = [...safeSelectedFundos, value];
+      onChange([...selectedFundos, fundo]);
     }
-    
-    onChange(updatedFundos);
   };
 
-  // Function to remove a fundo when clicking on badge
-  const handleRemoveFundo = (value: FundoMunicipal, e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent the event from bubbling up
-    const updatedFundos = safeSelectedFundos.filter(fundo => fundo !== value);
-    onChange(updatedFundos);
+  const handleRemove = (fundoToRemove: string) => {
+    onChange(selectedFundos.filter(f => f !== fundoToRemove));
   };
 
   return (
@@ -68,11 +45,10 @@ const FundoMunicipalSelector = ({ selectedFundos, onChange }: FundoMunicipalSele
             role="combobox"
             aria-expanded={open}
             className="w-full justify-between"
-            type="button"
           >
-            {safeSelectedFundos.length === 0
-              ? "Selecione fundos..."
-              : `${safeSelectedFundos.length} fundos selecionados`}
+            {selectedFundos.length > 0
+              ? `${selectedFundos.length} fundos selecionados`
+              : "Selecione os fundos..."}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -82,66 +58,44 @@ const FundoMunicipalSelector = ({ selectedFundos, onChange }: FundoMunicipalSele
             <CommandList>
               <CommandEmpty>Nenhum fundo encontrado.</CommandEmpty>
               <CommandGroup>
-                {FUNDOS_MUNICIPAIS.map((fundo) => (
+                {fundosDisponiveis.map((fundo) => (
                   <CommandItem
-                    key={fundo.value}
-                    value={fundo.value}
-                    onSelect={() => {
-                      handleSelectFundo(fundo.value);
-                      // Don't close the popover automatically - let user select multiple items
-                    }}
-                    style={{ cursor: 'pointer' }}
+                    key={fundo}
+                    value={fundo}
+                    onSelect={() => handleSelect(fundo)}
                   >
-                    <div className="flex items-center">
-                      <Check
-                        className={cn(
-                          "mr-2 h-4 w-4",
-                          safeSelectedFundos.includes(fundo.value) ? "opacity-100" : "opacity-0"
-                        )}
-                      />
-                      {fundo.label}
-                    </div>
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        selectedFundos.includes(fundo) ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                    {fundo}
                   </CommandItem>
                 ))}
               </CommandGroup>
             </CommandList>
           </Command>
-          <div className="border-t p-2 flex justify-end">
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => setOpen(false)}
-            >
-              Concluir
-            </Button>
-          </div>
         </PopoverContent>
       </Popover>
 
-      {safeSelectedFundos.length > 0 && (
-        <div className="flex flex-wrap gap-1 mt-2">
-          {safeSelectedFundos.map(fundo => {
-            const fundoDetails = FUNDOS_MUNICIPAIS.find(f => f.value === fundo);
-            return (
-              <Badge 
-                key={fundo} 
-                variant="secondary" 
-                className="mr-1 mb-1"
+      {selectedFundos.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {selectedFundos.map((fundo) => (
+            <Badge key={fundo} variant="secondary" className="text-xs">
+              {fundo}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="ml-1 h-auto p-0 text-muted-foreground hover:text-foreground"
+                onClick={() => handleRemove(fundo)}
               >
-                {fundoDetails?.label || fundo}
-                <span 
-                  className="ml-1 cursor-pointer" 
-                  onClick={(e) => handleRemoveFundo(fundo, e)}
-                >
-                  ×
-                </span>
-              </Badge>
-            );
-          })}
+                <X className="h-3 w-3" />
+              </Button>
+            </Badge>
+          ))}
         </div>
       )}
     </div>
   );
-};
-
-export default FundoMunicipalSelector;
+}

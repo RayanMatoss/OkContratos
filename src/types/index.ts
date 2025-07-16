@@ -1,3 +1,4 @@
+
 export interface Fornecedor {
   id: string;
   nome: string;
@@ -32,13 +33,10 @@ export interface Item {
   valorUnitario: number;
   quantidadeConsumida: number;
   createdAt: Date;
-  fundoMunicipal: FundoMunicipal[];
+  fundos?: string[];
 }
 
-export type FundoMunicipal = {
-  id: string;
-  nome: string;
-};
+export type FundoMunicipal = string;
 
 export interface OrdemFornecimento {
   id: string;
@@ -48,6 +46,27 @@ export interface OrdemFornecimento {
   dataEmissao: Date;
   observacoes: string;
   createdAt: Date;
+  itens?: Item[];
 }
 
-export type StatusContrato = 'Ativo' | 'Expirado' | 'Suspenso' | 'Finalizado';
+export type StatusContrato = 'Ativo' | 'Expirado' | 'Suspenso' | 'Finalizado' | 'A Vencer' | 'Em Aprovação';
+
+export type StatusOrdem = 'Pendente' | 'Concluída' | 'Cancelada';
+
+export interface Aditivo {
+  id: string;
+  contrato_id: string;
+  tipo: TipoAditivo;
+  nova_data_termino?: string;
+  percentual_itens?: number;
+  criado_em: string;
+}
+
+export type TipoAditivo = 'periodo' | 'valor';
+
+export interface RelatorioMensal {
+  mes: string;
+  contratos: number;
+  ordens: number;
+  valor_total: number;
+}
