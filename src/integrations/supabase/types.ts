@@ -417,6 +417,7 @@ export type Database = {
         Row: {
           cargo: string | null
           created_at: string | null
+          fundo_municipal: string[] | null
           id: string
           municipio_id: string | null
           nome: string
@@ -428,6 +429,7 @@ export type Database = {
         Insert: {
           cargo?: string | null
           created_at?: string | null
+          fundo_municipal?: string[] | null
           id?: string
           municipio_id?: string | null
           nome: string
@@ -439,6 +441,7 @@ export type Database = {
         Update: {
           cargo?: string | null
           created_at?: string | null
+          fundo_municipal?: string[] | null
           id?: string
           municipio_id?: string | null
           nome?: string
@@ -525,6 +528,10 @@ export type Database = {
       }
     }
     Functions: {
+      aplicar_aditivo_valor: {
+        Args: { p_contrato_id: string; p_percentual: number }
+        Returns: undefined
+      }
       get_contratos_municipio: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -569,6 +576,30 @@ export type Database = {
       recalcular_consumo_itens: {
         Args: Record<PropertyKey, never>
         Returns: undefined
+      }
+      salvar_contrato_com_itens: {
+        Args:
+          | {
+              p_numero: string
+              p_fornecedor_id: string
+              p_fundo_municipal: string[]
+              p_objeto: string
+              p_valor: number
+              p_data_inicio: string
+              p_data_termino: string
+              p_itens: Json
+            }
+          | {
+              p_numero: string
+              p_fundo_municipal: string[]
+              p_objeto: string
+              p_valor: number
+              p_data_inicio: string
+              p_data_termino: string
+              p_fornecedor_id: string[]
+              p_itens: Json
+            }
+        Returns: string
       }
     }
     Enums: {
