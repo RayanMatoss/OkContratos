@@ -61,8 +61,8 @@ const FundoMunicipalSelector: React.FC<FundoMunicipalSelectorProps> = ({ selecte
                 />
                 <span>{fundo}</span>
               </label>
-            ))}
-          </div>
+          ))}
+        </div>
         )}
       </div>
       {/* Fecha o dropdown ao clicar fora */}

@@ -3,43 +3,38 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
-import FundoMunicipalSelector from "@/components/contratos/FundoMunicipalSelector";
-import { FundoMunicipal } from "@/types";
 
 interface NewItem {
   descricao: string;
   quantidade: string;
   unidade: string;
   valor_unitario: string;
-  fundos?: FundoMunicipal[];
+  contrato_id: string;
 }
 
 interface ItemFormProps {
   onAdd: (item: NewItem) => void;
+  contratos: { id: string; numero: string; objeto: string }[];
 }
 
-export const ItemForm = ({ onAdd }: ItemFormProps) => {
+export const ItemForm = ({ onAdd, contratos }: ItemFormProps) => {
   const [item, setItem] = useState<NewItem>({
     descricao: "",
     quantidade: "",
     unidade: "",
     valor_unitario: "",
-    fundos: []
+    contrato_id: ""
   });
 
   const handleAdd = () => {
-    onAdd({
-      ...item,
-      fundos: Array.isArray(item.fundos)
-        ? item.fundos
-        : (typeof item.fundos === "string" && item.fundos ? [item.fundos] : []),
-    });
+    if (!item.contrato_id) return;
+    onAdd(item);
     setItem({
       descricao: "",
       quantidade: "",
       unidade: "",
       valor_unitario: "",
-      fundos: []
+      contrato_id: ""
     });
   };
 
@@ -88,11 +83,21 @@ export const ItemForm = ({ onAdd }: ItemFormProps) => {
           </div>
         </div>
         <div className="space-y-2">
-          <Label>Fundos Municipais</Label>
-          <FundoMunicipalSelector
-            selectedFundos={item.fundos || []}
-            onChange={(fundos) => setItem({ ...item, fundos })}
-          />
+          <Label htmlFor="contrato">Contrato</Label>
+          <select
+            id="contrato"
+            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+            value={item.contrato_id}
+            onChange={e => setItem({ ...item, contrato_id: e.target.value })}
+            required
+          >
+            <option value="">Selecione o contrato</option>
+            {contratos.map(contrato => (
+              <option key={contrato.id} value={contrato.id}>
+                {contrato.numero} - {contrato.objeto}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
       <Button 
@@ -100,6 +105,7 @@ export const ItemForm = ({ onAdd }: ItemFormProps) => {
         variant="outline" 
         onClick={handleAdd}
         className="w-full"
+        disabled={!item.contrato_id}
       >
         <Plus className="h-4 w-4 mr-2" />
         Adicionar Item à Lista

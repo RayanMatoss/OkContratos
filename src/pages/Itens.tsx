@@ -134,6 +134,7 @@ const Itens = () => {
         onSuccess={handleFormSuccess}
         item={editingItem as any}
         mode={formMode}
+        contratos={contratos}
       />
     </div>
   );
