@@ -1,4 +1,4 @@
-
+""
 import { useEffect, useState, createContext, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Session, User } from '@supabase/supabase-js';
@@ -12,7 +12,7 @@ interface AuthContextType {
   loading: boolean;
   municipio: any | null;
   perfil: string | null;
-  login: (email: string, password: string, municipioId: string) => Promise<boolean>;
+  login: (email: string, password: string, municipioId: string, fundosSelecionados: string[]) => Promise<boolean>;
   logout: () => void;
 }
 
@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  const login = async (email: string, password: string, municipioId: string) => {
+  const login = async (email: string, password: string, municipioId: string, fundosSelecionados: string[]) => {
     setLoading(true);
     try {
       // Autentica no Supabase
@@ -61,7 +61,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Busca o perfil do usuário
       const { data: profile, error: profileError } = await supabase
         .from('user_profiles')
-        .select('municipio_id, permissao')
+        .select('municipio_id, permissao, fundo_municipal')
         .eq('user_id', data.user.id)
         .single();
 
@@ -72,6 +72,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       // Verifica se o município bate
       if ((profile as any).municipio_id !== municipioId) {
+        setLoading(false);
+        return false;
+      }
+
+      // Verifica se o fundo/secretaria bate
+      const fundosPerfil = (profile as any).fundo_municipal || [];
+      const temFundo = fundosSelecionados.some(f => fundosPerfil.includes(f));
+      if (!temFundo) {
         setLoading(false);
         return false;
       }

@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { FileText, Lock } from "lucide-react";
+import FundoMunicipalSelector from '@/components/contratos/FundoMunicipalSelector';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const Login = () => {
   const [municipioId, setMunicipioId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [municipios, setMunicipios] = useState([]);
+  const [selectedFundos, setSelectedFundos] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchMunicipios = async () => {
@@ -47,10 +49,19 @@ const Login = () => {
       return;
     }
 
+    if (selectedFundos.length === 0) {
+      toast({
+        title: "Seleção obrigatória",
+        description: "Por favor, selecione pelo menos um fundo/secretaria.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
 
     try {
-      const success = await login(email, password, municipioId);
+      const success = await login(email, password, municipioId, selectedFundos);
       
       if (success) {
         toast({
@@ -63,7 +74,7 @@ const Login = () => {
       } else {
         toast({
           title: "Erro ao fazer login",
-          description: "Email, senha ou município inválidos.",
+          description: "Email, senha, município ou fundo/secretaria inválidos.",
           variant: "destructive",
         });
       }
@@ -143,6 +154,8 @@ const Login = () => {
               </SelectContent>
             </Select>
           </div>
+          {/* Adicionando seleção de fundos/secretarias */}
+          <FundoMunicipalSelector selectedFundos={selectedFundos} onChange={setSelectedFundos} />
 
           <div className="flex items-center space-x-2">
             <Checkbox id="remember" />

@@ -1,29 +1,25 @@
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import Select from 'react-select';
 import { Fornecedor } from "@/types";
 
 interface FornecedorSelectorProps {
-  value: string;
-  onChange: (value: string) => void;
+  value: string[];
+  onChange: (value: string[]) => void;
   fornecedores: Fornecedor[];
 }
 
 const FornecedorSelector = ({ value, onChange, fornecedores }: FornecedorSelectorProps) => {
+  const options = fornecedores.map(f => ({ value: f.id, label: f.nome }));
   return (
     <Select
-      value={value}
-      onValueChange={onChange}
-    >
-      <SelectTrigger>
-        <SelectValue placeholder="Selecione o fornecedor" />
-      </SelectTrigger>
-      <SelectContent disablePortal>
-        {fornecedores?.map((fornecedor) => (
-          <SelectItem key={fornecedor.id} value={fornecedor.id}>
-            {fornecedor.nome}
-          </SelectItem>
-        )) || <SelectItem value="">Carregando...</SelectItem>}
-      </SelectContent>
-    </Select>
+      isMulti
+      options={options}
+      value={options.filter(opt => value.includes(opt.value))}
+      onChange={selected => onChange(selected.map(opt => opt.value))}
+      placeholder="Selecione os fornecedores"
+      className="w-full"
+      classNamePrefix="select"
+      noOptionsMessage={() => "Nenhum fornecedor disponível"}
+    />
   );
 };
 

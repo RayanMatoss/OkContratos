@@ -62,48 +62,63 @@ export const useContratoForm = ({
     setLoading(true);
 
     try {
-      const contratoData = {
-        numero: formData.numero,
-        fornecedor_id: formData.fornecedor_id,
-        fundo_municipal: formData.fundo_municipal,
-        objeto: formData.objeto,
-        valor: parseFloat(formData.valor),
-        data_inicio: formData.data_inicio.toISOString(),
-        data_termino: formData.data_termino.toISOString(),
-      };
-
       if (mode === 'edit' && contrato) {
+        // Edição: atualizar contrato
+        const contratoData = {
+          numero: formData.numero,
+          fornecedor_id: Array.isArray(formData.fornecedor_id) ? formData.fornecedor_id : [formData.fornecedor_id],
+          fundo_municipal: formData.fundo_municipal,
+          objeto: formData.objeto,
+          valor: parseFloat(formData.valor),
+          data_inicio: formData.data_inicio.toISOString(),
+          data_termino: formData.data_termino.toISOString(),
+        };
+
         const { error } = await supabase
           .from('contratos')
           .update(contratoData)
           .eq('id', contrato.id);
 
         if (error) throw error;
+
+        // Para edição, os itens são gerenciados separadamente
+        // (pode ser otimizado futuramente com uma função SQL específica para edição)
       } else {
-        const { data: newContrato, error } = await supabase
-          .from('contratos')
-          .insert([contratoData])
-          .select()
-          .single();
+        // Criação: usar função SQL otimizada
+        try {
+          const response = await fetch(`${supabase.supabaseUrl}/rest/v1/rpc/salvar_contrato_com_itens`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${supabase.supabaseKey}`,
+              'apikey': supabase.supabaseKey
+            },
+            body: JSON.stringify({
+              p_numero: formData.numero,
+              p_fornecedor_id: Array.isArray(formData.fornecedor_id) ? formData.fornecedor_id : [formData.fornecedor_id],
+              p_fundo_municipal: formData.fundo_municipal,
+              p_objeto: formData.objeto,
+              p_valor: parseFloat(formData.valor),
+              p_data_inicio: formData.data_inicio.toISOString().split('T')[0],
+              p_data_termino: formData.data_termino.toISOString().split('T')[0],
+              p_itens: formData.items && formData.items.length > 0 
+                ? formData.items.map(item => ({
+                    descricao: item.descricao,
+                    quantidade: item.quantidade,
+                    unidade: item.unidade || 'UN',
+                    valor_unitario: item.valorUnitario || 0,
+                    fundos: item.fundos || []
+                  }))
+                : null
+            })
+          });
 
-        if (error) throw error;
-
-        // Save items if any
-        if (formData.items && formData.items.length > 0) {
-          const itemsData = formData.items.map(item => ({
-            contrato_id: newContrato.id,
-            descricao: item.descricao,
-            quantidade: item.quantidade,
-            unidade: item.unidade || 'UN',
-            valor_unitario: item.valorUnitario || 0,
-            fundos: item.fundos || []
-          }));
-
-          const { error: itemsError } = await supabase
-            .from('itens')
-            .insert(itemsData);
-
-          if (itemsError) throw itemsError;
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Erro ao salvar contrato');
+          }
+        } catch (error: any) {
+          throw error;
         }
       }
 

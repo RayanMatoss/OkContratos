@@ -45,19 +45,34 @@ export function useAditivos(contratoId: string) {
       return false;
     }
 
-    // Lógica para aplicar o aditivo
+    // Lógica para aplicar o aditivo usando funções SQL otimizadas
     if (aditivo.tipo === "periodo" && aditivo.nova_data_termino) {
       await supabase.from("contratos").update({ data_termino: aditivo.nova_data_termino }).eq("id", aditivo.contrato_id);
     }
 
     if (aditivo.tipo === "valor" && aditivo.percentual_itens) {
-      // Buscar itens do contrato
-      const { data: itens } = await supabase.from("itens").select("*").eq("contrato_id", aditivo.contrato_id);
-      if (itens && itens.length > 0) {
-        for (const item of itens) {
-          const novaQuantidade = Math.round(item.quantidade * (1 + aditivo.percentual_itens / 100));
-          await supabase.from("itens").update({ quantidade: novaQuantidade }).eq("id", item.id);
+      // Usar função SQL otimizada em vez do loop
+      try {
+        const response = await fetch(`${supabase.supabaseUrl}/rest/v1/rpc/aplicar_aditivo_valor`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${supabase.supabaseKey}`,
+            'apikey': supabase.supabaseKey
+          },
+          body: JSON.stringify({
+            p_contrato_id: aditivo.contrato_id,
+            p_percentual: aditivo.percentual_itens
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Erro ao aplicar aditivo');
         }
+      } catch (error: any) {
+        toast({ title: "Erro ao aplicar aditivo", description: error.message, variant: "destructive" });
+        return false;
       }
     }
 

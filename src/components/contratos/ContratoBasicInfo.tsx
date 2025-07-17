@@ -7,7 +7,7 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 
 interface ContratoBasicInfoProps {
   numero: string;
-  fornecedorId: string;
+  fornecedorId: string | string[];
   fundoMunicipal: FundoMunicipal[];
   objeto: string;
   valor: string;
@@ -43,7 +43,7 @@ const ContratoBasicInfo = ({
         <div className="space-y-2">
           <Label htmlFor="fornecedor">Fornecedor</Label>
           <FornecedorSelector
-            value={fornecedorId}
+            value={Array.isArray(fornecedorId) ? fornecedorId : fornecedorId ? [fornecedorId] : []}
             onChange={(value) => onFieldChange("fornecedor_id", value)}
             fornecedores={fornecedores}
           />
@@ -51,14 +51,7 @@ const ContratoBasicInfo = ({
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="fundo">Fundos Municipais</Label>
-          <FundoMunicipalSelector
-            selectedFundos={selectedFundos}
-            onChange={(value) => onFieldChange("fundo_municipal", value)}
-          />
-        </div>
-
+        {/* Campo de fundos removido */}
         <div className="space-y-2">
           <Label htmlFor="valor">Valor do Contrato</Label>
           <Input

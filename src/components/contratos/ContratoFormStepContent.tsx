@@ -11,7 +11,7 @@ interface ContratoFormStepContentProps {
   formData: {
     numero: string;
     objeto: string;
-    fornecedor_id: string;
+    fornecedor_id: string | string[];
     valor: string;
     fundo_municipal: FundoMunicipal[];
     data_inicio: Date;
@@ -38,7 +38,7 @@ export const ContratoFormStepContent: React.FC<ContratoFormStepContentProps> = (
       return (
         <ContratoBasicInfo 
           numero={formData.numero || ""}
-          fornecedorId={formData.fornecedor_id || ""}
+          fornecedorId={Array.isArray(formData.fornecedor_id) ? formData.fornecedor_id : formData.fornecedor_id ? [formData.fornecedor_id] : []}
           fundoMunicipal={fundoMunicipal}
           objeto={formData.objeto || ""}
           valor={formData.valor || ""}
@@ -52,6 +52,27 @@ export const ContratoFormStepContent: React.FC<ContratoFormStepContentProps> = (
           dataInicio={formData.data_inicio || new Date()}
           dataTermino={formData.data_termino || new Date()}
           onDateChange={(field, date) => onFieldChange(field, date)}
+        />
+      );
+    case "items":
+      // Corrigir tipagem: garantir que todos os campos existem
+      const items = (formData.items || []).map((item: any) => ({
+        descricao: item.descricao || "",
+        quantidade: item.quantidade || 0,
+        unidade: item.unidade || "UN",
+        valor_unitario: item.valor_unitario || item.valorUnitario || 0,
+        fundos: item.fundos || []
+      }));
+      return (
+        <ContratoItems
+          items={items}
+          onAddItem={(item) => onFieldChange("items", [...(formData.items || []), item])}
+          onRemoveItem={(index) => {
+            const newItems = [...(formData.items || [])];
+            newItems.splice(index, 1);
+            onFieldChange("items", newItems);
+          }}
+          fundosMunicipais={fundoMunicipal}
         />
       );
     default:
