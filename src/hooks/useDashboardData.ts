@@ -12,6 +12,7 @@ interface DashboardData {
   contratosRecentes: any[];
   ordensPendentesLista: any[];
   itensAlerta: any[];
+  fornecedores: any[]; // ADICIONADO
 }
 
 export const useDashboardData = () => {
@@ -25,7 +26,8 @@ export const useDashboardData = () => {
     ordensData: [],
     contratosRecentes: [],
     ordensPendentesLista: [],
-    itensAlerta: []
+    itensAlerta: [],
+    fornecedores: []
   });
   const [loading, setLoading] = useState(true);
 
@@ -66,8 +68,13 @@ export const useDashboardData = () => {
       const { count: fornecedoresCount, error: fornecedoresError } = await supabase
         .from("fornecedores")
         .select('*', { count: "exact" });
-
       if (fornecedoresError) throw fornecedoresError;
+
+      // Fetch todos os fornecedores
+      const { data: fornecedores, error: fornecedoresListError } = await supabase
+        .from("fornecedores")
+        .select("*");
+      if (fornecedoresListError) throw fornecedoresListError;
 
       // Calculate dashboard metrics
       const now = new Date();
@@ -150,15 +157,16 @@ export const useDashboardData = () => {
       );
 
       setData({
-        totalContratos: contratos?.length || 0,
+        totalContratos: contratos.length,
         contratosAVencer,
         totalFornecedores: fornecedoresCount || 0,
         ordensPendentes,
         statusContratosData,
         ordensData,
-        contratosRecentes,
+        contratosRecentes: contratos.slice(0, 10),
         ordensPendentesLista,
-        itensAlerta: itensAlertaFiltrados
+        itensAlerta: itensAlertaFiltrados,
+        fornecedores: fornecedores || [], // ADICIONADO
       });
 
     } catch (error: any) {

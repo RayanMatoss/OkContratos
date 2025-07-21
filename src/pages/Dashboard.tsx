@@ -110,7 +110,7 @@ const Dashboard = () => {
 
       {/* Modal de Total de Contratos */}
       <Dialog open={openContratosModal} onOpenChange={setOpenContratosModal}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Todos os Contratos</DialogTitle>
             <DialogDescription>Lista de todos os contratos registrados.</DialogDescription>
@@ -204,24 +204,21 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.totalFornecedores === 0 ? (
+                {data.fornecedores.length === 0 ? (
                   <tr>
                     <td colSpan={4} className="text-center py-4 text-muted-foreground">
                       Nenhum fornecedor encontrado.
                     </td>
                   </tr>
                 ) : (
-                  (data.contratosRecentes || [])
-                    .map((contrato: any) => contrato.fornecedor)
-                    .filter((fornecedor: any, idx: number, arr: any[]) => fornecedor && arr.findIndex(f => f?.nome === fornecedor?.nome) === idx)
-                    .map((fornecedor: any, idx: number) => (
-                      <tr key={idx} className="border-b last:border-0">
-                        <td className="px-2 py-1 font-medium">{fornecedor?.nome || '-'}</td>
-                        <td className="px-2 py-1">{fornecedor?.cnpj || '-'}</td>
-                        <td className="px-2 py-1">{fornecedor?.email || '-'}</td>
-                        <td className="px-2 py-1">{fornecedor?.telefone || '-'}</td>
-                      </tr>
-                    ))
+                  data.fornecedores.map((fornecedor: any, idx: number) => (
+                    <tr key={fornecedor.id || idx} className="border-b last:border-0">
+                      <td className="px-2 py-1 font-medium">{fornecedor.nome || '-'}</td>
+                      <td className="px-2 py-1">{fornecedor.cnpj || '-'}</td>
+                      <td className="px-2 py-1">{fornecedor.email || '-'}</td>
+                      <td className="px-2 py-1">{fornecedor.telefone || '-'}</td>
+                    </tr>
+                  ))
                 )}
               </tbody>
             </table>
