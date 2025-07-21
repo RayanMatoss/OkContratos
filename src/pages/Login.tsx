@@ -100,7 +100,7 @@ const Login = () => {
             </div>
           </div>
           <h1 className="text-2xl font-bold">
-            <span className="text-primary">Lumen</span>Contract
+            <span className="text-primary">Ok</span>Contratos
           </h1>
           <p className="text-sm text-muted-foreground mt-2">
             Sistema de Controle de Contratos
