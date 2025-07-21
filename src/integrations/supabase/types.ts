@@ -569,6 +569,19 @@ export type Database = {
       recalcular_consumo_itens: {
         Args: Record<PropertyKey, never>
         Returns: undefined
+      },
+      salvar_contrato_com_itens: {
+        Args: {
+          p_numero: string,
+          p_fundo_municipal: string[],
+          p_objeto: string,
+          p_valor: number,
+          p_data_inicio: string,
+          p_data_termino: string,
+          p_fornecedor_id: string,
+          p_itens: any // ou ajuste conforme o tipo real esperado
+        },
+        Returns: any // ajuste conforme o retorno real
       }
     }
     Enums: {

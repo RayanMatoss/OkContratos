@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
+import Select from 'react-select';
 
 interface NewItem {
   descricao: string;
@@ -84,20 +85,39 @@ export const ItemForm = ({ onAdd, contratos }: ItemFormProps) => {
         </div>
         <div className="space-y-2">
           <Label htmlFor="contrato">Contrato</Label>
-          <select
-            id="contrato"
-            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-            value={item.contrato_id}
-            onChange={e => setItem({ ...item, contrato_id: e.target.value })}
-            required
-          >
-            <option value="">Selecione o contrato</option>
-            {contratos.map(contrato => (
-              <option key={contrato.id} value={contrato.id}>
-                {contrato.numero} - {contrato.objeto}
-              </option>
-            ))}
-          </select>
+          <Select
+            inputId="contrato"
+            classNamePrefix="select"
+            className="w-full"
+            isSearchable
+            isClearable
+            placeholder="Selecione o contrato"
+            value={
+              contratos
+                .map((contrato) => ({
+                  value: contrato.id,
+                  label: `${contrato.numero} - ${contrato.objeto}`,
+                }))
+                .find((opt) => opt.value === item.contrato_id) || null
+            }
+            onChange={(selected) => setItem({ ...item, contrato_id: selected ? selected.value : '' })}
+            options={contratos.map((contrato) => ({
+              value: contrato.id,
+              label: `${contrato.numero} - ${contrato.objeto}`,
+            }))}
+            noOptionsMessage={() => 'Nenhum contrato encontrado'}
+            styles={{
+              option: (provided) => ({
+                ...provided,
+                whiteSpace: 'normal',
+                wordBreak: 'break-word',
+              }),
+              menu: (provided) => ({
+                ...provided,
+                zIndex: 9999,
+              }),
+            }}
+          />
         </div>
       </div>
       <Button 

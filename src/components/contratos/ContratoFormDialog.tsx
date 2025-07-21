@@ -57,8 +57,8 @@ export const ContratoFormDialog = ({
       description={mode === 'create' ? "Preencha os dados do novo contrato" : "Edite os dados do contrato"}
       loading={loading}
       footer={formFooter}
-      step={formStep === "basic" ? 1 : 2}
-      totalSteps={2}
+      step={1}
+      totalSteps={1}
     >
       <ContratoFormStepContent
         step={formStep}

@@ -2,8 +2,8 @@ import Select from 'react-select';
 import { Fornecedor } from "@/types";
 
 interface FornecedorSelectorProps {
-  value: string[];
-  onChange: (value: string[]) => void;
+  value: string;
+  onChange: (value: string) => void;
   fornecedores: Fornecedor[];
 }
 
@@ -11,10 +11,9 @@ const FornecedorSelector = ({ value, onChange, fornecedores }: FornecedorSelecto
   const options = fornecedores.map(f => ({ value: f.id, label: f.nome }));
   return (
     <Select
-      isMulti
       options={options}
-      value={options.filter(opt => value.includes(opt.value))}
-      onChange={selected => onChange(selected.map(opt => opt.value))}
+      value={options.find(opt => opt.value === value) || null}
+      onChange={selected => onChange(selected ? selected.value : "")}
       placeholder="Selecione os fornecedores"
       className="w-full"
       classNamePrefix="select"

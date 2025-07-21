@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ItemForm } from "./ItemForm";
 import { ItemsList } from "./ItemsList";
 import { Contrato } from "@/types";
+import Select from 'react-select';
 
 interface NewItem {
   descricao: string;
@@ -86,22 +87,42 @@ export const AddItemsDialog = ({ open, onOpenChange, onSuccess, contratos }: Add
           <div className="grid gap-4 py-4">
             <div className="space-y-2">
               <Label htmlFor="contrato">Contrato</Label>
-              <select
-                id="contrato"
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                value={selectedContrato}
-                onChange={(e) => setSelectedContrato(e.target.value)}
-              >
-                <option value="">Selecione um contrato</option>
-                {contratos.map(contrato => (
-                  <option key={contrato.id} value={contrato.id}>
-                    {contrato.numero} - {contrato.objeto}
-                  </option>
-                ))}
-              </select>
+              <Select
+                inputId="contrato"
+                classNamePrefix="select"
+                className="w-full"
+                isSearchable
+                isClearable
+                placeholder="Selecione um contrato"
+                value={
+                  contratos
+                    .map((contrato) => ({
+                      value: contrato.id,
+                      label: `${contrato.numero} - ${contrato.objeto}`,
+                    }))
+                    .find((opt) => opt.value === selectedContrato) || null
+                }
+                onChange={(selected) => setSelectedContrato(selected ? selected.value : '')}
+                options={contratos.map((contrato) => ({
+                  value: contrato.id,
+                  label: `${contrato.numero} - ${contrato.objeto}`,
+                }))}
+                noOptionsMessage={() => 'Nenhum contrato encontrado'}
+                styles={{
+                  option: (provided) => ({
+                    ...provided,
+                    whiteSpace: 'normal',
+                    wordBreak: 'break-word',
+                  }),
+                  menu: (provided) => ({
+                    ...provided,
+                    zIndex: 9999,
+                  }),
+                }}
+              />
             </div>
             
-            <ItemForm onAdd={handleAddItem} />
+            <ItemForm onAdd={handleAddItem} contratos={contratos} />
             
             <ItemsList items={itemsList} />
           </div>

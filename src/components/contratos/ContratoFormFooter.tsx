@@ -40,16 +40,9 @@ export const ContratoFormFooter: React.FC<ContratoFormFooterProps> = ({
         >
           Cancelar
         </Button>
-        
-        {formStep !== "items" ? (
-          <Button type="button" onClick={onNext} disabled={loading}>
-            Próximo
-          </Button>
-        ) : (
-          <Button type="submit" disabled={loading}>
-            {loading ? "Salvando..." : "Salvar"}
-          </Button>
-        )}
+        <Button type="submit" disabled={loading}>
+          {loading ? "Salvando..." : "Salvar"}
+        </Button>
       </div>
     </div>
   );

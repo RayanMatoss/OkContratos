@@ -36,24 +36,25 @@ export const ContratoFormStepContent: React.FC<ContratoFormStepContentProps> = (
   switch (step) {
     case "basic":
       return (
-        <ContratoBasicInfo 
-          numero={formData.numero || ""}
-          fornecedorId={Array.isArray(formData.fornecedor_id) ? formData.fornecedor_id : formData.fornecedor_id ? [formData.fornecedor_id] : []}
-          fundoMunicipal={fundoMunicipal}
-          objeto={formData.objeto || ""}
-          valor={formData.valor || ""}
-          fornecedores={fornecedores || []}
-          onFieldChange={onFieldChange}
-        />
+        <>
+          <ContratoBasicInfo 
+            numero={formData.numero || ""}
+            fornecedorId={Array.isArray(formData.fornecedor_id) ? formData.fornecedor_id : formData.fornecedor_id ? [formData.fornecedor_id] : []}
+            fundoMunicipal={fundoMunicipal}
+            objeto={formData.objeto || ""}
+            valor={formData.valor || ""}
+            fornecedores={fornecedores || []}
+            onFieldChange={onFieldChange}
+          />
+          <ContratoDates
+            dataInicio={formData.data_inicio || new Date()}
+            dataTermino={formData.data_termino || new Date()}
+            onDateChange={(field, date) => onFieldChange(field, date)}
+          />
+        </>
       );
     case "dates":
-      return (
-        <ContratoDates
-          dataInicio={formData.data_inicio || new Date()}
-          dataTermino={formData.data_termino || new Date()}
-          onDateChange={(field, date) => onFieldChange(field, date)}
-        />
-      );
+      return null;
     case "items":
       // Corrigir tipagem: garantir que todos os campos existem
       const items = (formData.items || []).map((item: any) => ({

@@ -49,7 +49,7 @@ export function FormSheet({
             <SheetTitle>{title}</SheetTitle>
             {description && <SheetDescription>{description}</SheetDescription>}
             
-            {step && totalSteps && (
+            {step && totalSteps && false && (
               <div className="flex items-center justify-center mt-2">
                 <div className="flex gap-1">
                   {Array.from({ length: totalSteps }).map((_, index) => (

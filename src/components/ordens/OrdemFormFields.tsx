@@ -7,6 +7,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Select from 'react-select';
 
 interface OrdemFormFieldsProps {
   numero: string;
@@ -57,20 +58,40 @@ const OrdemFormFields = ({
 
       <div className="space-y-2">
         <Label htmlFor="contrato">Contrato</Label>
-        <select
-          id="contrato"
-          value={contratoId}
-          onChange={(e) => setContratoId(e.target.value)}
-          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
-          disabled={mode === 'edit'} // Only disable in edit mode
-        >
-          <option value="">Selecione um contrato</option>
-          {contratos.map((contrato) => (
-            <option key={contrato.id} value={contrato.id}>
-              {contrato.numero} - {contrato.objeto} ({contrato.fornecedores?.nome})
-            </option>
-          ))}
-        </select>
+        <Select
+          inputId="contrato"
+          classNamePrefix="select"
+          className="w-full"
+          isSearchable
+          isClearable
+          placeholder="Selecione um contrato"
+          value={
+            contratos
+              .map((contrato) => ({
+                value: contrato.id,
+                label: `${contrato.numero} - ${contrato.objeto} (${contrato.fornecedores?.nome || contrato.fornecedor?.nome || ''})`,
+              }))
+              .find((opt) => opt.value === contratoId) || null
+          }
+          onChange={(selected) => setContratoId(selected ? selected.value : '')}
+          options={contratos.map((contrato) => ({
+            value: contrato.id,
+            label: `${contrato.numero} - ${contrato.objeto} (${contrato.fornecedores?.nome || contrato.fornecedor?.nome || ''})`,
+          }))}
+          noOptionsMessage={() => 'Nenhum contrato encontrado'}
+          styles={{
+            option: (provided) => ({
+              ...provided,
+              whiteSpace: 'normal',
+              wordBreak: 'break-word',
+            }),
+            menu: (provided) => ({
+              ...provided,
+              zIndex: 9999,
+            }),
+          }}
+          isDisabled={mode === 'edit'}
+        />
         {mode === 'edit' && (
           <p className="text-xs text-muted-foreground">
             O contrato não pode ser alterado após a criação da ordem

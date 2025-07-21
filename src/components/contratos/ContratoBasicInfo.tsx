@@ -28,43 +28,35 @@ const ContratoBasicInfo = ({
   const selectedFundos = Array.isArray(fundoMunicipal) ? fundoMunicipal : [];
 
   return (
-    <div className="grid gap-4">
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="numero">Número do Contrato</Label>
-          <Input
-            id="numero"
-            placeholder="Digite o número do contrato"
-            value={numero}
-            onChange={(e) => onFieldChange("numero", e.target.value)}
-          />
-        </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="fornecedor">Fornecedor</Label>
-          <FornecedorSelector
-            value={Array.isArray(fornecedorId) ? fornecedorId : fornecedorId ? [fornecedorId] : []}
-            onChange={(value) => onFieldChange("fornecedor_id", value)}
-            fornecedores={fornecedores}
-          />
-        </div>
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="numero">Número do Contrato</Label>
+        <Input
+          id="numero"
+          placeholder="Digite o número do contrato"
+          value={numero}
+          onChange={(e) => onFieldChange("numero", e.target.value)}
+        />
       </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        {/* Campo de fundos removido */}
-        <div className="space-y-2">
-          <Label htmlFor="valor">Valor do Contrato</Label>
-          <Input
-            id="valor"
-            type="number"
-            placeholder="Digite o valor"
-            value={valor}
-            onChange={(e) => onFieldChange("valor", e.target.value)}
-          />
-        </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="fornecedor">Fornecedor</Label>
+        <FornecedorSelector
+          value={typeof fornecedorId === 'string' ? fornecedorId : (Array.isArray(fornecedorId) && fornecedorId.length > 0 ? fornecedorId[0] : '')}
+          onChange={(value) => onFieldChange("fornecedor_id", value)}
+          fornecedores={fornecedores}
+        />
       </div>
-
-      <div className="space-y-2">
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="valor">Valor do Contrato</Label>
+        <Input
+          id="valor"
+          type="number"
+          placeholder="Digite o valor"
+          value={valor}
+          onChange={(e) => onFieldChange("valor", e.target.value)}
+        />
+      </div>
+      <div className="flex flex-col gap-2">
         <Label htmlFor="objeto">Objeto do Contrato</Label>
         <Input
           id="objeto"
