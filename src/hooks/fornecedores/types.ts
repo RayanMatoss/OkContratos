@@ -9,17 +9,7 @@ export interface NewFornecedor {
   endereco: string;
 }
 
-interface FornecedorDB {
-  id: string;
-  nome: string;
-  cnpj: string;
-  email?: string;
-  telefone?: string;
-  endereco?: string;
-  created_at: string;
-}
-
-export const formatFornecedor = (fornecedor: FornecedorDB): Fornecedor => {
+export const formatFornecedor = (fornecedor: any): Fornecedor => {
   return {
     id: fornecedor.id,
     nome: fornecedor.nome,

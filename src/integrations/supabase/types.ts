@@ -586,9 +586,9 @@ export type Database = {
           p_data_inicio: string,
           p_data_termino: string,
           p_fornecedor_id: string,
-          p_itens: Json
+          p_itens: any // ou ajuste conforme o tipo real esperado
         },
-        Returns: string
+        Returns: any // ajuste conforme o retorno real
       }
       salvar_contrato_com_itens: {
         Args:

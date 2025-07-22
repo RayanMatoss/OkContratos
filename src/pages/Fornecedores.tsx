@@ -28,7 +28,7 @@ const Fornecedores = () => {
 
   useEffect(() => {
     fetchFornecedores();
-  }, [fetchFornecedores]);
+  }, []);
 
   return (
     <div className="space-y-6 animate-fade-in">

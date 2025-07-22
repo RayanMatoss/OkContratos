@@ -12,7 +12,7 @@ interface ContratoBasicInfoProps {
   objeto: string;
   valor: string;
   fornecedores: Fornecedor[];
-  onFieldChange: (field: string, value: string | number | string[]) => void;
+  onFieldChange: (field: string, value: any) => void;
 }
 
 const ContratoBasicInfo = ({

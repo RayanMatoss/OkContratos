@@ -30,7 +30,7 @@ const Dashboard = () => {
   }
 
   // Definir a variável local contratosAVencer corretamente
-  const contratosAVencer = (data.contratosRecentes || []).filter((contrato) => {
+  const contratosAVencer = (data.contratosRecentes || []).filter((contrato: any) => {
     if (!contrato.data_termino) return false;
     const dataTermino = new Date(contrato.data_termino);
     const now = new Date();
@@ -91,7 +91,7 @@ const Dashboard = () => {
                     </td>
                   </tr>
                 ) : (
-                  data.itensAlerta.map((item) => (
+                  data.itensAlerta.map((item: any) => (
                     <tr key={item.id} className="border-b last:border-0">
                       <td className="px-2 py-1 font-medium">{item.descricao}</td>
                       <td className="px-2 py-1">{item.contratos?.numero || '-'}</td>
@@ -133,7 +133,7 @@ const Dashboard = () => {
                     </td>
                   </tr>
                 ) : (
-                  data.contratosRecentes.map((contrato) => (
+                  data.contratosRecentes.map((contrato: any) => (
                     <tr key={contrato.id} className="border-b last:border-0">
                       <td className="px-2 py-1 font-medium">{contrato.numero}</td>
                       <td className="px-2 py-1">{contrato.fornecedor?.nome || '-'}</td>
@@ -172,7 +172,7 @@ const Dashboard = () => {
                     </td>
                   </tr>
                 ) : (
-                  contratosAVencer.map((contrato) => (
+                  contratosAVencer.map((contrato: any) => (
                     <tr key={contrato.id} className="border-b last:border-0">
                       <td className="px-2 py-1 font-medium">{contrato.numero}</td>
                       <td className="px-2 py-1">{contrato.fornecedor?.nome || '-'}</td>
@@ -211,7 +211,7 @@ const Dashboard = () => {
                     </td>
                   </tr>
                 ) : (
-                  data.fornecedores.map((fornecedor, idx: number) => (
+                  data.fornecedores.map((fornecedor: any, idx: number) => (
                     <tr key={fornecedor.id || idx} className="border-b last:border-0">
                       <td className="px-2 py-1 font-medium">{fornecedor.nome || '-'}</td>
                       <td className="px-2 py-1">{fornecedor.cnpj || '-'}</td>

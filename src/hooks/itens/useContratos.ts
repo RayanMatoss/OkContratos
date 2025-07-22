@@ -3,23 +3,9 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Contrato, FundoMunicipal } from "@/types";
 
-interface ContratoDB {
-  id: string;
-  numero: string;
-  fornecedor_id: string;
-  fornecedor?: { nome?: string };
-  fundo_municipal?: string[];
-  objeto: string;
-  valor: number;
-  data_inicio: string;
-  data_termino: string;
-  status: string;
-  created_at: string;
-}
-
 export const useContratos = () => {
   const { toast } = useToast();
-  const [contratos, setContratos] = useState<Contrato[]>([]);
+  const [contratos, setContratos] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
   const fetchContratos = async () => {
@@ -34,7 +20,7 @@ export const useContratos = () => {
 
       if (error) throw error;
 
-      const formattedContratos = (data as ContratoDB[]).map((contrato) => ({
+      const formattedContratos = data.map(contrato => ({
         id: contrato.id,
         numero: contrato.numero,
         fornecedorId: contrato.fornecedor_id,
@@ -54,12 +40,8 @@ export const useContratos = () => {
       }));
 
       setContratos(formattedContratos);
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error('Erro ao buscar contratos:', error.message);
-      } else {
-        console.error('Erro desconhecido ao buscar contratos:', error);
-      }
+    } catch (error: any) {
+      console.error('Erro ao buscar contratos:', error);
     } finally {
       setLoading(false);
     }

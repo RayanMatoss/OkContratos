@@ -1,5 +1,5 @@
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { OrdemFornecimento } from "@/types";
@@ -9,7 +9,7 @@ export const useOrdens = () => {
   const [ordens, setOrdens] = useState<OrdemFornecimento[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchOrdens = useCallback(async () => {
+  const fetchOrdens = async () => {
     try {
       const { data, error } = await supabase
         .from("ordens")
@@ -52,7 +52,7 @@ export const useOrdens = () => {
           valor: ordem.contrato.valor,
           dataInicio: new Date(ordem.contrato.data_inicio),
           dataTermino: new Date(ordem.contrato.data_termino),
-          status: ordem.contrato.status as string,
+          status: ordem.contrato.status as any,
           itens: [], // Empty array since we're not fetching items
           createdAt: new Date(ordem.created_at),
           fornecedor: ordem.contrato.fornecedor ? {
@@ -67,28 +67,26 @@ export const useOrdens = () => {
         } : undefined,
         dataEmissao: new Date(ordem.data_emissao),
         observacoes: "", // Add default empty observacoes
-        status: ordem.status as string,
+        status: ordem.status as any,
         itensConsumidos: [],
         createdAt: new Date(ordem.created_at)
       }));
 
       setOrdens(transformedOrdens);
-    } catch (error: unknown) {
-      let message = 'Erro desconhecido';
-      if (error instanceof Error) message = error.message;
+    } catch (error: any) {
       toast({
         title: "Erro ao carregar ordens",
-        description: message,
+        description: error.message,
         variant: "destructive",
       });
     } finally {
       setLoading(false);
     }
-  }, [toast]);
+  };
 
   useEffect(() => {
     fetchOrdens();
-  }, [fetchOrdens]);
+  }, []);
 
   return {
     ordens,

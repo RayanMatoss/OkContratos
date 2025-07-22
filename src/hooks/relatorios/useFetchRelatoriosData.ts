@@ -97,40 +97,12 @@ export const useFetchRelatoriosData = (periodoSelecionado: string) => {
   return { relatoriosMensais, loading, error };
 };
 
-interface ContratoRelatorio {
-  id: string;
-  numero: string;
-  valor: number;
-  data_inicio: string;
-  data_termino: string;
-  status: string;
-  created_at: string;
-}
-interface OrdemRelatorio {
-  id: string;
-  numero: string;
-  status: string;
-  data_emissao: string;
-  created_at: string;
-  contrato_id: string;
-}
-interface ItemConsumidoRelatorio {
-  quantidade: number;
-  item_id: string;
-  ordem_id: string;
-}
-interface ItemRelatorio {
-  id: string;
-  valor_unitario: number;
-  contrato_id: string;
-}
-
 // Helper function to process the raw data into monthly reports
 function processRelatoriosData(
-  contratos: ContratoRelatorio[],
-  ordens: OrdemRelatorio[],
-  itensConsumidos: ItemConsumidoRelatorio[],
-  itens: ItemRelatorio[],
+  contratos: any[],
+  ordens: any[],
+  itensConsumidos: any[],
+  itens: any[],
   numMeses: number
 ): RelatorioMensal[] {
   // Criar mapa de valores de itens para uso rápido

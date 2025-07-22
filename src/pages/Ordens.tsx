@@ -51,12 +51,10 @@ const Ordens = () => {
         title: "Ordem excluída",
         description: "A ordem foi excluída com sucesso",
       });
-    } catch (error: unknown) {
-      let message = 'Erro desconhecido';
-      if (error instanceof Error) message = error.message;
+    } catch (error: any) {
       toast({
         title: "Erro ao excluir ordem",
-        description: message,
+        description: error.message,
         variant: "destructive",
       });
     }

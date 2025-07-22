@@ -16,18 +16,10 @@ interface ContratoFormStepContentProps {
     fundo_municipal: FundoMunicipal[];
     data_inicio: Date;
     data_termino: Date;
-    items?: FormItem[];
+    items?: { descricao: string; quantidade: number }[];
   };
   fornecedores: Fornecedor[];
-  onFieldChange: (field: string, value: string | number | FormItem[] | Date) => void;
-}
-
-interface FormItem {
-  descricao: string;
-  quantidade: number;
-  unidade: string;
-  valor_unitario: number;
-  fundos: string[];
+  onFieldChange: (field: string, value: any) => void;
 }
 
 export const ContratoFormStepContent: React.FC<ContratoFormStepContentProps> = ({
@@ -40,15 +32,7 @@ export const ContratoFormStepContent: React.FC<ContratoFormStepContentProps> = (
   const fundoMunicipal = Array.isArray(formData.fundo_municipal) 
     ? formData.fundo_municipal 
     : [];
-
-  const items = (formData.items || []).map((item: FormItem) => ({
-    descricao: item.descricao || "",
-    quantidade: item.quantidade || 0,
-    unidade: item.unidade || "UN",
-    valor_unitario: item.valor_unitario || 0,
-    fundos: item.fundos || []
-  }));
-
+  
   switch (step) {
     case "basic":
       return (
@@ -72,6 +56,14 @@ export const ContratoFormStepContent: React.FC<ContratoFormStepContentProps> = (
     case "dates":
       return null;
     case "items":
+      // Corrigir tipagem: garantir que todos os campos existem
+      const items = (formData.items || []).map((item: any) => ({
+        descricao: item.descricao || "",
+        quantidade: item.quantidade || 0,
+        unidade: item.unidade || "UN",
+        valor_unitario: item.valor_unitario || item.valorUnitario || 0,
+        fundos: item.fundos || []
+      }));
       return (
         <ContratoItems
           items={items}

@@ -1,10 +1,9 @@
 import { useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useMunicipioFilter } from "../useMunicipioFilter";
-import { Fornecedor } from "@/types";
 
 export const useFetchFornecedores = () => {
-  const [fornecedores, setFornecedores] = useState<Fornecedor[]>([]);
+  const [fornecedores, setFornecedores] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const { filterByMunicipio } = useMunicipioFilter();
 
@@ -17,7 +16,7 @@ export const useFetchFornecedores = () => {
         .select("*");
       if (error) throw error;
       // Filtrar pelo município do usuário usando o campo correto
-      const filteredFornecedores = filterByMunicipio((data || []) as Fornecedor[], 'municipio_id');
+      const filteredFornecedores = filterByMunicipio(data || [], 'municipio_id');
       setFornecedores(filteredFornecedores);
     } catch (error) {
       console.error('Erro ao buscar fornecedores:', error);

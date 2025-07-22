@@ -18,7 +18,7 @@ export const useOrdemForm = (
   );
   const [contratoId, setContratoId] = useState(initialOrdem?.contratoId || "");
 
-  const { numero, setNumero, loadingNumero, fetchNextNumero } = useOrdemNumero(mode, initialOrdem?.numero);
+  const { numero, setNumero, loadingNumero } = useOrdemNumero(mode, initialOrdem?.numero);
   const { contratos } = useOrdemContratos();
   const { contratoItems, selectedItems, setSelectedItems, updateConsumedItems } = useOrdemItems(
     contratoId,
@@ -59,12 +59,10 @@ export const useOrdemForm = (
       });
 
       if (onSuccess) onSuccess();
-    } catch (error: unknown) {
-      let message = 'Erro desconhecido';
-      if (error instanceof Error) message = error.message;
+    } catch (error: any) {
       toast({
         title: "Erro",
-        description: message,
+        description: error.message,
         variant: "destructive",
       });
     } finally {
@@ -91,7 +89,7 @@ export const useOrdemForm = (
           description: "Este número de ordem já está em uso. Um novo número será sugerido.",
           variant: "destructive",
         });
-        await fetchNextNumero();
+        await useOrdemNumero().fetchNextNumero();
         throw new Error("Este número de ordem já está em uso");
       }
       throw ordemError;

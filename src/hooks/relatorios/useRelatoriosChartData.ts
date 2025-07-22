@@ -5,10 +5,8 @@ import { RelatorioMensal } from "@/types";
 export const useRelatoriosChartData = (
   relatoriosMensais: RelatorioMensal[]
 ) => {
-  const meses = useMemo(() => [
-    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", 
-    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
-  ], []);
+  const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", 
+                "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
   
   // Chart data transformations
   const contratosData = useMemo(() => {
@@ -18,7 +16,7 @@ export const useRelatoriosChartData = (
       ativos: r.contratosAtivos,
       vencidos: r.contratosVencidos,
     }));
-  }, [relatoriosMensais, meses]);
+  }, [relatoriosMensais]);
 
   const ordensData = useMemo(() => {
     return relatoriosMensais.map(r => ({
@@ -27,7 +25,7 @@ export const useRelatoriosChartData = (
       pendentes: r.ordensPendentes,
       concluidas: r.ordensConcluidas,
     }));
-  }, [relatoriosMensais, meses]);
+  }, [relatoriosMensais]);
 
   const financeiroData = useMemo(() => {
     return relatoriosMensais.map(r => ({
@@ -35,7 +33,7 @@ export const useRelatoriosChartData = (
       contratos: r.valorTotalContratos / 1000,
       ordens: r.valorTotalOrdens / 1000,
     }));
-  }, [relatoriosMensais, meses]);
+  }, [relatoriosMensais]);
 
   return { contratosData, ordensData, financeiroData, meses };
 };

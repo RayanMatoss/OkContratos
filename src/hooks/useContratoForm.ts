@@ -34,7 +34,7 @@ export const useContratoForm = ({
     items: contrato?.itens || []
   });
 
-  const handleFieldChange = (field: string, value: string | number | Item[] | Date | string[]) => {
+  const handleFieldChange = (field: string, value: any) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -104,12 +104,10 @@ export const useContratoForm = ({
 
       onSuccess?.();
       onOpenChange(false);
-    } catch (error: unknown) {
-      let message = 'Erro desconhecido';
-      if (error instanceof Error) message = error.message;
+    } catch (error: any) {
       toast({
         title: "Erro",
-        description: message,
+        description: error.message,
         variant: "destructive"
       });
     } finally {

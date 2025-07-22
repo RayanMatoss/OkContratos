@@ -16,5 +16,3 @@ export {
   formatFornecedor,
   type NewFornecedor
 };
-
-// TODO: Mover funções/constantes utilitárias para arquivo separado se houver.

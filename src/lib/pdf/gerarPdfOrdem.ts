@@ -42,8 +42,7 @@ export function gerarPdfOrdem(ordem, contrato, fornecedor, itens) {
   });
 
   // Get the final Y position from the table using proper typing
-  const autoTableState = (doc as unknown as { lastAutoTable?: { finalY?: number } });
-  const finalY = autoTableState.lastAutoTable?.finalY || 100;
+  const finalY = (doc as any).lastAutoTable?.finalY || 100;
 
   // Total geral
   const totalGeral = (itens || []).reduce((acc, item) => acc + (item.quantidade * (item.valor_unitario || item.valorUnitario)), 0);

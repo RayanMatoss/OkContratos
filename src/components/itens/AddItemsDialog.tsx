@@ -14,7 +14,6 @@ interface NewItem {
   quantidade: string;
   unidade: string;
   valor_unitario: string;
-  fundos?: string[];
 }
 
 interface AddItemsDialogProps {
@@ -27,9 +26,9 @@ interface AddItemsDialogProps {
 export const AddItemsDialog = ({ open, onOpenChange, onSuccess, contratos }: AddItemsDialogProps) => {
   const { toast } = useToast();
   const [selectedContrato, setSelectedContrato] = useState("");
-  const [itemsList, setItemsList] = useState<NewItem[]>([]);
+  const [itemsList, setItemsList] = useState<any[]>([]);
 
-  const handleAddItem = (newItem: NewItem) => {
+  const handleAddItem = (newItem: any) => {
     setItemsList([...itemsList, newItem]);
   };
 
@@ -69,12 +68,10 @@ export const AddItemsDialog = ({ open, onOpenChange, onSuccess, contratos }: Add
       setItemsList([]);
       setSelectedContrato("");
       onSuccess();
-    } catch (error: unknown) {
-      let message = 'Erro desconhecido';
-      if (error instanceof Error) message = error.message;
+    } catch (error: any) {
       toast({
         title: "Erro",
-        description: message,
+        description: error.message,
         variant: "destructive"
       });
     }

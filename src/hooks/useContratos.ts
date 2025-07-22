@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Contrato, FundoMunicipal } from "@/types";
@@ -22,7 +22,7 @@ export const useContratos = () => {
     return [];
   };
 
-  const fetchContratos = useCallback(async () => {
+  const fetchContratos = async () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
@@ -53,7 +53,7 @@ export const useContratos = () => {
         valor: contrato.valor,
         dataInicio: new Date(contrato.data_inicio),
         dataTermino: new Date(contrato.data_termino),
-        status: String(contrato.status),
+        status: contrato.status as any,
         createdAt: new Date(contrato.created_at),
         fornecedor: contrato.fornecedor ? {
           id: contrato.fornecedor.id,
@@ -62,7 +62,7 @@ export const useContratos = () => {
           email: contrato.fornecedor.email || "",
           telefone: contrato.fornecedor.telefone || "",
           endereco: contrato.fornecedor.endereco || "",
-          createdAt: new Date()
+          createdAt: new Date() // Since the fornecedor data from API doesn't include created_at
         } : undefined,
         itens: []
       }));
@@ -70,18 +70,16 @@ export const useContratos = () => {
       console.log('Contratos formatados:', formattedContratos);
 
       setContratos(formattedContratos);
-    } catch (error: unknown) {
-      let message = 'Erro desconhecido';
-      if (error instanceof Error) message = error.message;
+    } catch (error: any) {
       toast({
         title: "Erro ao carregar contratos",
-        description: message,
+        description: error.message,
         variant: "destructive"
       });
     } finally {
       setLoading(false);
     }
-  }, [toast]);
+  };
 
   const updateContrato = async (id: string, data: Partial<Omit<Contrato, 'id' | 'createdAt' | 'status'>>) => {
     try {
@@ -113,12 +111,10 @@ export const useContratos = () => {
       });
 
       return true;
-    } catch (error: unknown) {
-      let message = 'Erro desconhecido';
-      if (error instanceof Error) message = error.message;
+    } catch (error: any) {
       toast({
         title: "Erro ao atualizar contrato",
-        description: message,
+        description: error.message,
         variant: "destructive",
       });
       return false;
@@ -140,12 +136,10 @@ export const useContratos = () => {
         title: "Contrato excluído",
         description: "O contrato foi excluído com sucesso",
       });
-    } catch (error: unknown) {
-      let message = 'Erro desconhecido';
-      if (error instanceof Error) message = error.message;
+    } catch (error: any) {
       toast({
         title: "Erro ao excluir contrato",
-        description: message,
+        description: error.message,
         variant: "destructive",
       });
     }
@@ -172,7 +166,7 @@ export const useContratos = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [fetchContratos]);
+  }, []);
 
   return { contratos, loading, fetchContratos, deleteContrato, updateContrato };
 };

@@ -65,12 +65,10 @@ export const EditItemDialog = ({ open, onOpenChange, onSuccess, item }: EditItem
       
       onSuccess();
       onOpenChange(false);
-    } catch (error: unknown) {
-      let message = 'Erro desconhecido';
-      if (error instanceof Error) message = error.message;
+    } catch (error: any) {
       toast({
         title: "Erro ao atualizar item",
-        description: message,
+        description: error.message,
         variant: "destructive"
       });
     }

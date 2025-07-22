@@ -17,17 +17,7 @@ interface AddContratoFormProps {
   onCancel: () => void;
   fornecedores: Fornecedor[];
   isEditing?: boolean;
-  contratoToEdit?: {
-    id: string;
-    numero: string;
-    fundoMunicipal: FundoMunicipal[];
-    objeto: string;
-    valor: number;
-    dataInicio: Date | string;
-    dataTermino: Date | string;
-    fornecedorId: string;
-    fornecedor?: Fornecedor;
-  };
+  contratoToEdit?: any;
 }
 
 interface ContratoForm {
@@ -133,12 +123,10 @@ export const AddContratoForm = ({
         description: "Contrato salvo com sucesso",
       });
       onSuccess();
-    } catch (error: unknown) {
-      let message = 'Erro desconhecido';
-      if (error instanceof Error) message = error.message;
+    } catch (error: any) {
       toast({
         title: "Erro",
-        description: message,
+        description: error.message,
         variant: "destructive"
       });
     }

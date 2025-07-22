@@ -42,7 +42,7 @@ export const FornecedorFormDialog = ({
     if (fornecedor.cnpj !== cnpjValue) {
       handleCnpjChange(fornecedor.cnpj);
     }
-  }, [fornecedor.cnpj, cnpjValue, handleCnpjChange]);
+  }, [fornecedor.cnpj]);
   
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

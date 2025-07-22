@@ -21,7 +21,7 @@ const Itens = () => {
 
   useEffect(() => {
     fetchItens();
-  }, [fetchItens]);
+  }, []);
 
   useEffect(() => {
     const fetchContratos = async () => {
@@ -44,18 +44,16 @@ const Itens = () => {
             valor: contrato.valor,
             dataInicio: new Date(contrato.data_inicio),
             dataTermino: new Date(contrato.data_termino),
-            status: String(contrato.status),
+            status: contrato.status as any,
             createdAt: new Date(contrato.created_at),
             itens: []
           }));
           setContratos(contratosFormatados);
         }
-      } catch (error: unknown) {
-        let message = 'Erro desconhecido';
-        if (error instanceof Error) message = error.message;
+      } catch (error: any) {
         toast({
           title: "Erro ao buscar contratos",
-          description: message,
+          description: error.message,
           variant: "destructive",
         });
       }
@@ -134,7 +132,7 @@ const Itens = () => {
         open={showForm}
         onOpenChange={setShowForm}
         onSuccess={handleFormSuccess}
-        item={editingItem}
+        item={editingItem as any}
         mode={formMode}
         contratos={contratos}
       />

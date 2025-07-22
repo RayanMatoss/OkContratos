@@ -45,12 +45,10 @@ export const useItensCrud = () => {
 
       if (error) throw error;
       setItens(data || []);
-    } catch (error: unknown) {
-      let message = 'Erro desconhecido';
-      if (error instanceof Error) message = error.message;
+    } catch (error: any) {
       toast({
         title: "Erro",
-        description: message,
+        description: error.message,
         variant: "destructive"
       });
     } finally {
@@ -89,12 +87,10 @@ export const useItensCrud = () => {
         title: "Item excluído",
         description: "O item foi excluído com sucesso",
       });
-    } catch (error: unknown) {
-      let message = 'Erro desconhecido';
-      if (error instanceof Error) message = error.message;
+    } catch (error: any) {
       toast({
         title: "Erro ao excluir item",
-        description: message,
+        description: error.message,
         variant: "destructive",
       });
     }

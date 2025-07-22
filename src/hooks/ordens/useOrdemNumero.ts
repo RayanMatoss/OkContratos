@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -7,7 +7,7 @@ export const useOrdemNumero = (mode: 'create' | 'edit' = 'create', initialNumero
   const [numero, setNumero] = useState(initialNumero || "");
   const [loadingNumero, setLoadingNumero] = useState(mode === 'create');
 
-  const fetchNextNumero = useCallback(async () => {
+  const fetchNextNumero = async () => {
     setLoadingNumero(true);
     try {
       const { data, error } = await supabase
@@ -15,25 +15,23 @@ export const useOrdemNumero = (mode: 'create' | 'edit' = 'create', initialNumero
 
       if (error) throw error;
       setNumero(data);
-    } catch (error: unknown) {
-      let message = 'Erro desconhecido';
-      if (error instanceof Error) message = error.message;
+    } catch (error: any) {
       toast({
         title: "Erro",
-        description: "Erro ao gerar próximo número da ordem" + (message ? `: ${message}` : ''),
+        description: "Erro ao gerar próximo número da ordem",
         variant: "destructive",
       });
     } finally {
       setLoadingNumero(false);
     }
-  }, [toast]);
+  };
 
   // Chamar automaticamente ao abrir o formulário de criação
   useEffect(() => {
     if (mode === 'create') {
       fetchNextNumero();
     }
-  }, [mode, fetchNextNumero]);
+  }, [mode]);
 
   return {
     numero,

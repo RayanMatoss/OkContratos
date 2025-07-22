@@ -1,12 +1,8 @@
 
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
 
-interface BarChartData {
-  [key: string]: string | number;
-}
-
 interface BarChartProps {
-  data: BarChartData[];
+  data: any[];
   xAxisKey: string;
   barKey: string;
   barName: string;

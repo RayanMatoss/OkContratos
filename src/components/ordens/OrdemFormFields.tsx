@@ -16,7 +16,7 @@ interface OrdemFormFieldsProps {
   setData: (date: Date | undefined) => void;
   contratoId: string;
   setContratoId: (id: string) => void;
-  contratos: { id: string; numero: string; objeto: string; fornecedor?: { nome: string }; fornecedores?: { nome: string } }[];
+  contratos: any[];
   loadingNumero?: boolean;
   mode?: 'create' | 'edit';
 }

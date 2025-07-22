@@ -28,12 +28,10 @@ export const useFornecedoresCrud = () => {
         description: "O fornecedor foi adicionado com sucesso",
       });
       return true;
-    } catch (error: unknown) {
-      let message = 'Erro desconhecido';
-      if (error instanceof Error) message = error.message;
+    } catch (error: any) {
       toast({
         title: "Erro ao adicionar fornecedor",
-        description: message,
+        description: error.message,
         variant: "destructive",
       });
       return false;
@@ -63,12 +61,10 @@ export const useFornecedoresCrud = () => {
         description: "O fornecedor foi atualizado com sucesso",
       });
       return true;
-    } catch (error: unknown) {
-      let message = 'Erro desconhecido';
-      if (error instanceof Error) message = error.message;
+    } catch (error: any) {
       toast({
         title: "Erro ao atualizar fornecedor",
-        description: message,
+        description: error.message,
         variant: "destructive",
       });
       return false;
@@ -92,12 +88,10 @@ export const useFornecedoresCrud = () => {
         description: "O fornecedor foi excluído com sucesso",
       });
       return true;
-    } catch (error: unknown) {
-      let message = 'Erro desconhecido';
-      if (error instanceof Error) message = error.message;
+    } catch (error: any) {
       toast({
         title: "Erro ao excluir fornecedor",
-        description: message,
+        description: error.message,
         variant: "destructive",
       });
       return false;

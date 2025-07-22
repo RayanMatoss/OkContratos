@@ -1,35 +1,6 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-
-interface ContratoResumido {
-  id: string;
-  numero: string;
-  fornecedor: { nome: string };
-  data_termino: string;
-  status: string;
-  objeto?: string;
-  valor?: number;
-}
-interface OrdemPendente {
-  id: string;
-  numero: string;
-  status: string;
-}
-interface ItemAlerta {
-  id: string;
-  descricao: string;
-  quantidade: number;
-  quantidade_consumida: number;
-  contratos?: { numero?: string; fornecedores?: { nome?: string } };
-}
-interface FornecedorResumido {
-  id: string;
-  nome: string;
-  cnpj?: string;
-  email?: string;
-  telefone?: string;
-}
 
 interface DashboardData {
   totalContratos: number;
@@ -38,10 +9,10 @@ interface DashboardData {
   ordensPendentes: number;
   statusContratosData: { name: string; value: number; color: string }[];
   ordensData: { name: string; value: number }[];
-  contratosRecentes: ContratoResumido[];
-  ordensPendentesLista: OrdemPendente[];
-  itensAlerta: ItemAlerta[];
-  fornecedores: FornecedorResumido[];
+  contratosRecentes: any[];
+  ordensPendentesLista: any[];
+  itensAlerta: any[];
+  fornecedores: any[]; // ADICIONADO
 }
 
 export const useDashboardData = () => {
@@ -60,7 +31,7 @@ export const useDashboardData = () => {
   });
   const [loading, setLoading] = useState(true);
 
-  const fetchDashboardData = useCallback(async () => {
+  const fetchDashboardData = async () => {
     try {
       setLoading(true);
       
@@ -198,22 +169,20 @@ export const useDashboardData = () => {
         fornecedores: fornecedores || [], // ADICIONADO
       });
 
-    } catch (error: unknown) {
-      let message = 'Erro desconhecido';
-      if (error instanceof Error) message = error.message;
+    } catch (error: any) {
       toast({
         title: "Erro ao carregar dados",
-        description: message,
+        description: error.message,
         variant: "destructive",
       });
     } finally {
       setLoading(false);
     }
-  }, [toast]);
+  };
 
   useEffect(() => {
     fetchDashboardData();
-  }, [fetchDashboardData]);
+  }, []);
 
   return { data, loading, refetch: fetchDashboardData };
 };

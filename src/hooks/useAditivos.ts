@@ -70,10 +70,8 @@ export function useAditivos(contratoId: string) {
           const errorData = await response.json();
           throw new Error(errorData.message || 'Erro ao aplicar aditivo');
         }
-      } catch (error: unknown) {
-        let message = 'Erro desconhecido';
-        if (error instanceof Error) message = error.message;
-        toast({ title: "Erro ao aplicar aditivo", description: message, variant: "destructive" });
+      } catch (error: any) {
+        toast({ title: "Erro ao aplicar aditivo", description: error.message, variant: "destructive" });
         return false;
       }
     }

@@ -5,13 +5,6 @@ import { Input } from "@/components/ui/input";
 import { useAditivos } from "@/hooks/useAditivos";
 import { TipoAditivo } from "@/types";
 
-interface AditivoPayload {
-  contrato_id: string;
-  tipo: string;
-  nova_data_termino?: string;
-  percentual_itens?: number;
-}
-
 interface AditivoFormDialogProps {
   contratoId: string;
   open: boolean;
@@ -29,7 +22,7 @@ const AditivoFormDialog = ({ contratoId, open, onOpenChange, onSuccess }: Aditiv
     e.preventDefault();
     if (tipo === "periodo" && !novaDataTermino) return;
     if (tipo === "valor" && !percentual) return;
-    const aditivo: AditivoPayload = {
+    const aditivo: any = {
       contrato_id: contratoId,
       tipo,
     };

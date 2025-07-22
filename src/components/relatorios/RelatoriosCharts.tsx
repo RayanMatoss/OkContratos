@@ -3,30 +3,13 @@ import ChartContainer from "@/components/ChartContainer";
 import StatisticsDonut from "@/components/StatisticsDonut";
 import BarChartComponent from "@/components/BarChartComponent";
 
-interface ContratoChartData {
-  name: string;
-  value: number;
-}
-interface OrdemChartData {
-  name: string;
-  total: number;
-}
-interface FinanceiroChartData {
-  name: string;
-  contratos: number;
-}
-interface StatusChartData {
-  name: string;
-  value: number;
-}
-
 interface RelatoriosChartsProps {
   activeTab: string;
-  contratosData: ContratoChartData[];
-  ordensData: OrdemChartData[];
-  financeiroData: FinanceiroChartData[];
-  statusContratosData: StatusChartData[];
-  statusOrdensData: StatusChartData[];
+  contratosData: any[];
+  ordensData: any[];
+  financeiroData: any[];
+  statusContratosData: any[];
+  statusOrdensData: any[];
 }
 
 export const RelatoriosCharts = ({
