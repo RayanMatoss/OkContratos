@@ -15,7 +15,7 @@ interface AuthContextType {
   loading: boolean;
   municipio: Municipio | null;
   perfil: string | null;
-  login: (email: string, password: string, municipioId: string, fundosSelecionados: string[]) => Promise<boolean>;
+  login: (username: string, password: string, municipioId: string, fundosSelecionados: string[]) => Promise<boolean>;
   logout: () => void;
 }
 
@@ -49,10 +49,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  const login = async (email: string, password: string, municipioId: string, fundosSelecionados: string[]) => {
+  const login = async (username: string, password: string, municipioId: string, fundosSelecionados: string[]) => {
     setLoading(true);
     try {
-      // Autentica no Supabase
+      // Primeiro, buscar o email pelo username
+      const { data: userData, error: userError } = await supabase
+        .rpc('get_user_by_username', { p_username: username });
+
+      if (userError || !userData || userData.length === 0) {
+        setLoading(false);
+        return false;
+      }
+
+      const userInfo = userData[0];
+      const email = userInfo.email;
+
+      // Autentica no Supabase usando o email encontrado
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error || !data.session) {
         setLoading(false);
@@ -61,34 +73,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       setUser(data.user); // Garante atualização do contexto
 
-      // Busca o perfil do usuário
-      const { data: profile, error: profileError } = await supabase
-        .from('user_profiles')
-        .select('municipio_id, permissao, fundo_municipal')
-        .eq('user_id', data.user.id)
-        .single();
-
-      if (profileError || !profile) {
-        setLoading(false);
-        return false;
-      }
-
       // Verifica se o município bate
-      if ((profile as UserProfile).municipio_id !== municipioId) {
+      if (userInfo.municipio_id !== municipioId) {
         setLoading(false);
         return false;
       }
 
       // Verifica se o fundo/secretaria bate
-      const fundosPerfil = (profile as UserProfile).fundo_municipal || [];
+      const fundosPerfil = userInfo.fundo_municipal || [];
       const temFundo = fundosSelecionados.some(f => fundosPerfil.includes(f));
       if (!temFundo) {
         setLoading(false);
         return false;
       }
 
-      setPerfil((profile as UserProfile).permissao || null);
-      localStorage.setItem('perfil', (profile as UserProfile).permissao || '');
+      setPerfil(userInfo.permissao || null);
+      localStorage.setItem('perfil', userInfo.permissao || '');
 
       // Busca os dados do município
       const { data: municipio, error: municipioError } = await supabase

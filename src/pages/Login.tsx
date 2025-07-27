@@ -16,7 +16,7 @@ const Login = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { login } = useAuth();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [municipioId, setMunicipioId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -62,7 +62,7 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      const success = await login(email, password, municipioId, selectedFundos);
+      const success = await login(username, password, municipioId, selectedFundos);
       
       if (success) {
         toast({
@@ -75,7 +75,7 @@ const Login = () => {
       } else {
         toast({
           title: "Erro ao fazer login",
-          description: "Email, senha, município ou fundo/secretaria inválidos.",
+          description: "Nome de usuário, senha, município ou fundo/secretaria inválidos.",
           variant: "destructive",
         });
       }
@@ -109,13 +109,13 @@ const Login = () => {
 
         <form onSubmit={handleLogin} className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="username">Nome de Usuário</Label>
             <Input
-              id="email"
-              type="email"
-              placeholder="Digite seu email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              id="username"
+              type="text"
+              placeholder="Digite seu nome de usuário"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
             />
           </div>

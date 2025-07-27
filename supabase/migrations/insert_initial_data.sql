@@ -12,14 +12,23 @@
 -- 2. Função para criar perfil de usuário automaticamente
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
+DECLARE
+    v_nome VARCHAR(255);
+    v_username VARCHAR(50);
 BEGIN
-    INSERT INTO public.user_profiles (user_id, nome, cargo, permissao, municipio_id)
+    v_nome := COALESCE(NEW.raw_user_meta_data->>'nome', 'Usuário');
+    
+    -- Gerar username baseado no nome
+    v_username := generate_username(v_nome);
+    
+    INSERT INTO public.user_profiles (user_id, nome, cargo, permissao, municipio_id, username)
     VALUES (
         NEW.id,
-        COALESCE(NEW.raw_user_meta_data->>'nome', 'Usuário'),
+        v_nome,
         COALESCE(NEW.raw_user_meta_data->>'cargo', 'Analista'),
         COALESCE(NEW.raw_user_meta_data->>'permissao', 'basico'),
-        '550e8400-e29b-41d4-a716-446655440001' -- Capela do Alto Alegre
+        '550e8400-e29b-41d4-a716-446655440001', -- Capela do Alto Alegre
+        v_username
     );
     RETURN NEW;
 END;
