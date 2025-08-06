@@ -1,8 +1,9 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Contrato, ContratoFormValues, Item } from "@/types";
+import { useAuth } from "@/hooks/useAuth";
 
 export type FormStep = 'basic' | 'items';
 
@@ -20,6 +21,7 @@ export const useContratoForm = ({
   onOpenChange
 }: UseContratoFormProps) => {
   const { toast } = useToast();
+  const { fundosSelecionados } = useAuth();
   const [loading, setLoading] = useState(false);
   const [formStep, setFormStep] = useState<FormStep>('basic');
 
@@ -28,11 +30,33 @@ export const useContratoForm = ({
     objeto: contrato?.objeto || "",
     fornecedor_ids: contrato?.fornecedorIds || [],
     valor: contrato?.valor?.toString() || "",
-    fundo_municipal: contrato?.fundoMunicipal || [],
+    fundo_municipal: contrato?.fundoMunicipal || fundosSelecionados || [],
     data_inicio: contrato?.dataInicio || new Date(),
     data_termino: contrato?.dataTermino || new Date(),
     items: contrato?.itens || []
   });
+
+  // Atualizar formData quando o contrato ou fundosSelecionados mudar
+  useEffect(() => {
+    if (contrato) {
+      setFormData({
+        numero: contrato.numero || "",
+        objeto: contrato.objeto || "",
+        fornecedor_ids: contrato.fornecedorIds || [],
+        valor: contrato.valor?.toString() || "",
+        fundo_municipal: contrato.fundoMunicipal || fundosSelecionados || [],
+        data_inicio: contrato.dataInicio || new Date(),
+        data_termino: contrato.dataTermino || new Date(),
+        items: contrato.itens || []
+      });
+    } else {
+      // Para novos contratos, usar os fundos selecionados no login
+      setFormData(prev => ({
+        ...prev,
+        fundo_municipal: fundosSelecionados || []
+      }));
+    }
+  }, [contrato, fundosSelecionados]);
 
   const handleFieldChange = (field: string, value: any) => {
     setFormData(prev => ({
@@ -56,18 +80,29 @@ export const useContratoForm = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    console.log('FORM DATA ENVIADO:', formData);
 
     try {
+      // Garantir que fornecedor_id seja uma string válida
+      const fornecedorId = Array.isArray(formData.fornecedor_ids) && formData.fornecedor_ids.length > 0
+        ? formData.fornecedor_ids[0]
+        : (typeof formData.fornecedor_ids === 'string' ? formData.fornecedor_ids : '');
+
+      if (!fornecedorId) {
+        throw new Error('É necessário selecionar pelo menos um fornecedor');
+      }
+
       if (mode === 'edit' && contrato) {
         // Edição: atualizar contrato
         const contratoData = {
           numero: formData.numero,
-          fundo_municipal: formData.fundo_municipal,
+          fundo_municipal: Array.isArray(formData.fundo_municipal)
+            ? formData.fundo_municipal
+            : (formData.fundo_municipal ? [formData.fundo_municipal] : []),
           objeto: formData.objeto,
           valor: parseFloat(formData.valor),
           data_inicio: formData.data_inicio.toISOString(),
           data_termino: formData.data_termino.toISOString(),
+          fornecedor_id: fornecedorId
         };
 
         const { error: contratoError } = await supabase
@@ -76,63 +111,27 @@ export const useContratoForm = ({
           .eq('id', contrato.id);
 
         if (contratoError) throw contratoError;
-
-        // Atualizar fornecedores do contrato
-        if (Array.isArray(formData.fornecedor_ids)) {
-          // Remover todos os fornecedores existentes
-          const { error: deleteError } = await supabase
-            .from('contrato_fornecedores')
-            .delete()
-            .eq('contrato_id', contrato.id);
-
-          if (deleteError) throw deleteError;
-
-          // Adicionar os novos fornecedores
-          if (formData.fornecedor_ids.length > 0) {
-            const fornecedoresToInsert = formData.fornecedor_ids.map(fornecedorId => ({
-              contrato_id: contrato.id,
-              fornecedor_id: fornecedorId
-            }));
-
-            const { error: insertError } = await supabase
-              .from('contrato_fornecedores')
-              .insert(fornecedoresToInsert);
-
-            if (insertError) throw insertError;
-          }
-        }
       } else {
         // Criação: criar contrato primeiro
-        const { data: contratoData, error: contratoError } = await supabase
+        const contratoData = {
+          numero: formData.numero,
+          fundo_municipal: Array.isArray(formData.fundo_municipal)
+            ? formData.fundo_municipal
+            : (formData.fundo_municipal ? [formData.fundo_municipal] : []),
+          objeto: formData.objeto,
+          valor: parseFloat(formData.valor),
+          data_inicio: formData.data_inicio.toISOString().split('T')[0],
+          data_termino: formData.data_termino.toISOString().split('T')[0],
+          fornecedor_id: fornecedorId
+        };
+
+        const { data: newContrato, error: contratoError } = await supabase
           .from('contratos')
-          .insert({
-            numero: formData.numero,
-            fundo_municipal: Array.isArray(formData.fundo_municipal)
-              ? formData.fundo_municipal
-              : (formData.fundo_municipal ? [formData.fundo_municipal] : []),
-            objeto: formData.objeto,
-            valor: parseFloat(formData.valor),
-            data_inicio: formData.data_inicio.toISOString().split('T')[0],
-            data_termino: formData.data_termino.toISOString().split('T')[0],
-          })
+          .insert([contratoData])
           .select()
           .single();
 
         if (contratoError) throw contratoError;
-
-        // Adicionar fornecedores ao contrato
-        if (contratoData && Array.isArray(formData.fornecedor_ids) && formData.fornecedor_ids.length > 0) {
-          const fornecedoresToInsert = formData.fornecedor_ids.map(fornecedorId => ({
-            contrato_id: contratoData.id,
-            fornecedor_id: fornecedorId
-          }));
-
-          const { error: fornecedoresError } = await supabase
-            .from('contrato_fornecedores')
-            .insert(fornecedoresToInsert);
-
-          if (fornecedoresError) throw fornecedoresError;
-        }
       }
 
       toast({

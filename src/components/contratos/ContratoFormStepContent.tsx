@@ -28,11 +28,6 @@ export const ContratoFormStepContent: React.FC<ContratoFormStepContentProps> = (
   fornecedores,
   onFieldChange
 }) => {
-  // Ensure fundo_municipal is always an array
-  const fundoMunicipal = Array.isArray(formData.fundo_municipal) 
-    ? formData.fundo_municipal 
-    : [];
-  
   // Ensure fornecedor_ids is always an array
   const fornecedorIds = Array.isArray(formData.fornecedor_ids) 
     ? formData.fornecedor_ids 
@@ -45,7 +40,6 @@ export const ContratoFormStepContent: React.FC<ContratoFormStepContentProps> = (
           <ContratoBasicInfo 
             numero={formData.numero || ""}
             fornecedorIds={fornecedorIds}
-            fundoMunicipal={fundoMunicipal}
             objeto={formData.objeto || ""}
             valor={formData.valor || ""}
             fornecedores={fornecedores || []}
@@ -78,7 +72,7 @@ export const ContratoFormStepContent: React.FC<ContratoFormStepContentProps> = (
             newItems.splice(index, 1);
             onFieldChange("items", newItems);
           }}
-          fundosMunicipais={fundoMunicipal}
+          fundosMunicipais={formData.fundo_municipal || []}
         />
       );
     default:

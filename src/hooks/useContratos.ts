@@ -39,6 +39,7 @@ export const useContratos = () => {
       if (error) throw error;
 
       const formattedContratos: Contrato[] = data.map(contrato => {
+        
         let fornecedores: any[] = [];
         let fornecedorIds: string[] = [];
 
@@ -69,11 +70,13 @@ export const useContratos = () => {
           fundos: item.fundos || []
         })) || [];
 
+        const fundoMunicipal = parseFundoMunicipal(contrato.fundo_municipal);
+
         return {
           id: contrato.id,
           numero: contrato.numero,
           fornecedorIds: fornecedorIds,
-          fundoMunicipal: parseFundoMunicipal(contrato.fundo_municipal),
+          fundoMunicipal: fundoMunicipal,
           objeto: contrato.objeto,
           valor: contrato.valor,
           dataInicio: new Date(contrato.data_inicio),
@@ -97,9 +100,37 @@ export const useContratos = () => {
     }
   };
 
+  // Função para atualizar contratos existentes com fundos do usuário
+  const atualizarContratosComFundos = async (fundosUsuario: string[]) => {
+    try {
+      // Buscar contratos que não têm fundos associados
+      const { data: contratosSemFundos, error } = await supabase
+        .from("contratos")
+        .select("id, fundo_municipal")
+        .or("fundo_municipal.is.null,fundo_municipal.eq.[]");
+
+      if (error) throw error;
+
+      if (contratosSemFundos && contratosSemFundos.length > 0) {
+        // Atualizar contratos sem fundos
+        const { error: updateError } = await supabase
+          .from("contratos")
+          .update({ fundo_municipal: fundosUsuario })
+          .in("id", contratosSemFundos.map(c => c.id));
+
+        if (updateError) throw updateError;
+
+        // Recarregar contratos
+        await fetchContratos();
+      }
+    } catch (error: any) {
+      console.error("Erro ao atualizar contratos com fundos:", error);
+    }
+  };
+
   useEffect(() => {
     fetchContratos();
   }, []);
 
-  return { contratos, loading, fetchContratos };
+  return { contratos, loading, fetchContratos, atualizarContratosComFundos };
 };

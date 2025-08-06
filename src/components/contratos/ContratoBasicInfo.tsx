@@ -1,14 +1,12 @@
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import FornecedorSelector from "./FornecedorSelector";
-import FundoMunicipalSelector from "./FundoMunicipalSelector";
 import { FundoMunicipal, Fornecedor } from "@/types";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 
 interface ContratoBasicInfoProps {
   numero: string;
   fornecedorIds: string | string[];
-  fundoMunicipal: FundoMunicipal[];
   objeto: string;
   valor: string;
   fornecedores: Fornecedor[];
@@ -24,9 +22,6 @@ const ContratoBasicInfo = ({
   fornecedores = [], // Default empty array for fornecedores
   onFieldChange
 }: ContratoBasicInfoProps) => {
-  // Ensure fundoMunicipal is always an array
-  const selectedFundos = Array.isArray(fundoMunicipal) ? fundoMunicipal : [];
-  
   // Ensure fornecedorIds is always an array
   const selectedFornecedores = Array.isArray(fornecedorIds) ? fornecedorIds : (fornecedorIds ? [fornecedorIds] : []);
 
