@@ -1,0 +1,71 @@
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import FornecedorSelector from "./FornecedorSelector";
+import { FundoMunicipal, Fornecedor } from "@/types";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+
+interface ContratoBasicInfoProps {
+  numero: string;
+  fornecedorIds: string | string[];
+  objeto: string;
+  valor: string;
+  fornecedores: Fornecedor[];
+  onFieldChange: (field: string, value: any) => void;
+}
+
+const ContratoBasicInfo = ({
+  numero,
+  fornecedorIds,
+  fundoMunicipal = [], // Always provide a default empty array
+  objeto,
+  valor,
+  fornecedores = [], // Default empty array for fornecedores
+  onFieldChange
+}: ContratoBasicInfoProps) => {
+  // Ensure fornecedorIds is always an array
+  const selectedFornecedores = Array.isArray(fornecedorIds) ? fornecedorIds : (fornecedorIds ? [fornecedorIds] : []);
+
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="numero">Número do Contrato</Label>
+        <Input
+          id="numero"
+          placeholder="Digite o número do contrato"
+          value={numero}
+          onChange={(e) => onFieldChange("numero", e.target.value)}
+        />
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="fornecedores">Fornecedores</Label>
+        <FornecedorSelector
+          value={selectedFornecedores}
+          onChange={(value) => onFieldChange("fornecedor_ids", value)}
+          fornecedores={fornecedores}
+          isMulti={true}
+        />
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="valor">Valor do Contrato</Label>
+        <Input
+          id="valor"
+          type="number"
+          placeholder="Digite o valor"
+          value={valor}
+          onChange={(e) => onFieldChange("valor", e.target.value)}
+        />
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="objeto">Objeto do Contrato</Label>
+        <Input
+          id="objeto"
+          placeholder="Digite o objeto do contrato"
+          value={objeto}
+          onChange={(e) => onFieldChange("objeto", e.target.value)}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default ContratoBasicInfo;

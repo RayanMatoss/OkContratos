@@ -1,0 +1,252 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%; /* branco */
+    --foreground: 240 10% 10%; /* preto/cinza bem escuro */
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 10%;
+
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 217.2 32.6% 90%;
+    --secondary-foreground: 240 10% 10%;
+
+    --muted: 240 4% 95%;
+    --muted-foreground: 240 5% 30%;
+
+    --accent: 217.2 32.6% 90%;
+    --accent-foreground: 240 10% 10%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 5% 70%; /* borda mais escura */
+    --input: 240 5% 70%; /* input mais escuro */
+    --ring: 217.2 91.2% 59.8%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 240 10% 10%;
+    --sidebar-primary: 217.2 91.2% 59.8%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 4% 95%;
+    --sidebar-accent-foreground: 240 5% 30%;
+    --sidebar-border: 240 5% 70%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 50.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 217.2 91.2% 59.8%;
+    --radius: 0.5rem;
+    --sidebar-background: 240 10% 3.9%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 217.2 91.2% 59.8%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 5% 64.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  .card-gradient {
+    @apply bg-gradient-to-br from-card to-secondary/80 backdrop-blur-sm;
+  }
+
+  .glass-effect {
+    @apply bg-black/20 backdrop-blur-md border border-white/10;
+  }
+
+  .hover-card {
+    @apply transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 hover:border-primary/30;
+  }
+
+  .text-shadow-light {
+    text-shadow: 1px 1px 2px #222, 0 0 1px #222;
+  }
+}
+
+#lovable-badge {
+  opacity: 0.08 !important;
+  transform: scale(0.4) !important;
+  transition: opacity 0.3s;
+  position: fixed !important;
+  left: 50% !important;
+  bottom: -30px !important;
+  z-index: 9999 !important;
+  translate: -50% 0;
+}
+
+#lovable-badge:hover {
+  opacity: 0.25 !important;
+}
+
+/* Bloco de notas tipo caderno */
+.notebook-container {
+  background: #f8f8fa;
+  border-radius: 16px;
+  border: 3px double #d32f2f;
+  box-shadow: 0 2px 8px #0001;
+  position: relative;
+}
+.notebook-spirals {
+  display: flex;
+  gap: 0;
+  position: absolute;
+  top: -18px;
+  left: 0;
+  width: 100%;
+  justify-content: space-between;
+  padding: 0 18px;
+}
+.notebook-spiral {
+  width: 8px;
+  height: 32px;
+  background: #eee;
+  border: 2px solid #444;
+  border-radius: 8px;
+  box-shadow: 2px 0 #888;
+}
+.notebook-lines {
+  position: absolute;
+  left: 0; right: 0; top: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+.notebook-line {
+  height: 32px;
+  border-bottom: 1px solid #c2c2c2;
+}
+.notebook-textarea {
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: vertical;
+  width: 100%;
+  height: 100%;
+  color: #222;
+  font-size: 1rem;
+  padding: 32px 16px 16px 16px;
+  position: relative;
+  z-index: 2;
+}
+.dark .notebook-container {
+  background: #23232b;
+  border-color: #1976d2;
+}
+.dark .notebook-line {
+  border-bottom: 1px solid #444a;
+}
+.dark .notebook-textarea {
+  color: #fff;
+}
+
+/* Garante que os itens do dropdown aceitam clique */
+[data-radix-collection-item], .select__option, .command-item, .dropdown-item {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+/* Garante que o modal está acima dos outros elementos */
+[role="dialog"], .modal, .DialogContent {
+  z-index: 1050 !important;
+}
+
+/* Tenta esconder overlays que possam estar cobrindo o dropdown */
+.overlay, .modal-backdrop {
+  pointer-events: none !important;
+}
+
+/* Estilos para react-select no modo escuro */
+.dark .select__control {
+  background-color: hsl(240 10% 3.9%) !important;
+  border-color: hsl(240 3.7% 15.9%) !important;
+  color: hsl(0 0% 98%) !important;
+}
+
+.dark .select__control:hover {
+  border-color: hsl(240 3.7% 15.9%) !important;
+}
+
+.dark .select__control--is-focused {
+  border-color: hsl(217.2 91.2% 59.8%) !important;
+  box-shadow: 0 0 0 2px hsl(217.2 91.2% 59.8% / 0.2) !important;
+}
+
+.dark .select__menu {
+  background-color: hsl(240 10% 3.9%) !important;
+  border: 1px solid hsl(240 3.7% 15.9%) !important;
+}
+
+.dark .select__option {
+  background-color: hsl(240 10% 3.9%) !important;
+  color: hsl(0 0% 98%) !important;
+}
+
+.dark .select__option--is-focused {
+  background-color: hsl(217.2 32.6% 17.5%) !important;
+}
+
+.dark .select__option--is-selected {
+  background-color: hsl(217.2 91.2% 59.8%) !important;
+}
+
+.dark .select__single-value {
+  color: hsl(0 0% 98%) !important;
+}
+
+.dark .select__placeholder {
+  color: hsl(240 5% 64.9%) !important;
+}
+
+.dark .select__multi-value {
+  background-color: hsl(240 3.7% 15.9%) !important;
+  color: hsl(0 0% 98%) !important;
+}
+
+.dark .select__multi-value__label {
+  color: hsl(0 0% 98%) !important;
+}
+
+.dark .select__multi-value__remove:hover {
+  background-color: hsl(0 62.8% 50.6%) !important;
+  color: hsl(0 0% 98%) !important;
+}
+
+.dark .select__input {
+  color: hsl(0 0% 98%) !important;
+}
