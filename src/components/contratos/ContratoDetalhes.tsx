@@ -15,13 +15,14 @@ import { Button } from "@/components/ui/button";
 import { Edit, Eye, Plus, TrendingDown, TrendingUp, DollarSign } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
-import AditivoForm from "./AditivoForm";
+import AditivoFormDialog from "./AditivoFormDialog";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useContratoSaldo } from "@/hooks/useContratoSaldo";
 import { useAuth } from "@/hooks/useAuth";
+import ContratosRelacionados from "./ContratosRelacionados";
 
 interface ContratoDetalhesProps {
   contrato: Contrato;
@@ -87,7 +88,9 @@ const ContratoDetalhes = ({ contrato, open, onOpenChange, onAditivoCriado }: Con
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <div className="text-sm font-medium leading-none">Número do Contrato</div>
-                <p className="text-sm text-muted-foreground">{contrato.numero}</p>
+                <p className="text-sm text-muted-foreground">
+                  {contrato.numeroCompleto || contrato.numero}
+                </p>
               </div>
               <div>
                 <div className="text-sm font-medium leading-none">Fornecedores</div>
@@ -335,6 +338,15 @@ const ContratoDetalhes = ({ contrato, open, onOpenChange, onAditivoCriado }: Con
                 </div>
               </div>
             )}
+
+            {/* Contratos Relacionados */}
+            <ContratosRelacionados 
+              contratoId={contrato.id}
+              onViewContrato={(id) => {
+                // Aqui você pode implementar a lógica para abrir outro contrato
+                console.log('Visualizar contrato relacionado:', id);
+              }}
+            />
           </div>
         </ScrollArea>
         <div className="flex justify-end gap-2 pt-4 border-t">
@@ -347,12 +359,12 @@ const ContratoDetalhes = ({ contrato, open, onOpenChange, onAditivoCriado }: Con
           </Button>
         </div>
       </DialogContent>
-      <AditivoForm
-        contratoId={contrato.id}
-        open={showAditivoForm}
-        onOpenChange={setShowAditivoForm}
-        onSuccess={handleAditivoSuccess}
-      />
+              <AditivoFormDialog
+          contratoId={contrato.id}
+          open={showAditivoForm}
+          onOpenChange={setShowAditivoForm}
+          onSuccess={handleAditivoSuccess}
+        />
     </Dialog>
   );
 };

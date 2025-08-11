@@ -3,6 +3,9 @@ import { useAditivos } from "@/hooks/useAditivos";
 import { Button } from "@/components/ui/button";
 import { Aditivo } from "@/types";
 import AditivoFormDialog from "./AditivoFormDialog";
+import { Trash2, Calendar, DollarSign } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
 
 interface AditivosTabProps {
   contratoId: string;
@@ -10,8 +13,9 @@ interface AditivosTabProps {
 }
 
 const AditivosTab = ({ contratoId, onAditivoCriado }: AditivosTabProps) => {
-  const { aditivos, loading, fetchAditivos } = useAditivos(contratoId);
+  const { aditivos, loading, fetchAditivos, deletarAditivo } = useAditivos(contratoId);
   const [openForm, setOpenForm] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     fetchAditivos();
@@ -24,45 +28,107 @@ const AditivosTab = ({ contratoId, onAditivoCriado }: AditivosTabProps) => {
     if (onAditivoCriado) onAditivoCriado();
   };
 
+  const handleDeletarAditivo = async (aditivoId: string) => {
+    if (confirm("Tem certeza que deseja remover este aditivo?")) {
+      const success = await deletarAditivo(aditivoId);
+      if (success && onAditivoCriado) {
+        onAditivoCriado();
+      }
+    }
+  };
+
+  const getTipoIcon = (tipo: string) => {
+    switch (tipo) {
+      case "periodo":
+        return <Calendar className="w-4 h-4" />;
+      case "valor":
+        return <DollarSign className="w-4 h-4" />;
+      default:
+        return null;
+    }
+  };
+
+  const getTipoBadge = (tipo: string) => {
+    switch (tipo) {
+      case "periodo":
+        return <Badge variant="secondary" className="bg-blue-100 text-blue-800">Período</Badge>;
+      case "valor":
+        return <Badge variant="secondary" className="bg-green-100 text-green-800">Valor</Badge>;
+      default:
+        return <Badge variant="outline">{tipo}</Badge>;
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-bold">Aditivos</h2>
         <Button onClick={() => setOpenForm(true)}>Novo Aditivo</Button>
       </div>
+      
       <AditivoFormDialog
         contratoId={contratoId}
         open={openForm}
         onOpenChange={setOpenForm}
         onSuccess={handleAditivoCriado}
       />
+      
       <div className="overflow-x-auto">
-        <table className="min-w-full text-sm border">
-          <thead>
-            <tr>
-              <th className="border px-2 py-1">Tipo</th>
-              <th className="border px-2 py-1">Nova Vigência</th>
-              <th className="border px-2 py-1">% Itens</th>
-              <th className="border px-2 py-1">Criado em</th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr><td colSpan={4} className="text-center">Carregando...</td></tr>
-            ) : aditivos.length === 0 ? (
-              <tr><td colSpan={4} className="text-center">Nenhum aditivo cadastrado.</td></tr>
-            ) : (
-              aditivos.map((aditivo: Aditivo) => (
-                <tr key={aditivo.id}>
-                  <td className="border px-2 py-1">{aditivo.tipo === "periodo" ? "Período" : "Valor"}</td>
-                  <td className="border px-2 py-1">{aditivo.nova_data_termino || "-"}</td>
-                  <td className="border px-2 py-1">{aditivo.percentual_itens ? `${aditivo.percentual_itens}%` : "-"}</td>
-                  <td className="border px-2 py-1">{new Date(aditivo.criado_em).toLocaleDateString()}</td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+        {loading ? (
+          <div className="text-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="mt-2 text-sm text-muted-foreground">Carregando aditivos...</p>
+          </div>
+        ) : aditivos.length === 0 ? (
+          <div className="text-center py-8">
+            <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+            <p className="text-muted-foreground">Nenhum aditivo cadastrado.</p>
+            <p className="text-sm text-muted-foreground mt-1">
+              Clique em "Novo Aditivo" para criar o primeiro aditivo.
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {aditivos.map((aditivo: Aditivo) => (
+              <div key={aditivo.id} className="border rounded-lg p-4 bg-card">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    {getTipoIcon(aditivo.tipo)}
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        {getTipoBadge(aditivo.tipo)}
+                        <span className="text-sm text-muted-foreground">
+                          {new Date(aditivo.criado_em).toLocaleDateString('pt-BR')}
+                        </span>
+                      </div>
+                      
+                      {aditivo.tipo === "periodo" && aditivo.nova_data_termino && (
+                        <p className="text-sm">
+                          <span className="font-medium">Nova vigência:</span> {new Date(aditivo.nova_data_termino).toLocaleDateString('pt-BR')}
+                        </p>
+                      )}
+                      
+                      {aditivo.tipo === "valor" && aditivo.percentual_itens && (
+                        <p className="text-sm">
+                          <span className="font-medium">Acréscimo:</span> {aditivo.percentual_itens}%
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleDeletarAditivo(aditivo.id)}
+                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

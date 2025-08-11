@@ -88,7 +88,7 @@ export const useContratoForm = ({
         : (typeof formData.fornecedor_ids === 'string' ? formData.fornecedor_ids : '');
 
       if (!fornecedorId) {
-        throw new Error('É necessário selecionar pelo menos um fornecedor');
+        throw new Error('É necessário selecionar um fornecedor');
       }
 
       if (mode === 'edit' && contrato) {
@@ -112,7 +112,7 @@ export const useContratoForm = ({
 
         if (contratoError) throw contratoError;
       } else {
-        // Criação: criar contrato primeiro
+        // Criação: criar contrato único
         const contratoData = {
           numero: formData.numero,
           fundo_municipal: Array.isArray(formData.fundo_municipal)
@@ -134,18 +134,30 @@ export const useContratoForm = ({
         if (contratoError) throw contratoError;
       }
 
-      toast({
-        title: "Sucesso",
-        description: mode === 'edit' ? "Contrato atualizado com sucesso" : "Contrato criado com sucesso",
-      });
+      // Mostrar mensagem de sucesso
+      if (mode === 'edit') {
+        toast({
+          title: "Sucesso",
+          description: "Contrato atualizado com sucesso",
+        });
+      } else {
+        toast({
+          title: "Sucesso",
+          description: "Contrato criado com sucesso",
+        });
+      }
 
-      onSuccess?.();
+      // Fechar modal e recarregar dados
       onOpenChange(false);
-    } catch (error: any) {
+      if (onSuccess) {
+        onSuccess();
+      }
+    } catch (error) {
+      console.error('Erro ao salvar contrato:', error);
       toast({
         title: "Erro",
-        description: error.message,
-        variant: "destructive"
+        description: error instanceof Error ? error.message : "Erro ao salvar contrato",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);

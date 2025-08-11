@@ -22,7 +22,7 @@ const ContratoBasicInfo = ({
   fornecedores = [], // Default empty array for fornecedores
   onFieldChange
 }: ContratoBasicInfoProps) => {
-  // Ensure fornecedorIds is always an array
+  // Ensure fornecedorIds is always an array for compatibility
   const selectedFornecedores = Array.isArray(fornecedorIds) ? fornecedorIds : (fornecedorIds ? [fornecedorIds] : []);
 
   return (
@@ -37,13 +37,20 @@ const ContratoBasicInfo = ({
         />
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="fornecedores">Fornecedores</Label>
+        <Label htmlFor="fornecedores">Fornecedor</Label>
         <FornecedorSelector
           value={selectedFornecedores}
           onChange={(value) => onFieldChange("fornecedor_ids", value)}
           fornecedores={fornecedores}
-          isMulti={true}
+          isMulti={false}
         />
+        <div className="text-sm text-blue-600 bg-blue-50 dark:bg-blue-950/20 p-3 rounded-md border border-blue-200 dark:border-blue-800">
+          <p className="font-medium mb-1">💡 Sistema de Sufixos</p>
+          <p className="text-xs">
+            Para criar contratos com múltiplos fornecedores, crie um contrato para cada fornecedor com o mesmo número base. 
+            O sistema automaticamente atribuirá sufixos únicos (ex: 001.1/2025, 001.2/2025) para controle individual de saldo.
+          </p>
+        </div>
       </div>
       <div className="flex flex-col gap-2">
         <Label htmlFor="valor">Valor do Contrato</Label>

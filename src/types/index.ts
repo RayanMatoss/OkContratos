@@ -12,6 +12,9 @@ export interface Fornecedor {
 export interface Contrato {
   id: string;
   numero: string;
+  sufixo?: string;
+  numeroCompleto?: string;
+  contratoBaseId?: string;
   fornecedorIds: string[];
   fornecedores?: Fornecedor[];
   fundoMunicipal: FundoMunicipal[];
@@ -82,7 +85,7 @@ export interface RelatorioMensal {
 export interface ContratoFormValues {
   numero: string;
   objeto: string;
-  fornecedor_ids: string[];
+  fornecedor_ids: string | string[]; // Mantido como array para compatibilidade, mas agora sempre terá apenas um elemento
   valor: string;
   fundo_municipal: FundoMunicipal[];
   data_inicio: Date;

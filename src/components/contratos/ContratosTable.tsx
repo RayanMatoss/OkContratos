@@ -40,7 +40,9 @@ const ContratosTable: React.FC<ContratosTableProps> = ({
         <TableBody>
           {contratos.map((contrato) => (
             <TableRow key={contrato.id}>
-              <TableCell>{contrato.numero}</TableCell>
+              <TableCell>
+                {contrato.numeroCompleto || contrato.numero}
+              </TableCell>
               <TableCell>
                 <div className="flex flex-wrap gap-1">
                   {contrato.fornecedores && contrato.fornecedores.length > 0 ? (

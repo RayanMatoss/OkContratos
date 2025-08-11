@@ -19,19 +19,11 @@ export const useContratos = () => {
     try {
       setLoading(true);
       
-      // Buscar contratos com fornecedores e itens
+      // Buscar contratos usando a nova view com numeração completa
       const { data, error } = await supabase
-        .from("contratos")
+        .from("vw_contratos_completos")
         .select(`
           *,
-          fornecedor:fornecedor_id(
-            id,
-            nome,
-            cnpj,
-            email,
-            telefone,
-            endereco
-          ),
           itens(*)
         `)
         .order('created_at', { ascending: false });
@@ -40,22 +32,17 @@ export const useContratos = () => {
 
       const formattedContratos: Contrato[] = data.map(contrato => {
         
-        let fornecedores: any[] = [];
-        let fornecedorIds: string[] = [];
-
-        // Verificar se há fornecedor
-        if (contrato.fornecedor) {
-          fornecedores = [{
-            id: contrato.fornecedor.id,
-            nome: contrato.fornecedor.nome,
-            cnpj: contrato.fornecedor.cnpj,
-            email: contrato.fornecedor.email || "",
-            telefone: contrato.fornecedor.telefone || "",
-            endereco: contrato.fornecedor.endereco || "",
-            createdAt: new Date()
-          }];
-          fornecedorIds = [contrato.fornecedor.id];
-        }
+        // Usar dados da nova view
+        const fornecedores = [{
+          id: contrato.fornecedor_id,
+          nome: contrato.fornecedor_nome,
+          cnpj: contrato.fornecedor_cnpj,
+          email: "",
+          telefone: "",
+          endereco: "",
+          createdAt: new Date()
+        }];
+        const fornecedorIds = [contrato.fornecedor_id];
 
         // Extrair itens do contrato
         const itens = contrato.itens?.map((item: any) => ({
@@ -75,6 +62,9 @@ export const useContratos = () => {
         return {
           id: contrato.id,
           numero: contrato.numero,
+          sufixo: contrato.sufixo,
+          numeroCompleto: contrato.numero_completo,
+          contratoBaseId: contrato.contrato_base_id,
           fornecedorIds: fornecedorIds,
           fundoMunicipal: fundoMunicipal,
           objeto: contrato.objeto,
