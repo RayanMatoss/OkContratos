@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ""
 import { useEffect, useState, createContext, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -29,6 +30,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [municipio, setMunicipio] = useState<Municipio | null>(null);
   const [perfil, setPerfil] = useState<string | null>(null);
   const [fundosSelecionados, setFundosSelecionados] = useState<string[]>([]);
+=======
+
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Session, User } from '@supabase/supabase-js';
+import { supabase } from '@/integrations/supabase/client';
+
+export function useAuth() {
+  const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,6 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
+<<<<<<< HEAD
   const login = async (username: string, password: string, municipioId: string, fundosSelecionados: string[]) => {
     setLoading(true);
     try {
@@ -166,4 +180,7 @@ export function useAuth() {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
+=======
+  return { user, session, loading };
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 }

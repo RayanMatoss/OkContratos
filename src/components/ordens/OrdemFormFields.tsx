@@ -1,5 +1,8 @@
 
+<<<<<<< HEAD
 import React from "react";
+=======
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,7 +11,10 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+<<<<<<< HEAD
 import Select from 'react-select';
+=======
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 
 interface OrdemFormFieldsProps {
   numero: string;
@@ -34,10 +40,16 @@ const OrdemFormFields = ({
   mode = 'create'
 }: OrdemFormFieldsProps) => {
   return (
+<<<<<<< HEAD
     <>
       {/* Número da OF */}
       <div className="space-y-2">
         <Label htmlFor="numero" className="text-sm font-medium">Número da OF</Label>
+=======
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="numero">Número da OF</Label>
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
         <Input
           id="numero"
           placeholder="Carregando número..."
@@ -58,6 +70,7 @@ const OrdemFormFields = ({
         )}
       </div>
 
+<<<<<<< HEAD
       {/* Contrato */}
       <div className="space-y-2">
         <Label htmlFor="contrato" className="text-sm font-medium">Contrato</Label>
@@ -95,6 +108,24 @@ const OrdemFormFields = ({
           }}
           isDisabled={mode === 'edit'}
         />
+=======
+      <div className="space-y-2">
+        <Label htmlFor="contrato">Contrato</Label>
+        <select
+          id="contrato"
+          value={contratoId}
+          onChange={(e) => setContratoId(e.target.value)}
+          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+          disabled={mode === 'edit'} // Only disable in edit mode
+        >
+          <option value="">Selecione um contrato</option>
+          {contratos.map((contrato) => (
+            <option key={contrato.id} value={contrato.id}>
+              {contrato.numero} - {contrato.objeto} ({contrato.fornecedores?.nome})
+            </option>
+          ))}
+        </select>
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
         {mode === 'edit' && (
           <p className="text-xs text-muted-foreground">
             O contrato não pode ser alterado após a criação da ordem
@@ -102,9 +133,14 @@ const OrdemFormFields = ({
         )}
       </div>
 
+<<<<<<< HEAD
       {/* Data de Emissão */}
       <div className="space-y-2">
         <Label htmlFor="data" className="text-sm font-medium">Data de Emissão</Label>
+=======
+      <div className="space-y-2">
+        <Label htmlFor="data">Data de Emissão</Label>
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
         <Popover>
           <PopoverTrigger asChild>
             <Button
@@ -118,7 +154,11 @@ const OrdemFormFields = ({
               {data ? format(data, "dd/MM/yyyy") : <span>Selecione uma data</span>}
             </Button>
           </PopoverTrigger>
+<<<<<<< HEAD
           <PopoverContent className="w-auto p-0" align="start">
+=======
+          <PopoverContent className="w-auto p-0">
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
             <Calendar
               mode="single"
               selected={data}
@@ -129,7 +169,11 @@ const OrdemFormFields = ({
           </PopoverContent>
         </Popover>
       </div>
+<<<<<<< HEAD
     </>
+=======
+    </div>
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
   );
 };
 

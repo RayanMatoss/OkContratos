@@ -4,9 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+<<<<<<< HEAD
 import { useState } from "react";
 import { parse, isValid } from "date-fns";
 import React from "react";
+=======
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 
 interface DatePickerFieldProps {
   date: Date;
@@ -15,6 +18,7 @@ interface DatePickerFieldProps {
 }
 
 const DatePickerField = ({ date, onDateChange, label }: DatePickerFieldProps) => {
+<<<<<<< HEAD
   const [inputValue, setInputValue] = useState(date ? format(date, "dd/MM/yyyy") : "");
   const [open, setOpen] = useState(false);
 
@@ -72,6 +76,34 @@ const DatePickerField = ({ date, onDateChange, label }: DatePickerFieldProps) =>
           </PopoverContent>
         </Popover>
       </div>
+=======
+  return (
+    <div className="flex flex-col mb-4">
+      <label className="text-xs mb-2">{label}</label>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            className={cn(
+              "w-full border rounded px-4 py-2 bg-background text-foreground text-left font-normal",
+              !date && "text-muted-foreground"
+            )}
+          >
+            <CalendarIcon className="mr-2 h-4 w-4" />
+            {date ? format(date, "dd/MM/yyyy") : <span>Selecione uma data</span>}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0" align="start">
+          <Calendar
+            mode="single"
+            selected={date}
+            onSelect={(date) => date && onDateChange(date)}
+            initialFocus
+            className="p-3 pointer-events-auto"
+          />
+        </PopoverContent>
+      </Popover>
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
     </div>
   );
 };

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import FornecedorSelector from "./FornecedorSelector";
@@ -7,6 +8,19 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 interface ContratoBasicInfoProps {
   numero: string;
   fornecedorIds: string | string[];
+=======
+
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import FornecedorSelector from "./FornecedorSelector";
+import FundoMunicipalSelector from "./FundoMunicipalSelector";
+import { FundoMunicipal, Fornecedor } from "@/types";
+
+interface ContratoBasicInfoProps {
+  numero: string;
+  fornecedorId: string;
+  fundoMunicipal: FundoMunicipal[];
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
   objeto: string;
   valor: string;
   fornecedores: Fornecedor[];
@@ -15,13 +29,18 @@ interface ContratoBasicInfoProps {
 
 const ContratoBasicInfo = ({
   numero,
+<<<<<<< HEAD
   fornecedorIds,
+=======
+  fornecedorId,
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
   fundoMunicipal = [], // Always provide a default empty array
   objeto,
   valor,
   fornecedores = [], // Default empty array for fornecedores
   onFieldChange
 }: ContratoBasicInfoProps) => {
+<<<<<<< HEAD
   // Ensure fornecedorIds is always an array for compatibility
   const selectedFornecedores = Array.isArray(fornecedorIds) ? fornecedorIds : (fornecedorIds ? [fornecedorIds] : []);
 
@@ -63,6 +82,56 @@ const ContratoBasicInfo = ({
         />
       </div>
       <div className="flex flex-col gap-2">
+=======
+  // Ensure fundoMunicipal is always an array
+  const selectedFundos = Array.isArray(fundoMunicipal) ? fundoMunicipal : [];
+
+  return (
+    <div className="grid gap-4">
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="numero">Número do Contrato</Label>
+          <Input
+            id="numero"
+            placeholder="Digite o número do contrato"
+            value={numero}
+            onChange={(e) => onFieldChange("numero", e.target.value)}
+          />
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="fornecedor">Fornecedor</Label>
+          <FornecedorSelector
+            value={fornecedorId}
+            onChange={(value) => onFieldChange("fornecedor_id", value)}
+            fornecedores={fornecedores}
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="fundo">Fundos Municipais</Label>
+          <FundoMunicipalSelector
+            selectedFundos={selectedFundos}
+            onChange={(value) => onFieldChange("fundo_municipal", value)}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="valor">Valor do Contrato</Label>
+          <Input
+            id="valor"
+            type="number"
+            placeholder="Digite o valor"
+            value={valor}
+            onChange={(e) => onFieldChange("valor", e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="space-y-2">
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
         <Label htmlFor="objeto">Objeto do Contrato</Label>
         <Input
           id="objeto"

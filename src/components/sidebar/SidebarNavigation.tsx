@@ -9,7 +9,10 @@ import {
   ChartBar, 
   Settings 
 } from "lucide-react";
+<<<<<<< HEAD
 import { useAuth } from "@/hooks/useAuth";
+=======
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 
 interface SidebarLinkProps {
   to: string;
@@ -44,7 +47,11 @@ const sidebarLinks = [
   {
     to: "/dashboard",
     icon: LayoutDashboard,
+<<<<<<< HEAD
     label: "Página Inicial"
+=======
+    label: "Dashboard"
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
   },
   {
     to: "/dashboard/fornecedores",
@@ -57,11 +64,14 @@ const sidebarLinks = [
     label: "Contratos"
   },
   {
+<<<<<<< HEAD
     to: "/dashboard/itens",
     icon: Package,
     label: "Itens"
   },
   {
+=======
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
     to: "/dashboard/ordens",
     icon: FileEdit,
     label: "Ordens"
@@ -81,7 +91,10 @@ const sidebarLinks = [
 const SidebarNavigation = () => {
   const location = useLocation();
   const currentPath = location.pathname;
+<<<<<<< HEAD
   const { perfil } = useAuth();
+=======
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 
   return (
     <div className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
@@ -89,12 +102,18 @@ const SidebarNavigation = () => {
         <SidebarLink 
           key={link.to} 
           {...link} 
+<<<<<<< HEAD
           isActive={link.to === "/dashboard" 
+=======
+          isActive={
+            link.to === "/dashboard" 
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
               ? currentPath === "/dashboard" 
               : currentPath.startsWith(link.to)
           } 
         />
       ))}
+<<<<<<< HEAD
       {/* Menu exclusivo para admin */}
       {perfil === 'admin' && (
         <SidebarLink
@@ -104,9 +123,14 @@ const SidebarNavigation = () => {
           isActive={currentPath.startsWith("/admin")}
         />
       )}
+=======
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
     </div>
   );
 };
 
 export default SidebarNavigation;
+<<<<<<< HEAD
 
+=======
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654

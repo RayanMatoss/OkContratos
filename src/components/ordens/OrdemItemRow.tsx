@@ -32,6 +32,7 @@ const OrdemItemRow = ({
         <div className="w-24">
           <Input
             type="text"
+<<<<<<< HEAD
             inputMode="numeric"
             pattern="[0-9]*"
             min={0}
@@ -42,6 +43,13 @@ const OrdemItemRow = ({
               if (value <= adjustedAvailable) {
                 onQuantityChange(item.id, value);
               }
+=======
+            value={selectedQuantity || ''}
+            onChange={(e) => {
+              // Permite apenas números
+              const value = e.target.value.replace(/[^0-9]/g, "");
+              onQuantityChange(item.id, value ? parseInt(value) : 0);
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
             }}
             className="text-right"
             placeholder="Qtd"

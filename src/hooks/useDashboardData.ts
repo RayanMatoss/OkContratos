@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,8 +15,11 @@ interface DashboardData {
   ordensData: { name: string; value: number }[];
   contratosRecentes: any[];
   ordensPendentesLista: any[];
+<<<<<<< HEAD
   itensAlerta: any[];
   fornecedores: any[]; // ADICIONADO
+=======
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 }
 
 export const useDashboardData = () => {
@@ -25,9 +32,13 @@ export const useDashboardData = () => {
     statusContratosData: [],
     ordensData: [],
     contratosRecentes: [],
+<<<<<<< HEAD
     ordensPendentesLista: [],
     itensAlerta: [],
     fornecedores: []
+=======
+    ordensPendentesLista: []
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
   });
   const [loading, setLoading] = useState(true);
 
@@ -68,6 +79,7 @@ export const useDashboardData = () => {
       const { count: fornecedoresCount, error: fornecedoresError } = await supabase
         .from("fornecedores")
         .select('*', { count: "exact" });
+<<<<<<< HEAD
       if (fornecedoresError) throw fornecedoresError;
 
       // Fetch todos os fornecedores
@@ -75,6 +87,10 @@ export const useDashboardData = () => {
         .from("fornecedores")
         .select("*");
       if (fornecedoresListError) throw fornecedoresListError;
+=======
+
+      if (fornecedoresError) throw fornecedoresError;
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 
       // Calculate dashboard metrics
       const now = new Date();
@@ -138,6 +154,7 @@ export const useDashboardData = () => {
           });
       }
 
+<<<<<<< HEAD
       // Buscar itens em alerta (consumo > 90%)
       const { data: itensAlerta, error: itensAlertaError } = await supabase
         .from('itens')
@@ -158,15 +175,24 @@ export const useDashboardData = () => {
 
       setData({
         totalContratos: contratos.length,
+=======
+      setData({
+        totalContratos: contratos?.length || 0,
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
         contratosAVencer,
         totalFornecedores: fornecedoresCount || 0,
         ordensPendentes,
         statusContratosData,
         ordensData,
+<<<<<<< HEAD
         contratosRecentes: contratos.slice(0, 10),
         ordensPendentesLista,
         itensAlerta: itensAlertaFiltrados,
         fornecedores: fornecedores || [], // ADICIONADO
+=======
+        contratosRecentes,
+        ordensPendentesLista
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
       });
 
     } catch (error: any) {

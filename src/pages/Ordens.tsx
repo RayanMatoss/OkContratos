@@ -66,6 +66,7 @@ const Ordens = () => {
     refetch();
   };
 
+<<<<<<< HEAD
   const handleRecalcularConsumo = async () => {
     const { error } = await supabase.rpc('recalcular_consumo_itens');
     if (error) {
@@ -84,6 +85,8 @@ const Ordens = () => {
     }
   };
 
+=======
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between">
@@ -93,6 +96,7 @@ const Ordens = () => {
             Gerenciamento das ordens de fornecimento e serviço
           </p>
         </div>
+<<<<<<< HEAD
         <div className="flex flex-col items-end gap-1">
           <Button onClick={handleAdd} className="flex items-center gap-2">
             <Plus size={16} />
@@ -106,6 +110,12 @@ const Ordens = () => {
             Recalcular consumo dos itens
           </button>
         </div>
+=======
+        <Button onClick={handleAdd} className="flex items-center gap-2">
+          <Plus size={16} />
+          <span>Nova Ordem</span>
+        </Button>
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
       </div>
 
       <div className="flex items-center gap-4">
@@ -140,4 +150,7 @@ const Ordens = () => {
 };
 
 export default Ordens;
+<<<<<<< HEAD
 
+=======
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654

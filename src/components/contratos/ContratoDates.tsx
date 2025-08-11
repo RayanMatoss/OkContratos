@@ -1,9 +1,14 @@
+<<<<<<< HEAD
 import DatePickerField from "./DatePickerField";
 import { useState } from "react";
 import { format, parse, isValid } from "date-fns";
 import React from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
+=======
+
+import DatePickerField from "./DatePickerField";
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 
 interface ContratoDatesProps {
   dataInicio: Date;
@@ -12,6 +17,7 @@ interface ContratoDatesProps {
 }
 
 const ContratoDates = ({ dataInicio, dataTermino, onDateChange }: ContratoDatesProps) => {
+<<<<<<< HEAD
   // Estado local para o input de intervalo
   const [inputValue, setInputValue] = useState(() => {
     const ini = dataInicio ? format(dataInicio, "dd/MM/yyyy") : "";
@@ -94,6 +100,20 @@ const ContratoDates = ({ dataInicio, dataTermino, onDateChange }: ContratoDatesP
           />
         </PopoverContent>
       </Popover>
+=======
+  return (
+    <div className="space-y-4">
+      <DatePickerField 
+        label="Data de Início" 
+        date={dataInicio} 
+        onDateChange={date => onDateChange("data_inicio", date || new Date())} 
+      />
+      <DatePickerField 
+        label="Data de Término" 
+        date={dataTermino} 
+        onDateChange={date => onDateChange("data_termino", date || new Date())} 
+      />
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
     </div>
   );
 };

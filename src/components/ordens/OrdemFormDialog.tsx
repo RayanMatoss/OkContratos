@@ -1,14 +1,21 @@
 
+<<<<<<< HEAD
 import React from "react";
 import { FormSheet } from "@/components/ui/form-sheet";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
+=======
+import { FormSheet } from "@/components/ui/form-sheet";
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 import OrdemFormFields from "./OrdemFormFields";
 import OrdemItemsSelection from "./OrdemItemsSelection";
 import { useOrdemForm } from "@/hooks/useOrdemForm";
 import { OrdemFornecimento } from "@/types";
+<<<<<<< HEAD
 import { gerarPdfOrdem } from "@/lib/pdf/gerarPdfOrdem";
+=======
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 
 type OrdemFormDialogProps = {
   open: boolean;
@@ -47,6 +54,7 @@ export const OrdemFormDialog = ({
     : "Edite os dados desta ordem de fornecimento";
   const submitLabel = mode === 'create' ? "Criar Ordem" : "Salvar Alterações";
 
+<<<<<<< HEAD
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     handleSubmit(e);
@@ -124,6 +132,42 @@ export const OrdemFormDialog = ({
         </form>
       </DialogContent>
     </Dialog>
+=======
+  return (
+    <FormSheet
+      open={open}
+      onOpenChange={onOpenChange}
+      title={title}
+      description={description}
+      onSubmit={handleSubmit}
+      loading={loading}
+      submitLabel={submitLabel}
+    >
+      <div className="space-y-6">
+        <OrdemFormFields
+          numero={numero}
+          setNumero={setNumero}
+          data={data}
+          setData={setData}
+          contratoId={contratoId}
+          setContratoId={setContratoId}
+          contratos={contratos}
+          loadingNumero={loadingNumero}
+          mode={mode}
+        />
+        
+        {contratoId && (
+          <OrdemItemsSelection
+            selectedContratoId={contratoId}
+            contratoItens={contratoItems}
+            onItemsChange={setSelectedItems}
+            initialSelectedItems={selectedItems}
+            mode={mode}
+          />
+        )}
+      </div>
+    </FormSheet>
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
   );
 };
 

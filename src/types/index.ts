@@ -1,4 +1,15 @@
 
+<<<<<<< HEAD
+=======
+export type FundoMunicipal = "Prefeitura" | "Educação" | "Saúde" | "Assistência";
+
+// Updated contract status values - only managed by database now
+export type StatusContrato = "Ativo" | "Expirado" | "A Vencer" | "Em Aprovação";
+
+// Simplified order status values - only managed by database now
+export type StatusOrdem = "Pendente" | "Concluída";
+
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 export interface Fornecedor {
   id: string;
   nome: string;
@@ -9,6 +20,7 @@ export interface Fornecedor {
   createdAt: Date;
 }
 
+<<<<<<< HEAD
 export interface Contrato {
   id: string;
   numero: string;
@@ -27,11 +39,14 @@ export interface Contrato {
   itens: Item[];
 }
 
+=======
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 export interface Item {
   id: string;
   contratoId: string;
   descricao: string;
   quantidade: number;
+<<<<<<< HEAD
   unidade: string;
   valorUnitario: number;
   quantidadeConsumida: number;
@@ -40,6 +55,27 @@ export interface Item {
 }
 
 export type FundoMunicipal = string;
+=======
+  valorUnitario: number;
+  unidade: string;
+  quantidadeConsumida: number;
+}
+
+export interface Contrato {
+  id: string;
+  numero: string;
+  fornecedorId: string;
+  fornecedor?: Fornecedor;
+  fundoMunicipal: FundoMunicipal[]; // Changed to only accept array type
+  objeto: string;
+  valor: number;
+  dataInicio: Date;
+  dataTermino: Date;
+  status: StatusContrato;
+  itens: Item[];
+  createdAt: Date;
+}
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 
 export interface OrdemFornecimento {
   id: string;
@@ -47,6 +83,7 @@ export interface OrdemFornecimento {
   contratoId: string;
   contrato?: Contrato;
   dataEmissao: Date;
+<<<<<<< HEAD
   observacoes: string;
   status: StatusOrdem;
   itensConsumidos: { itemId: string; quantidade: number }[];
@@ -70,11 +107,40 @@ export interface Aditivo {
 }
 
 export type TipoAditivo = 'periodo' | 'valor';
+=======
+  status: StatusOrdem;
+  itensConsumidos: {
+    itemId: string;
+    quantidade: number;
+  }[];
+  createdAt: Date;
+}
+
+export interface Usuario {
+  id: string;
+  nome: string;
+  email: string;
+  cargo: string;
+  permissao: "admin" | "basico";
+  createdAt: Date;
+}
+
+export interface Notificacao {
+  id: string;
+  titulo: string;
+  mensagem: string;
+  tipo: "contrato" | "ordem" | "sistema";
+  lida: boolean;
+  data: Date;
+  usuarioId: string;
+}
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 
 export interface RelatorioMensal {
   mes: number;
   ano: number;
   totalContratos: number;
+<<<<<<< HEAD
   contratosAtivos: number;
   contratosVencidos: number;
   ordensRealizadas: number;
@@ -96,3 +162,13 @@ export interface ContratoFormValues {
 }
 
 export type FormStep = 'basic' | 'dates' | 'items';
+=======
+  contratosVencidos: number;
+  contratosAtivos: number;
+  ordensRealizadas: number;
+  ordensPendentes: number;
+  ordensConcluidas: number;
+  valorTotalContratos: number;
+  valorTotalOrdens: number;
+}
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654

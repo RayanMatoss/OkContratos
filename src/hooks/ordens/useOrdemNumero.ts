@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { useState, useEffect } from "react";
+=======
+import { useState } from "react";
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -26,6 +30,7 @@ export const useOrdemNumero = (mode: 'create' | 'edit' = 'create', initialNumero
     }
   };
 
+<<<<<<< HEAD
   // Chamar automaticamente ao abrir o formulário de criação
   useEffect(() => {
     if (mode === 'create') {
@@ -33,6 +38,8 @@ export const useOrdemNumero = (mode: 'create' | 'edit' = 'create', initialNumero
     }
   }, [mode]);
 
+=======
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
   return {
     numero,
     setNumero,

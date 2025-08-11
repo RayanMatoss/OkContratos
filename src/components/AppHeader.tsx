@@ -2,8 +2,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+<<<<<<< HEAD
 import { Menu, LogOut, MapPin } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+=======
+import { Menu, LogOut } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 import { useToast } from "@/hooks/use-toast";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
 
@@ -15,6 +20,7 @@ interface AppHeaderProps {
 const AppHeader = ({ onToggleSidebar, isSidebarCollapsed }: AppHeaderProps) => {
   const navigate = useNavigate();
   const { toast } = useToast();
+<<<<<<< HEAD
   const { municipio, logout } = useAuth();
 
   const handleLogout = async () => {
@@ -30,6 +36,17 @@ const AppHeader = ({ onToggleSidebar, isSidebarCollapsed }: AppHeaderProps) => {
       toast({
         title: "Erro ao sair",
         description: message,
+=======
+
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      navigate('/auth');
+    } catch (error: any) {
+      toast({
+        title: "Erro ao sair",
+        description: error.message,
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
         variant: "destructive"
       });
     }
@@ -50,6 +67,7 @@ const AppHeader = ({ onToggleSidebar, isSidebarCollapsed }: AppHeaderProps) => {
         </Button>
       </div>
 
+<<<<<<< HEAD
       <div className="flex items-center gap-4">
         {municipio && (
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -58,6 +76,9 @@ const AppHeader = ({ onToggleSidebar, isSidebarCollapsed }: AppHeaderProps) => {
           </div>
         )}
         
+=======
+      <div className="flex items-center gap-2">
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
         <NotificationBell />
         
         <Button
@@ -65,7 +86,10 @@ const AppHeader = ({ onToggleSidebar, isSidebarCollapsed }: AppHeaderProps) => {
           size="icon"
           onClick={handleLogout}
           className="ml-2"
+<<<<<<< HEAD
           title="Sair do sistema"
+=======
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
         >
           <LogOut size={20} />
         </Button>

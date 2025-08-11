@@ -1,9 +1,14 @@
+<<<<<<< HEAD
 import { useState, useEffect } from "react";
+=======
+import { useState } from "react";
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Search } from "lucide-react";
 import { ContratoFormDialog } from "@/components/contratos/ContratoFormDialog";
 import ContratosTable from "@/components/contratos/ContratosTable";
+<<<<<<< HEAD
 import ContratoDetalhes from "@/components/contratos/ContratoDetalhes";
 import { useContratos } from "@/hooks/useContratos";
 import { useToast } from "@/hooks/use-toast";
@@ -18,11 +23,17 @@ function useFixPointerEvents(open: boolean) {
     }
   }, [open]);
 }
+=======
+import { useContratos } from "@/hooks/useContratos";
+import { useToast } from "@/hooks/use-toast";
+import { Contrato } from "@/types";
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 
 const Contratos = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editingContrato, setEditingContrato] = useState<Contrato | undefined>();
+<<<<<<< HEAD
   const [selectedContrato, setSelectedContrato] = useState<Contrato | undefined>();
   const { contratos, loading, fetchContratos } = useContratos();
   const { toast } = useToast();
@@ -33,14 +44,31 @@ const Contratos = () => {
       contrato.numero.toLowerCase().includes(searchTerm.toLowerCase()) ||
       contrato.objeto.toLowerCase().includes(searchTerm.toLowerCase()) ||
       fornecedoresNomes.includes(searchTerm.toLowerCase())
+=======
+  const { contratos, loading, deleteContrato } = useContratos();
+  const { toast } = useToast();
+
+  const filteredContratos = contratos.filter((contrato) => {
+    return (
+      contrato.numero.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      contrato.objeto.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      contrato.fornecedor?.nome.toLowerCase().includes(searchTerm.toLowerCase())
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
     );
   });
 
   const handleEdit = (contrato: Contrato) => {
+<<<<<<< HEAD
     if (contrato.status === 'Expirado') {
       toast({
         title: "Edição não permitida",
         description: "Contratos expirados não podem ser editados",
+=======
+    if (contrato.status !== 'Em Aprovação') {
+      toast({
+        title: "Edição não permitida",
+        description: "Apenas contratos em aprovação podem ser editados",
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
         variant: "destructive"
       });
       return;
@@ -55,6 +83,7 @@ const Contratos = () => {
   };
 
   const handleDelete = async (contrato: Contrato) => {
+<<<<<<< HEAD
     try {
       const { error } = await supabase
         .from('contratos')
@@ -160,6 +189,11 @@ const Contratos = () => {
 
   useFixPointerEvents(showForm);
 
+=======
+    await deleteContrato(contrato.id);
+  };
+
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between">
@@ -192,7 +226,10 @@ const Contratos = () => {
         contratos={filteredContratos} 
         onEdit={handleEdit}
         onDelete={handleDelete}
+<<<<<<< HEAD
         onView={handleView}
+=======
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
       />
 
       <ContratoFormDialog
@@ -200,6 +237,7 @@ const Contratos = () => {
         onOpenChange={handleCloseForm}
         mode={editingContrato ? 'edit' : 'create'}
         contrato={editingContrato}
+<<<<<<< HEAD
         onSuccess={handleSuccess}
       />
 
@@ -222,6 +260,9 @@ const Contratos = () => {
           }}
         />
       )}
+=======
+      />
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
     </div>
   );
 };

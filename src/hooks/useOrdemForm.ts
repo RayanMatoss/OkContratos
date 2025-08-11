@@ -35,7 +35,11 @@ export const useOrdemForm = (
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+<<<<<<< HEAD
     if (!contratoId || !data || !numero) {
+=======
+    if (!contratoId || !data) {
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
       toast({
         title: "Erro",
         description: "Preencha todos os campos obrigatórios",
@@ -54,8 +58,14 @@ export const useOrdemForm = (
       }
 
       toast({
+<<<<<<< HEAD
         title: mode === 'create' ? "Ordem de Fornecimento criada" : "Ordem de Fornecimento atualizada",
         description: mode === 'create' ? "A ordem foi criada com sucesso" : "A ordem foi atualizada com sucesso",
+=======
+        title: "Ordem criada com sucesso!",
+        description: `Número da ordem: ${numero}`,
+        variant: "default",
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
       });
 
       if (onSuccess) onSuccess();
@@ -76,10 +86,17 @@ export const useOrdemForm = (
       .insert({
         contrato_id: contratoId,
         data_emissao: data?.toISOString(),
+<<<<<<< HEAD
         numero,
         // Status is now managed by triggers, no need to set it here
       })
       .select("id")
+=======
+        numero: numero,
+        status: "pendente"
+      })
+      .select("id, numero")
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
       .single();
 
     if (ordemError) {
@@ -116,7 +133,10 @@ export const useOrdemForm = (
       .update({
         data_emissao: data?.toISOString(),
         contrato_id: contratoId
+<<<<<<< HEAD
         // Status is now managed by triggers, no need to update it here
+=======
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
       })
       .eq("id", ordemId);
 
@@ -127,6 +147,21 @@ export const useOrdemForm = (
     await updateConsumedItems(ordemId);
   };
 
+<<<<<<< HEAD
+=======
+  const deleteOrdem = async (ordemId: string) => {
+    await supabase
+      .from('itens_consumidos')
+      .delete()
+      .eq('ordem_id', ordemId);
+
+    await supabase
+      .from('ordens')
+      .delete()
+      .eq('id', ordemId);
+  };
+
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
   return {
     data,
     setData,
@@ -140,6 +175,11 @@ export const useOrdemForm = (
     setSelectedItems,
     handleSubmit,
     loading,
+<<<<<<< HEAD
     loadingNumero
+=======
+    loadingNumero,
+    deleteOrdem
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
   };
 };

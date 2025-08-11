@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 
 import React from "react";
 import { FormStep } from "@/types";
+=======
+import React from "react";
+import { FormStep } from "@/hooks/useContratoForm";
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 import ContratoBasicInfo from "./ContratoBasicInfo";
 import ContratoDates from "./ContratoDates";
 import ContratoItems from "./ContratoItems";
@@ -11,7 +16,11 @@ interface ContratoFormStepContentProps {
   formData: {
     numero: string;
     objeto: string;
+<<<<<<< HEAD
     fornecedor_ids: string | string[];
+=======
+    fornecedor_id: string;
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
     valor: string;
     fundo_municipal: FundoMunicipal[];
     data_inicio: Date;
@@ -28,14 +37,22 @@ export const ContratoFormStepContent: React.FC<ContratoFormStepContentProps> = (
   fornecedores,
   onFieldChange
 }) => {
+<<<<<<< HEAD
   // Ensure fornecedor_ids is always an array
   const fornecedorIds = Array.isArray(formData.fornecedor_ids) 
     ? formData.fornecedor_ids 
     : (formData.fornecedor_ids ? [formData.fornecedor_ids] : []);
+=======
+  // Ensure fundo_municipal is always an array
+  const fundoMunicipal = Array.isArray(formData.fundo_municipal) 
+    ? formData.fundo_municipal 
+    : [];
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
   
   switch (step) {
     case "basic":
       return (
+<<<<<<< HEAD
         <>
           <ContratoBasicInfo 
             numero={formData.numero || ""}
@@ -73,6 +90,33 @@ export const ContratoFormStepContent: React.FC<ContratoFormStepContentProps> = (
             onFieldChange("items", newItems);
           }}
           fundosMunicipais={formData.fundo_municipal || []}
+=======
+        <ContratoBasicInfo 
+          numero={formData.numero || ""}
+          fornecedorId={formData.fornecedor_id || ""}
+          fundoMunicipal={fundoMunicipal}
+          objeto={formData.objeto || ""}
+          valor={formData.valor || ""}
+          fornecedores={fornecedores || []}
+          onFieldChange={onFieldChange}
+        />
+      );
+    case "dates":
+      return (
+        <ContratoDates
+          dataInicio={formData.data_inicio || new Date()}
+          dataTermino={formData.data_termino || new Date()}
+          onDateChange={(field, date) => onFieldChange(field, date)}
+        />
+      );
+    case "items":
+      return (
+        <ContratoItems
+          items={formData.items || []}
+          onAddItem={item => onFieldChange("items", [...(formData.items || []), item])}
+          onRemoveItem={idx => onFieldChange("items", (formData.items || []).filter((_, i) => i !== idx))}
+          fundosMunicipais={fundoMunicipal}
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
         />
       );
     default:

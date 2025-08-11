@@ -1,8 +1,12 @@
 
+<<<<<<< HEAD
 import React from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
+=======
+import { FormSheet } from "@/components/ui/form-sheet";
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 import OrdemFormFields from "./OrdemFormFields";
 import OrdemItemsSelection from "./OrdemItemsSelection";
 import { useOrdemForm } from "@/hooks/useOrdemForm";
@@ -36,6 +40,7 @@ export const AddOrdemForm = ({
     loadingNumero
   } = useOrdemForm(onSuccess);
 
+<<<<<<< HEAD
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     handleSubmit(e);
@@ -100,6 +105,39 @@ export const AddOrdemForm = ({
         </form>
       </DialogContent>
     </Dialog>
+=======
+  return (
+    <FormSheet
+      open={open}
+      onOpenChange={onOpenChange}
+      title="Nova Ordem de Fornecimento"
+      description="Preencha os dados para criar uma nova ordem de fornecimento"
+      onSubmit={handleSubmit}
+      loading={loading}
+      submitLabel="Criar Ordem"
+    >
+      <div className="space-y-6">
+        <OrdemFormFields
+          numero={numero}
+          setNumero={setNumero}
+          data={data}
+          setData={setData}
+          contratoId={contratoId}
+          setContratoId={setContratoId}
+          contratos={contratos}
+          loadingNumero={loadingNumero}
+        />
+        
+        {contratoId && (
+          <OrdemItemsSelection
+            selectedContratoId={contratoId}
+            contratoItens={contratoItems}
+            onItemsChange={setSelectedItems}
+          />
+        )}
+      </div>
+    </FormSheet>
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
   );
 };
 

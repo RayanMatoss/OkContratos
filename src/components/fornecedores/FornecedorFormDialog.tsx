@@ -5,8 +5,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import type { Fornecedor } from "@/types";
 import type { NewFornecedor } from "@/hooks/fornecedores/types";
+<<<<<<< HEAD
 import { useCpfCnpjMask } from "@/hooks/useCpfCnpjMask";
 import { useEffect } from "react";
+=======
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 
 interface FornecedorFormDialogProps {
   open: boolean;
@@ -28,6 +31,7 @@ export const FornecedorFormDialog = ({
   mode
 }: FornecedorFormDialogProps) => {
   const isEditing = mode === 'edit';
+<<<<<<< HEAD
   const { value: cnpjValue, handleChange: handleCnpjChange, getPlaceholder } = useCpfCnpjMask(fornecedor.cnpj);
 
   // Sincronizar o valor da máscara com o estado do formulário
@@ -43,6 +47,8 @@ export const FornecedorFormDialog = ({
       handleCnpjChange(fornecedor.cnpj);
     }
   }, [fornecedor.cnpj]);
+=======
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
   
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -63,12 +69,21 @@ export const FornecedorFormDialog = ({
             />
           </div>
           <div className="space-y-2">
+<<<<<<< HEAD
             <Label htmlFor="cnpj">CPF ou CNPJ</Label>
             <Input
               id="cnpj"
               placeholder={getPlaceholder()}
               value={cnpjValue}
               onChange={(e) => handleCnpjChange(e.target.value)}
+=======
+            <Label htmlFor="cnpj">CNPJ</Label>
+            <Input
+              id="cnpj"
+              placeholder="00.000.000/0000-00"
+              value={fornecedor.cnpj}
+              onChange={(e) => onFornecedorChange("cnpj", e.target.value)}
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
             />
           </div>
           <div className="space-y-2">

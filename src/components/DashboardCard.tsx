@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 import { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -8,7 +12,10 @@ interface DashboardCardProps {
   description: string;
   iconColor?: string;
   className?: string;
+<<<<<<< HEAD
   onClick?: () => void;
+=======
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 }
 
 const DashboardCard = ({
@@ -17,6 +24,7 @@ const DashboardCard = ({
   icon: Icon,
   description,
   iconColor,
+<<<<<<< HEAD
   className,
   onClick
 }: DashboardCardProps) => {
@@ -29,6 +37,15 @@ const DashboardCard = ({
       style={onClick ? { cursor: 'pointer' } : {}}
       onClick={onClick}
     >
+=======
+  className
+}: DashboardCardProps) => {
+  return (
+    <div className={cn(
+      "bg-secondary rounded-lg p-5 border border-border hover-card",
+      className
+    )}>
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
       <div className="flex justify-between items-start">
         <div>
           <h3 className="text-sm font-medium text-muted-foreground">{title}</h3>

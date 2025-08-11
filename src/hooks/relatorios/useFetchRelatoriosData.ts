@@ -30,9 +30,14 @@ export const useFetchRelatoriosData = (periodoSelecionado: string) => {
             data_termino,
             status,
             created_at
+<<<<<<< HEAD
           `);
         
         console.log('Contratos retornados:', contratos);
+=======
+          `)
+          .gte('created_at', format(dataInicial, 'yyyy-MM-dd'));
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
         
         if (contratosError) throw new Error(`Erro ao buscar contratos: ${contratosError.message}`);
 
@@ -47,7 +52,11 @@ export const useFetchRelatoriosData = (periodoSelecionado: string) => {
             created_at,
             contrato_id
           `)
+<<<<<<< HEAD
           .gte('data_emissao', format(dataInicial, 'yyyy-MM-dd'));
+=======
+          .gte('created_at', format(dataInicial, 'yyyy-MM-dd'));
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
         
         if (ordensError) throw new Error(`Erro ao buscar ordens: ${ordensError.message}`);
 
@@ -132,13 +141,20 @@ function processRelatoriosData(
   // Iterar pelos últimos n meses
   for (let i = 0; i < numMeses; i++) {
     const dataRef = subMonths(dataAtual, i);
+<<<<<<< HEAD
     console.log('Processando mês:', dataRef.toISOString());
+=======
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
     const mes = dataRef.getMonth() + 1;
     const ano = dataRef.getFullYear();
     
     // Filtrar contratos do mês
     const contratosMes = contratos.filter(c => {
+<<<<<<< HEAD
       const dataContrato = new Date(c.data_inicio);
+=======
+      const dataContrato = new Date(c.created_at);
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
       return dataContrato.getMonth() + 1 === mes && dataContrato.getFullYear() === ano;
     });
     

@@ -1,41 +1,68 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
+<<<<<<< HEAD
 import Select from 'react-select';
+=======
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 
 interface NewItem {
   descricao: string;
   quantidade: string;
   unidade: string;
   valor_unitario: string;
+<<<<<<< HEAD
   contrato_id: string;
+=======
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 }
 
 interface ItemFormProps {
   onAdd: (item: NewItem) => void;
+<<<<<<< HEAD
   contratos: { id: string; numero: string; objeto: string }[];
 }
 
 export const ItemForm = ({ onAdd, contratos }: ItemFormProps) => {
+=======
+}
+
+export const ItemForm = ({ onAdd }: ItemFormProps) => {
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
   const [item, setItem] = useState<NewItem>({
     descricao: "",
     quantidade: "",
     unidade: "",
+<<<<<<< HEAD
     valor_unitario: "",
     contrato_id: ""
   });
 
   const handleAdd = () => {
     if (!item.contrato_id) return;
+=======
+    valor_unitario: ""
+  });
+
+  const handleAdd = () => {
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
     onAdd(item);
     setItem({
       descricao: "",
       quantidade: "",
       unidade: "",
+<<<<<<< HEAD
       valor_unitario: "",
       contrato_id: ""
+=======
+      valor_unitario: ""
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
     });
   };
 
@@ -83,6 +110,7 @@ export const ItemForm = ({ onAdd, contratos }: ItemFormProps) => {
             />
           </div>
         </div>
+<<<<<<< HEAD
         <div className="space-y-2">
           <Label htmlFor="contrato">Contrato</Label>
           <Select
@@ -119,13 +147,18 @@ export const ItemForm = ({ onAdd, contratos }: ItemFormProps) => {
             }}
           />
         </div>
+=======
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
       </div>
       <Button 
         type="button" 
         variant="outline" 
         onClick={handleAdd}
         className="w-full"
+<<<<<<< HEAD
         disabled={!item.contrato_id}
+=======
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
       >
         <Plus className="h-4 w-4 mr-2" />
         Adicionar Item à Lista

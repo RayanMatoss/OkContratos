@@ -29,9 +29,15 @@ export const RelatoriosTables = ({ relatoriosFiltrados, activeTab }: RelatoriosT
                 <TableCell className="font-medium">
                   {format(new Date(relatorio.ano, relatorio.mes - 1), 'MMMM/yyyy', { locale: ptBR })}
                 </TableCell>
+<<<<<<< HEAD
                 <TableCell>{relatorio.totalContratos || 0}</TableCell>
                 <TableCell>{relatorio.contratosAtivos || 0}</TableCell>
                 <TableCell>{relatorio.contratosVencidos || 0}</TableCell>
+=======
+                <TableCell>{relatorio.totalContratos}</TableCell>
+                <TableCell>{relatorio.contratosAtivos}</TableCell>
+                <TableCell>{relatorio.contratosVencidos}</TableCell>
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
               </TableRow>
             ))}
           </TableBody>
@@ -58,9 +64,15 @@ export const RelatoriosTables = ({ relatoriosFiltrados, activeTab }: RelatoriosT
                 <TableCell className="font-medium">
                   {format(new Date(relatorio.ano, relatorio.mes - 1), 'MMMM/yyyy', { locale: ptBR })}
                 </TableCell>
+<<<<<<< HEAD
                 <TableCell>{relatorio.ordensRealizadas || 0}</TableCell>
                 <TableCell>{relatorio.ordensConcluidas || 0}</TableCell>
                 <TableCell>{relatorio.ordensPendentes || 0}</TableCell>
+=======
+                <TableCell>{relatorio.ordensRealizadas}</TableCell>
+                <TableCell>{relatorio.ordensConcluidas}</TableCell>
+                <TableCell>{relatorio.ordensPendentes}</TableCell>
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
               </TableRow>
             ))}
           </TableBody>
@@ -85,8 +97,13 @@ export const RelatoriosTables = ({ relatoriosFiltrados, activeTab }: RelatoriosT
               <TableCell className="font-medium">
                 {format(new Date(relatorio.ano, relatorio.mes - 1), 'MMMM/yyyy', { locale: ptBR })}
               </TableCell>
+<<<<<<< HEAD
               <TableCell>{formatCurrency(relatorio.valorTotalContratos || 0)}</TableCell>
               <TableCell>{formatCurrency(relatorio.valorTotalOrdens || 0)}</TableCell>
+=======
+              <TableCell>{formatCurrency(relatorio.valorTotalContratos)}</TableCell>
+              <TableCell>{formatCurrency(relatorio.valorTotalOrdens)}</TableCell>
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
             </TableRow>
           ))}
         </TableBody>

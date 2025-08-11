@@ -1,8 +1,12 @@
 
 import { Item } from "@/types";
+<<<<<<< HEAD
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useMemo } from "react";
+=======
+import OrdemItemRow from "./OrdemItemRow";
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
 
 interface OrdemItemsListProps {
   contratoItens: Item[];
@@ -22,6 +26,7 @@ const OrdemItemsList = ({
     return item ? item.quantidade : 0;
   };
 
+<<<<<<< HEAD
   // Calcular total geral dos itens selecionados
   const { totalGeral, itensComQuantidade } = useMemo(() => {
     let total = 0;
@@ -195,6 +200,29 @@ const OrdemItemsList = ({
               </div>
             </div>
           </div>
+=======
+  return (
+    <div className="max-h-[300px] overflow-y-auto space-y-2 rounded-md border p-2">
+      {contratoItens.map((item) => {
+        const selectedQuantity = getSelectedQuantity(item.id);
+        const adjustedAvailable = mode === 'edit'
+          ? item.quantidade - item.quantidadeConsumida + selectedQuantity
+          : item.quantidade - item.quantidadeConsumida;
+
+        return (
+          <OrdemItemRow
+            key={item.id}
+            item={item}
+            selectedQuantity={selectedQuantity}
+            adjustedAvailable={adjustedAvailable}
+            onQuantityChange={onQuantityChange}
+          />
+        );
+      })}
+      {contratoItens.length === 0 && (
+        <div className="p-4 text-center text-muted-foreground">
+          Nenhum item disponível para este contrato.
+>>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
         </div>
       )}
     </div>
