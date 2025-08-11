@@ -1,7 +1,10 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,10 +16,14 @@ export const useContratos = () => {
   const [loading, setLoading] = useState(false);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   const parseFundoMunicipal = (fundoMunicipal: any): FundoMunicipal[] => {
     if (Array.isArray(fundoMunicipal)) {
       return fundoMunicipal;
     }
+<<<<<<< HEAD
 =======
   const parseFundoMunicipal = (fundo: string | null | undefined): FundoMunicipal[] => {
     if (!fundo) return [];
@@ -35,6 +42,8 @@ export const useContratos = () => {
     
     // Caso não seja reconhecido, retorne array vazio
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     return [];
   };
 
@@ -42,6 +51,9 @@ export const useContratos = () => {
     try {
       setLoading(true);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       
       // Buscar contratos usando a nova view com numeração completa
       const { data, error } = await supabase
@@ -49,6 +61,7 @@ export const useContratos = () => {
         .select(`
           *,
           itens(*)
+<<<<<<< HEAD
 =======
       const { data, error } = await supabase
         .from("contratos")
@@ -63,12 +76,17 @@ export const useContratos = () => {
             endereco
           )
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         `)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       const formattedContratos: Contrato[] = data.map(contrato => {
         
         // Usar dados da nova view
@@ -116,6 +134,7 @@ export const useContratos = () => {
           itens: itens
         };
       });
+<<<<<<< HEAD
 =======
       const formattedContratos: Contrato[] = data.map(contrato => ({
         id: contrato.id,
@@ -140,6 +159,8 @@ export const useContratos = () => {
         itens: []
       }));
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 
       setContratos(formattedContratos);
     } catch (error: any) {
@@ -154,6 +175,9 @@ export const useContratos = () => {
   };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   // Função para atualizar contratos existentes com fundos do usuário
   const atualizarContratosComFundos = async (fundosUsuario: string[]) => {
     try {
@@ -179,6 +203,7 @@ export const useContratos = () => {
       }
     } catch (error: any) {
       console.error("Erro ao atualizar contratos com fundos:", error);
+<<<<<<< HEAD
 =======
   const updateContrato = async (id: string, data: Partial<Omit<Contrato, 'id' | 'createdAt' | 'status'>>) => {
     try {
@@ -242,11 +267,14 @@ export const useContratos = () => {
         variant: "destructive",
       });
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     }
   };
 
   useEffect(() => {
     fetchContratos();
+<<<<<<< HEAD
 <<<<<<< HEAD
   }, []);
 
@@ -275,4 +303,9 @@ export const useContratos = () => {
 
   return { contratos, loading, fetchContratos, deleteContrato, updateContrato };
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+  }, []);
+
+  return { contratos, loading, fetchContratos, atualizarContratosComFundos };
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 };

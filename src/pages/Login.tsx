@@ -1,31 +1,44 @@
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { useEffect, useState } from "react";
 =======
 import { useState } from "react";
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+import { useEffect, useState } from "react";
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { FileText, Lock } from "lucide-react";
 import FundoMunicipalSelector from '@/components/contratos/FundoMunicipalSelector';
+<<<<<<< HEAD
 =======
 import { useToast } from "@/hooks/use-toast";
 import { usuarios } from "@/data/mockData";
 import { FileText, Lock } from "lucide-react";
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 
 const Login = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   const { login } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -99,6 +112,7 @@ const Login = () => {
     } finally {
       setIsLoading(false);
     }
+<<<<<<< HEAD
 =======
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -128,6 +142,8 @@ const Login = () => {
       setIsLoading(false);
     }, 1500);
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   };
 
   return (
@@ -141,10 +157,14 @@ const Login = () => {
           </div>
           <h1 className="text-2xl font-bold">
 <<<<<<< HEAD
+<<<<<<< HEAD
             <span className="text-primary">Ok</span>Contratos
 =======
             <span className="text-primary">Lumen</span>Contract
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+            <span className="text-primary">Ok</span>Contratos
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
           </h1>
           <p className="text-sm text-muted-foreground mt-2">
             Sistema de Controle de Contratos
@@ -154,6 +174,9 @@ const Login = () => {
         <form onSubmit={handleLogin} className="space-y-6">
           <div className="space-y-2">
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
             <Label htmlFor="username">Nome de Usuário</Label>
             <Input
               id="username"
@@ -161,6 +184,7 @@ const Login = () => {
               placeholder="Digite seu nome de usuário"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+<<<<<<< HEAD
 =======
             <Label htmlFor="email">Email</Label>
             <Input
@@ -170,6 +194,8 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
               required
             />
           </div>
@@ -178,6 +204,9 @@ const Login = () => {
             <div className="flex justify-between">
               <Label htmlFor="password">Senha</Label>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
               <button 
                 type="button"
                 onClick={() => navigate("/recuperar-senha")}
@@ -229,6 +258,7 @@ const Login = () => {
           {/* Adicionando seleção de fundos/secretarias */}
           <FundoMunicipalSelector selectedFundos={selectedFundos} onChange={setSelectedFundos} />
 
+<<<<<<< HEAD
 =======
               <a 
                 href="#" 
@@ -248,6 +278,8 @@ const Login = () => {
           </div>
 
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
           <div className="flex items-center space-x-2">
             <Checkbox id="remember" />
             <Label htmlFor="remember" className="text-sm">
@@ -273,12 +305,15 @@ const Login = () => {
           </Button>
         </form>
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
         <div className="text-center text-xs text-muted-foreground">
           <p>Dica: Use o email "admin@sistema.gov.br" e senha "senha123"</p>
         </div>
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       </div>
     </div>
   );

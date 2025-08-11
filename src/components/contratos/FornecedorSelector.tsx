@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 import Select from 'react-select';
 import { Fornecedor } from "@/types";
 
@@ -160,6 +163,7 @@ const FornecedorSelector = ({ value, onChange, fornecedores, isMulti = true }: F
         })
       }}
     />
+<<<<<<< HEAD
 =======
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -189,6 +193,8 @@ const FornecedorSelector = ({ value, onChange, fornecedores }: FornecedorSelecto
       </SelectContent>
     </Select>
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   );
 };
 

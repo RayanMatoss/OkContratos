@@ -1,7 +1,10 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -16,10 +19,15 @@ interface DashboardData {
   contratosRecentes: any[];
   ordensPendentesLista: any[];
 <<<<<<< HEAD
+<<<<<<< HEAD
   itensAlerta: any[];
   fornecedores: any[]; // ADICIONADO
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+  itensAlerta: any[];
+  fornecedores: any[]; // ADICIONADO
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 }
 
 export const useDashboardData = () => {
@@ -33,12 +41,18 @@ export const useDashboardData = () => {
     ordensData: [],
     contratosRecentes: [],
 <<<<<<< HEAD
+<<<<<<< HEAD
     ordensPendentesLista: [],
     itensAlerta: [],
     fornecedores: []
 =======
     ordensPendentesLista: []
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+    ordensPendentesLista: [],
+    itensAlerta: [],
+    fornecedores: []
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   });
   const [loading, setLoading] = useState(true);
 
@@ -80,6 +94,9 @@ export const useDashboardData = () => {
         .from("fornecedores")
         .select('*', { count: "exact" });
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       if (fornecedoresError) throw fornecedoresError;
 
       // Fetch todos os fornecedores
@@ -87,10 +104,13 @@ export const useDashboardData = () => {
         .from("fornecedores")
         .select("*");
       if (fornecedoresListError) throw fornecedoresListError;
+<<<<<<< HEAD
 =======
 
       if (fornecedoresError) throw fornecedoresError;
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 
       // Calculate dashboard metrics
       const now = new Date();
@@ -155,6 +175,9 @@ export const useDashboardData = () => {
       }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       // Buscar itens em alerta (consumo > 90%)
       const { data: itensAlerta, error: itensAlertaError } = await supabase
         .from('itens')
@@ -175,24 +198,33 @@ export const useDashboardData = () => {
 
       setData({
         totalContratos: contratos.length,
+<<<<<<< HEAD
 =======
       setData({
         totalContratos: contratos?.length || 0,
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         contratosAVencer,
         totalFornecedores: fornecedoresCount || 0,
         ordensPendentes,
         statusContratosData,
         ordensData,
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         contratosRecentes: contratos.slice(0, 10),
         ordensPendentesLista,
         itensAlerta: itensAlertaFiltrados,
         fornecedores: fornecedores || [], // ADICIONADO
+<<<<<<< HEAD
 =======
         contratosRecentes,
         ordensPendentesLista
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       });
 
     } catch (error: any) {

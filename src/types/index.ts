@@ -1,5 +1,6 @@
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 export type FundoMunicipal = "Prefeitura" | "Educação" | "Saúde" | "Assistência";
 
@@ -10,6 +11,8 @@ export type StatusContrato = "Ativo" | "Expirado" | "A Vencer" | "Em Aprovação
 export type StatusOrdem = "Pendente" | "Concluída";
 
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 export interface Fornecedor {
   id: string;
   nome: string;
@@ -21,6 +24,9 @@ export interface Fornecedor {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 export interface Contrato {
   id: string;
   numero: string;
@@ -39,14 +45,20 @@ export interface Contrato {
   itens: Item[];
 }
 
+<<<<<<< HEAD
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 export interface Item {
   id: string;
   contratoId: string;
   descricao: string;
   quantidade: number;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   unidade: string;
   valorUnitario: number;
   quantidadeConsumida: number;
@@ -55,6 +67,7 @@ export interface Item {
 }
 
 export type FundoMunicipal = string;
+<<<<<<< HEAD
 =======
   valorUnitario: number;
   unidade: string;
@@ -76,6 +89,8 @@ export interface Contrato {
   createdAt: Date;
 }
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 
 export interface OrdemFornecimento {
   id: string;
@@ -84,6 +99,9 @@ export interface OrdemFornecimento {
   contrato?: Contrato;
   dataEmissao: Date;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   observacoes: string;
   status: StatusOrdem;
   itensConsumidos: { itemId: string; quantidade: number }[];
@@ -101,12 +119,16 @@ export interface Aditivo {
   tipo: TipoAditivo;
   nova_data_termino?: string;
   percentual_itens?: number;
+<<<<<<< HEAD
   aplicar_todos_itens?: boolean;
   percentuais_por_item?: { [itemId: string]: number };
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   criado_em: string;
 }
 
 export type TipoAditivo = 'periodo' | 'valor';
+<<<<<<< HEAD
 =======
   status: StatusOrdem;
   itensConsumidos: {
@@ -135,12 +157,17 @@ export interface Notificacao {
   usuarioId: string;
 }
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 
 export interface RelatorioMensal {
   mes: number;
   ano: number;
   totalContratos: number;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   contratosAtivos: number;
   contratosVencidos: number;
   ordensRealizadas: number;
@@ -162,6 +189,7 @@ export interface ContratoFormValues {
 }
 
 export type FormStep = 'basic' | 'dates' | 'items';
+<<<<<<< HEAD
 =======
   contratosVencidos: number;
   contratosAtivos: number;
@@ -172,3 +200,5 @@ export type FormStep = 'basic' | 'dates' | 'items';
   valorTotalOrdens: number;
 }
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c

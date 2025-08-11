@@ -59,6 +59,7 @@ const AditivosTab = ({ contratoId, onAditivoCriado }: AditivosTabProps) => {
     }
   };
 
+<<<<<<< HEAD
   const getAditivoDescription = (aditivo: Aditivo) => {
     switch (aditivo.tipo) {
       case "periodo":
@@ -76,6 +77,8 @@ const AditivosTab = ({ contratoId, onAditivoCriado }: AditivosTabProps) => {
     }
   };
 
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -119,9 +122,23 @@ const AditivosTab = ({ contratoId, onAditivoCriado }: AditivosTabProps) => {
                         </span>
                       </div>
                       
+<<<<<<< HEAD
                       <p className="text-sm text-muted-foreground">
                         {getAditivoDescription(aditivo)}
                       </p>
+=======
+                      {aditivo.tipo === "periodo" && aditivo.nova_data_termino && (
+                        <p className="text-sm">
+                          <span className="font-medium">Nova vigência:</span> {new Date(aditivo.nova_data_termino).toLocaleDateString('pt-BR')}
+                        </p>
+                      )}
+                      
+                      {aditivo.tipo === "valor" && aditivo.percentual_itens && (
+                        <p className="text-sm">
+                          <span className="font-medium">Acréscimo:</span> {aditivo.percentual_itens}%
+                        </p>
+                      )}
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
                     </div>
                   </div>
                   

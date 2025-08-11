@@ -8,6 +8,9 @@ export type Json =
 
 export type Database = {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   // Allows to automatically instanciate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
@@ -57,16 +60,20 @@ export type Database = {
           },
         ]
       }
+<<<<<<< HEAD
 =======
   public: {
     Tables: {
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       contratos: {
         Row: {
           created_at: string
           data_inicio: string
           data_termino: string
           fornecedor_id: string
+<<<<<<< HEAD
 <<<<<<< HEAD
           fundo_municipal: string[]
           id: string
@@ -75,6 +82,11 @@ export type Database = {
           fundo_municipal: string
           id: string
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+          fundo_municipal: string[]
+          id: string
+          municipio_id: string | null
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
           numero: string
           objeto: string
           status: string
@@ -86,6 +98,7 @@ export type Database = {
           data_termino: string
           fornecedor_id: string
 <<<<<<< HEAD
+<<<<<<< HEAD
           fundo_municipal: string[]
           id?: string
           municipio_id?: string | null
@@ -93,6 +106,11 @@ export type Database = {
           fundo_municipal: string
           id?: string
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+          fundo_municipal: string[]
+          id?: string
+          municipio_id?: string | null
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
           numero: string
           objeto: string
           status?: string
@@ -104,6 +122,7 @@ export type Database = {
           data_termino?: string
           fornecedor_id?: string
 <<<<<<< HEAD
+<<<<<<< HEAD
           fundo_municipal?: string[]
           id?: string
           municipio_id?: string | null
@@ -111,6 +130,11 @@ export type Database = {
           fundo_municipal?: string
           id?: string
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+          fundo_municipal?: string[]
+          id?: string
+          municipio_id?: string | null
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
           numero?: string
           objeto?: string
           status?: string
@@ -125,6 +149,9 @@ export type Database = {
             referencedColumns: ["id"]
           },
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
           {
             foreignKeyName: "contratos_fornecedor_id_fkey"
             columns: ["fornecedor_id"]
@@ -139,8 +166,11 @@ export type Database = {
             referencedRelation: "municipios"
             referencedColumns: ["id"]
           },
+<<<<<<< HEAD
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         ]
       }
       fornecedores: {
@@ -151,10 +181,15 @@ export type Database = {
           endereco: string | null
           id: string
 <<<<<<< HEAD
+<<<<<<< HEAD
           municipio_id: string | null
           municipioid: string | null
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+          municipio_id: string | null
+          municipioid: string | null
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
           nome: string
           telefone: string | null
         }
@@ -165,10 +200,15 @@ export type Database = {
           endereco?: string | null
           id?: string
 <<<<<<< HEAD
+<<<<<<< HEAD
           municipio_id?: string | null
           municipioid?: string | null
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+          municipio_id?: string | null
+          municipioid?: string | null
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
           nome: string
           telefone?: string | null
         }
@@ -179,6 +219,9 @@ export type Database = {
           endereco?: string | null
           id?: string
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
           municipio_id?: string | null
           municipioid?: string | null
           nome?: string
@@ -193,12 +236,15 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+<<<<<<< HEAD
 =======
           nome?: string
           telefone?: string | null
         }
         Relationships: []
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       }
       itens: {
         Row: {
@@ -206,12 +252,18 @@ export type Database = {
           created_at: string
           descricao: string
 <<<<<<< HEAD
+<<<<<<< HEAD
           fundos: string[] | null
           id: string
           municipio_id: string | null
 =======
           id: string
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+          fundos: string[] | null
+          id: string
+          municipio_id: string | null
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
           quantidade: number
           quantidade_consumida: number
           unidade: string
@@ -222,12 +274,18 @@ export type Database = {
           created_at?: string
           descricao: string
 <<<<<<< HEAD
+<<<<<<< HEAD
           fundos?: string[] | null
           id?: string
           municipio_id?: string | null
 =======
           id?: string
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+          fundos?: string[] | null
+          id?: string
+          municipio_id?: string | null
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
           quantidade: number
           quantidade_consumida?: number
           unidade: string
@@ -238,12 +296,18 @@ export type Database = {
           created_at?: string
           descricao?: string
 <<<<<<< HEAD
+<<<<<<< HEAD
           fundos?: string[] | null
           id?: string
           municipio_id?: string | null
 =======
           id?: string
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+          fundos?: string[] | null
+          id?: string
+          municipio_id?: string | null
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
           quantidade?: number
           quantidade_consumida?: number
           unidade?: string
@@ -258,6 +322,9 @@ export type Database = {
             referencedColumns: ["id"]
           },
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
           {
             foreignKeyName: "itens_contrato_id_fkey"
             columns: ["contrato_id"]
@@ -272,8 +339,11 @@ export type Database = {
             referencedRelation: "municipios"
             referencedColumns: ["id"]
           },
+<<<<<<< HEAD
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         ]
       }
       itens_consumidos: {
@@ -301,6 +371,9 @@ export type Database = {
         Relationships: [
           {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
             foreignKeyName: "fk_ordem"
             columns: ["ordem_id"]
             isOneToOne: false
@@ -308,8 +381,11 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+<<<<<<< HEAD
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
             foreignKeyName: "itens_consumidos_item_id_fkey"
             columns: ["item_id"]
             isOneToOne: false
@@ -326,6 +402,9 @@ export type Database = {
         ]
       }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       municipios: {
         Row: {
           created_at: string | null
@@ -350,8 +429,11 @@ export type Database = {
         }
         Relationships: []
       }
+<<<<<<< HEAD
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       notificacoes: {
         Row: {
           created_at: string
@@ -404,9 +486,13 @@ export type Database = {
           data_emissao: string
           id: string
 <<<<<<< HEAD
+<<<<<<< HEAD
           municipio_id: string | null
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+          municipio_id: string | null
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
           numero: string
           status: string
         }
@@ -416,9 +502,13 @@ export type Database = {
           data_emissao: string
           id?: string
 <<<<<<< HEAD
+<<<<<<< HEAD
           municipio_id?: string | null
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+          municipio_id?: string | null
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
           numero?: string
           status?: string
         }
@@ -428,9 +518,13 @@ export type Database = {
           data_emissao?: string
           id?: string
 <<<<<<< HEAD
+<<<<<<< HEAD
           municipio_id?: string | null
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+          municipio_id?: string | null
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
           numero?: string
           status?: string
         }
@@ -443,6 +537,9 @@ export type Database = {
             referencedColumns: ["id"]
           },
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
           {
             foreignKeyName: "ordens_contrato_id_fkey"
             columns: ["contrato_id"]
@@ -457,8 +554,11 @@ export type Database = {
             referencedRelation: "municipios"
             referencedColumns: ["id"]
           },
+<<<<<<< HEAD
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         ]
       }
       profiles: {
@@ -483,6 +583,9 @@ export type Database = {
         Relationships: []
       }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       user_profiles: {
         Row: {
           cargo: string | null
@@ -635,6 +738,7 @@ export type Database = {
           municipio_uf: string
         }[]
       }
+<<<<<<< HEAD
 =======
     }
     Views: {
@@ -642,11 +746,16 @@ export type Database = {
     }
     Functions: {
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       get_next_ordem_numero: {
         Args: Record<PropertyKey, never>
         Returns: string
       }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       get_user_municipio: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -692,8 +801,11 @@ export type Database = {
             }
         Returns: string
       }
+<<<<<<< HEAD
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     }
     Enums: {
       [_ in never]: never
@@ -705,17 +817,26 @@ export type Database = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
 
 type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 =======
 type DefaultSchema = Database[Extract<keyof Database, "public">]
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
@@ -728,6 +849,7 @@ export type Tables<
 }
   ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
       DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+<<<<<<< HEAD
 =======
     | { schema: keyof Database },
   TableName extends DefaultSchemaTableNameOrOptions extends {
@@ -740,6 +862,8 @@ export type Tables<
   ? (Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
       Database[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       Row: infer R
     }
     ? R
@@ -758,6 +882,9 @@ export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
@@ -768,6 +895,7 @@ export type TablesInsert<
   schema: keyof DatabaseWithoutInternals
 }
   ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+<<<<<<< HEAD
 =======
     | { schema: keyof Database },
   TableName extends DefaultSchemaTableNameOrOptions extends {
@@ -778,6 +906,8 @@ export type TablesInsert<
 > = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
   ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       Insert: infer I
     }
     ? I
@@ -794,6 +924,9 @@ export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
@@ -804,6 +937,7 @@ export type TablesUpdate<
   schema: keyof DatabaseWithoutInternals
 }
   ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+<<<<<<< HEAD
 =======
     | { schema: keyof Database },
   TableName extends DefaultSchemaTableNameOrOptions extends {
@@ -814,6 +948,8 @@ export type TablesUpdate<
 > = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
   ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       Update: infer U
     }
     ? U
@@ -830,6 +966,9 @@ export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     | { schema: keyof DatabaseWithoutInternals },
   EnumName extends DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
@@ -840,6 +979,7 @@ export type Enums<
   schema: keyof DatabaseWithoutInternals
 }
   ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+<<<<<<< HEAD
 =======
     | { schema: keyof Database },
   EnumName extends DefaultSchemaEnumNameOrOptions extends {
@@ -850,6 +990,8 @@ export type Enums<
 > = DefaultSchemaEnumNameOrOptions extends { schema: keyof Database }
   ? Database[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
     ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
     : never
@@ -858,6 +1000,9 @@ export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
@@ -868,6 +1013,7 @@ export type CompositeTypes<
   schema: keyof DatabaseWithoutInternals
 }
   ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+<<<<<<< HEAD
 =======
     | { schema: keyof Database },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
@@ -878,6 +1024,8 @@ export type CompositeTypes<
 > = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
   ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
     ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never

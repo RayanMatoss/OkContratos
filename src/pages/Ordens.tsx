@@ -67,6 +67,9 @@ const Ordens = () => {
   };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   const handleRecalcularConsumo = async () => {
     const { error } = await supabase.rpc('recalcular_consumo_itens');
     if (error) {
@@ -85,8 +88,11 @@ const Ordens = () => {
     }
   };
 
+<<<<<<< HEAD
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between">
@@ -97,6 +103,9 @@ const Ordens = () => {
           </p>
         </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         <div className="flex flex-col items-end gap-1">
           <Button onClick={handleAdd} className="flex items-center gap-2">
             <Plus size={16} />
@@ -110,12 +119,15 @@ const Ordens = () => {
             Recalcular consumo dos itens
           </button>
         </div>
+<<<<<<< HEAD
 =======
         <Button onClick={handleAdd} className="flex items-center gap-2">
           <Plus size={16} />
           <span>Nova Ordem</span>
         </Button>
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       </div>
 
       <div className="flex items-center gap-4">
@@ -151,6 +163,10 @@ const Ordens = () => {
 
 export default Ordens;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c

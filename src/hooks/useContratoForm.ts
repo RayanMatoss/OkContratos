@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -7,6 +10,7 @@ import { Contrato, ContratoFormValues, Item } from "@/types";
 import { useAuth } from "@/hooks/useAuth";
 
 export type FormStep = 'basic' | 'items';
+<<<<<<< HEAD
 =======
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -26,6 +30,8 @@ interface ContratoFormData {
   items?: { descricao: string; quantidade: number }[];
 }
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 
 interface UseContratoFormProps {
   mode: 'create' | 'edit';
@@ -35,6 +41,9 @@ interface UseContratoFormProps {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 export const useContratoForm = ({
   mode,
   contrato,
@@ -66,6 +75,7 @@ export const useContratoForm = ({
         fornecedor_ids: contrato.fornecedorIds || [],
         valor: contrato.valor?.toString() || "",
         fundo_municipal: contrato.fundoMunicipal || fundosSelecionados || [],
+<<<<<<< HEAD
 =======
 export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: UseContratoFormProps) => {
   const { toast } = useToast();
@@ -110,12 +120,17 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
         valor: contrato.valor?.toString() || "",
         fundo_municipal: parseFundoMunicipal(contrato.fundoMunicipal),
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         data_inicio: contrato.dataInicio || new Date(),
         data_termino: contrato.dataTermino || new Date(),
         items: contrato.itens || []
       });
     } else {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       // Para novos contratos, usar os fundos selecionados no login
       setFormData(prev => ({
         ...prev,
@@ -134,6 +149,7 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
   const handleNextStep = () => {
     if (formStep === 'basic') {
       setFormStep('items');
+<<<<<<< HEAD
 =======
       // Reset the form for creation mode
       setFormData({
@@ -173,10 +189,13 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
     } else if (formStep === "dates") {
       setFormStep("items");
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     }
   };
 
   const handlePreviousStep = () => {
+<<<<<<< HEAD
 <<<<<<< HEAD
     if (formStep === 'items') {
       setFormStep('basic');
@@ -186,6 +205,10 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
     } else if (formStep === "items") {
       setFormStep("dates");
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+    if (formStep === 'items') {
+      setFormStep('basic');
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     }
   };
 
@@ -193,6 +216,9 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
     e.preventDefault();
     setLoading(true);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 
     try {
       // Garantir que fornecedor_id seja uma string válida
@@ -271,6 +297,7 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
         title: "Erro",
         description: error instanceof Error ? error.message : "Erro ao salvar contrato",
         variant: "destructive",
+<<<<<<< HEAD
 =======
     try {
       // Exigir pelo menos um item antes de criar o contrato
@@ -339,6 +366,8 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
         description: error.message,
         variant: "destructive"
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       });
     } finally {
       setLoading(false);

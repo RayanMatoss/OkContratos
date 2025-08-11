@@ -3,12 +3,17 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Menu, LogOut, MapPin } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 =======
 import { Menu, LogOut } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+import { Menu, LogOut, MapPin } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 import { useToast } from "@/hooks/use-toast";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
 
@@ -21,6 +26,9 @@ const AppHeader = ({ onToggleSidebar, isSidebarCollapsed }: AppHeaderProps) => {
   const navigate = useNavigate();
   const { toast } = useToast();
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   const { municipio, logout } = useAuth();
 
   const handleLogout = async () => {
@@ -36,6 +44,7 @@ const AppHeader = ({ onToggleSidebar, isSidebarCollapsed }: AppHeaderProps) => {
       toast({
         title: "Erro ao sair",
         description: message,
+<<<<<<< HEAD
 =======
 
   const handleLogout = async () => {
@@ -47,6 +56,8 @@ const AppHeader = ({ onToggleSidebar, isSidebarCollapsed }: AppHeaderProps) => {
         title: "Erro ao sair",
         description: error.message,
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         variant: "destructive"
       });
     }
@@ -68,6 +79,9 @@ const AppHeader = ({ onToggleSidebar, isSidebarCollapsed }: AppHeaderProps) => {
       </div>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       <div className="flex items-center gap-4">
         {municipio && (
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -76,9 +90,12 @@ const AppHeader = ({ onToggleSidebar, isSidebarCollapsed }: AppHeaderProps) => {
           </div>
         )}
         
+<<<<<<< HEAD
 =======
       <div className="flex items-center gap-2">
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         <NotificationBell />
         
         <Button
@@ -87,9 +104,13 @@ const AppHeader = ({ onToggleSidebar, isSidebarCollapsed }: AppHeaderProps) => {
           onClick={handleLogout}
           className="ml-2"
 <<<<<<< HEAD
+<<<<<<< HEAD
           title="Sair do sistema"
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+          title="Sair do sistema"
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         >
           <LogOut size={20} />
         </Button>

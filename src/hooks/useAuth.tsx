@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 ""
 import { useEffect, useState, createContext, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -30,6 +33,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [municipio, setMunicipio] = useState<Municipio | null>(null);
   const [perfil, setPerfil] = useState<string | null>(null);
   const [fundosSelecionados, setFundosSelecionados] = useState<string[]>([]);
+<<<<<<< HEAD
 =======
 
 import { useEffect, useState } from 'react';
@@ -42,6 +46,8 @@ export function useAuth() {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -65,6 +71,9 @@ export function useAuth() {
   }, []);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   const login = async (username: string, password: string, municipioId: string, fundosSelecionados: string[]) => {
     setLoading(true);
     try {
@@ -180,7 +189,10 @@ export function useAuth() {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
+<<<<<<< HEAD
 =======
   return { user, session, loading };
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 }

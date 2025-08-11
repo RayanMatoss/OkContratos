@@ -1,7 +1,10 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRelatoriosData } from "@/hooks/relatorios/useRelatoriosData";
@@ -61,10 +64,14 @@ const Relatorios = () => {
       </RelatoriosHeader>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
       <RelatoriosCards ultimoRelatorio={ultimoRelatorio} relatoriosFiltrados={relatoriosFiltrados} />
 =======
       <RelatoriosCards ultimoRelatorio={ultimoRelatorio} />
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+      <RelatoriosCards ultimoRelatorio={ultimoRelatorio} relatoriosFiltrados={relatoriosFiltrados} />
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 
       {relatoriosFiltrados.length === 0 ? (
         <Alert className="my-6">

@@ -1,9 +1,12 @@
 
 import { useState, useEffect } from "react";
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import { useToast } from "@/hooks/use-toast";
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 import { supabase } from "@/integrations/supabase/client";
 import { Item } from "@/types";
 
@@ -13,6 +16,9 @@ export const useOrdemItems = (
   ordemId?: string
 ) => {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedItems, setSelectedItems] = useState<{ itemId: string; quantidade: number }[]>([]);
@@ -21,6 +27,7 @@ export const useOrdemItems = (
     if (!contratoId) return;
     
     setLoading(true);
+<<<<<<< HEAD
 =======
   const { toast } = useToast();
   const [contratoItems, setContratoItems] = useState<Item[]>([]);
@@ -46,12 +53,15 @@ export const useOrdemItems = (
 
   const fetchContratoItems = async () => {
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     try {
       const { data, error } = await supabase
         .from("itens")
         .select("*")
         .eq("contrato_id", contratoId);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
       if (error) throw error;
 
@@ -68,6 +78,11 @@ export const useOrdemItems = (
 
       const transformedItems: Item[] = (data || []).map(item => ({
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+      if (error) throw error;
+
+      const formattedItems: Item[] = data.map(item => ({
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         id: item.id,
         contratoId: item.contrato_id,
         descricao: item.descricao,
@@ -75,6 +90,9 @@ export const useOrdemItems = (
         valorUnitario: item.valor_unitario,
         unidade: item.unidade,
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         quantidadeConsumida: item.quantidade_consumida,
         createdAt: new Date(item.created_at),
         fundos: item.fundos || []
@@ -102,6 +120,7 @@ export const useOrdemItems = (
       console.error("Erro ao buscar itens:", error);
     } finally {
       setLoading(false);
+<<<<<<< HEAD
 =======
         quantidadeConsumida: item.quantidade_consumida
       }));
@@ -143,11 +162,16 @@ export const useOrdemItems = (
         variant: "destructive",
       });
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     }
   };
 
   const updateConsumedItems = async (ordemId: string) => {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     try {
       // Delete existing consumed items for this order
       await supabase
@@ -186,6 +210,7 @@ export const useOrdemItems = (
     updateConsumedItems,
     loading, 
     refetch: fetchItems 
+<<<<<<< HEAD
 =======
     // Find items to create or update
     const itemsToAdd: {ordem_id: string; item_id: string; quantidade: number}[] = [];
@@ -251,5 +276,7 @@ export const useOrdemItems = (
     setSelectedItems,
     updateConsumedItems
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   };
 };

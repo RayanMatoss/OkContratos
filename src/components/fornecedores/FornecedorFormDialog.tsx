@@ -6,10 +6,15 @@ import { Button } from "@/components/ui/button";
 import type { Fornecedor } from "@/types";
 import type { NewFornecedor } from "@/hooks/fornecedores/types";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { useCpfCnpjMask } from "@/hooks/useCpfCnpjMask";
 import { useEffect } from "react";
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+import { useCpfCnpjMask } from "@/hooks/useCpfCnpjMask";
+import { useEffect } from "react";
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 
 interface FornecedorFormDialogProps {
   open: boolean;
@@ -32,6 +37,9 @@ export const FornecedorFormDialog = ({
 }: FornecedorFormDialogProps) => {
   const isEditing = mode === 'edit';
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   const { value: cnpjValue, handleChange: handleCnpjChange, getPlaceholder } = useCpfCnpjMask(fornecedor.cnpj);
 
   // Sincronizar o valor da máscara com o estado do formulário
@@ -47,8 +55,11 @@ export const FornecedorFormDialog = ({
       handleCnpjChange(fornecedor.cnpj);
     }
   }, [fornecedor.cnpj]);
+<<<<<<< HEAD
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -70,12 +81,16 @@ export const FornecedorFormDialog = ({
           </div>
           <div className="space-y-2">
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
             <Label htmlFor="cnpj">CPF ou CNPJ</Label>
             <Input
               id="cnpj"
               placeholder={getPlaceholder()}
               value={cnpjValue}
               onChange={(e) => handleCnpjChange(e.target.value)}
+<<<<<<< HEAD
 =======
             <Label htmlFor="cnpj">CNPJ</Label>
             <Input
@@ -84,6 +99,8 @@ export const FornecedorFormDialog = ({
               value={fornecedor.cnpj}
               onChange={(e) => onFornecedorChange("cnpj", e.target.value)}
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
             />
           </div>
           <div className="space-y-2">

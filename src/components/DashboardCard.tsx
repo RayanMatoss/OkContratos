@@ -1,7 +1,10 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 import { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -13,9 +16,13 @@ interface DashboardCardProps {
   iconColor?: string;
   className?: string;
 <<<<<<< HEAD
+<<<<<<< HEAD
   onClick?: () => void;
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+  onClick?: () => void;
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 }
 
 const DashboardCard = ({
@@ -25,6 +32,9 @@ const DashboardCard = ({
   description,
   iconColor,
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   className,
   onClick
 }: DashboardCardProps) => {
@@ -37,6 +47,7 @@ const DashboardCard = ({
       style={onClick ? { cursor: 'pointer' } : {}}
       onClick={onClick}
     >
+<<<<<<< HEAD
 =======
   className
 }: DashboardCardProps) => {
@@ -46,6 +57,8 @@ const DashboardCard = ({
       className
     )}>
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       <div className="flex justify-between items-start">
         <div>
           <h3 className="text-sm font-medium text-muted-foreground">{title}</h3>

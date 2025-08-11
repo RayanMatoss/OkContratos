@@ -1,5 +1,8 @@
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 import React from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
@@ -8,17 +11,23 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Contrato } from "@/types";
 import { Edit, Trash2, Eye } from "lucide-react";
+<<<<<<< HEAD
 =======
 import { format } from "date-fns";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { TableActions } from "@/components/ui/table-actions";
 import { Contrato, FundoMunicipal } from "@/types";
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 import { Badge } from "@/components/ui/badge";
 
 interface ContratosTableProps {
   contratos: Contrato[];
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   onEdit: (contrato: Contrato) => void;
   onDelete: (contrato: Contrato) => void;
   onView: (contrato: Contrato) => void;
@@ -32,6 +41,7 @@ const ContratosTable: React.FC<ContratosTableProps> = ({
 }) => {
   return (
     <div className="border rounded-lg overflow-hidden">
+<<<<<<< HEAD
 =======
   onEdit?: (contrato: Contrato) => void;
   onDelete?: (contrato: Contrato) => void;
@@ -41,11 +51,16 @@ const ContratosTable = ({ contratos, onEdit, onDelete }: ContratosTableProps) =>
   return (
     <div className="rounded-md border">
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>Número</TableHead>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
             <TableHead>Fornecedores</TableHead>
             <TableHead>Objeto</TableHead>
             <TableHead>Valor</TableHead>
@@ -117,6 +132,7 @@ const ContratosTable = ({ contratos, onEdit, onDelete }: ContratosTableProps) =>
               </TableCell>
             </TableRow>
           ))}
+<<<<<<< HEAD
 =======
             <TableHead>Fornecedor</TableHead>
             <TableHead>Fundo</TableHead>
@@ -176,6 +192,8 @@ const ContratosTable = ({ contratos, onEdit, onDelete }: ContratosTableProps) =>
             </TableRow>
           )}
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         </TableBody>
       </Table>
     </div>

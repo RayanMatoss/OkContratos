@@ -1,7 +1,10 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,6 +12,9 @@
 @layer base {
   :root {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     --background: 0 0% 100%; /* branco */
     --foreground: 240 10% 10%; /* preto/cinza bem escuro */
 
@@ -70,6 +76,7 @@
     --input: 240 3.7% 15.9%;
     --ring: 217.2 91.2% 59.8%;
     --radius: 0.5rem;
+<<<<<<< HEAD
 =======
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
@@ -102,6 +109,8 @@
     --radius: 0.5rem;
 
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     --sidebar-background: 240 10% 3.9%;
     --sidebar-foreground: 0 0% 98%;
     --sidebar-primary: 217.2 91.2% 59.8%;
@@ -132,6 +141,9 @@
     @apply transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 hover:border-primary/30;
   }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 
   .text-shadow-light {
     text-shadow: 1px 1px 2px #222, 0 0 1px #222;
@@ -287,6 +299,9 @@
 
 .dark .select__input {
   color: hsl(0 0% 98%) !important;
+<<<<<<< HEAD
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 }

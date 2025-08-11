@@ -48,10 +48,14 @@ export const useOrdens = () => {
           numero: ordem.contrato.numero,
           fornecedorId: ordem.contrato.fornecedor_id,
 <<<<<<< HEAD
+<<<<<<< HEAD
           fundoMunicipal: Array.isArray(ordem.contrato.fundo_municipal) ? ordem.contrato.fundo_municipal : [],
 =======
           fundoMunicipal: ordem.contrato.fundo_municipal as any,
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+          fundoMunicipal: Array.isArray(ordem.contrato.fundo_municipal) ? ordem.contrato.fundo_municipal : [],
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
           objeto: ordem.contrato.objeto,
           valor: ordem.contrato.valor,
           dataInicio: new Date(ordem.contrato.data_inicio),
@@ -71,9 +75,13 @@ export const useOrdens = () => {
         } : undefined,
         dataEmissao: new Date(ordem.data_emissao),
 <<<<<<< HEAD
+<<<<<<< HEAD
         observacoes: "", // Add default empty observacoes
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+        observacoes: "", // Add default empty observacoes
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         status: ordem.status as any,
         itensConsumidos: [],
         createdAt: new Date(ordem.created_at)

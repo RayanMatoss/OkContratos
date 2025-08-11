@@ -5,11 +5,17 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { useState } from "react";
 import { parse, isValid } from "date-fns";
 import React from "react";
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+import { useState } from "react";
+import { parse, isValid } from "date-fns";
+import React from "react";
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 
 interface DatePickerFieldProps {
   date: Date;
@@ -19,6 +25,9 @@ interface DatePickerFieldProps {
 
 const DatePickerField = ({ date, onDateChange, label }: DatePickerFieldProps) => {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   const [inputValue, setInputValue] = useState(date ? format(date, "dd/MM/yyyy") : "");
   const [open, setOpen] = useState(false);
 
@@ -76,6 +85,7 @@ const DatePickerField = ({ date, onDateChange, label }: DatePickerFieldProps) =>
           </PopoverContent>
         </Popover>
       </div>
+<<<<<<< HEAD
 =======
   return (
     <div className="flex flex-col mb-4">
@@ -104,6 +114,8 @@ const DatePickerField = ({ date, onDateChange, label }: DatePickerFieldProps) =>
         </PopoverContent>
       </Popover>
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     </div>
   );
 };

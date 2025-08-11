@@ -6,6 +6,9 @@ import { RelatorioMensal } from "@/types";
 interface RelatoriosCardsProps {
   ultimoRelatorio: RelatorioMensal;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   relatoriosFiltrados: RelatorioMensal[];
 }
 
@@ -16,11 +19,14 @@ export const RelatoriosCards = ({ ultimoRelatorio, relatoriosFiltrados }: Relato
   const valorTotalContratosPeriodo = relatoriosFiltrados.reduce((acc, r) => acc + (r.valorTotalContratos || 0), 0);
   const valorTotalOrdensPeriodo = relatoriosFiltrados.reduce((acc, r) => acc + (r.valorTotalOrdens || 0), 0);
   
+<<<<<<< HEAD
 =======
 }
 
 export const RelatoriosCards = ({ ultimoRelatorio }: RelatoriosCardsProps) => {
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   return (
     <div className="grid gap-6 md:grid-cols-3">
       <Card>
@@ -30,6 +36,7 @@ export const RelatoriosCards = ({ ultimoRelatorio }: RelatoriosCardsProps) => {
         </CardHeader>
         <CardContent>
 <<<<<<< HEAD
+<<<<<<< HEAD
           <div className="text-3xl font-bold">{totalContratosPeriodo}</div>
           <p className="text-xs text-muted-foreground mt-1">
             {totalAtivosPeriodo} ativos | {totalVencidosPeriodo} vencidos
@@ -38,6 +45,11 @@ export const RelatoriosCards = ({ ultimoRelatorio }: RelatoriosCardsProps) => {
           <p className="text-xs text-muted-foreground mt-1">
             {ultimoRelatorio.contratosAtivos} ativos | {ultimoRelatorio.contratosVencidos} vencidos
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+          <div className="text-3xl font-bold">{totalContratosPeriodo}</div>
+          <p className="text-xs text-muted-foreground mt-1">
+            {totalAtivosPeriodo} ativos | {totalVencidosPeriodo} vencidos
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
           </p>
         </CardContent>
       </Card>
@@ -49,6 +61,7 @@ export const RelatoriosCards = ({ ultimoRelatorio }: RelatoriosCardsProps) => {
         </CardHeader>
         <CardContent>
 <<<<<<< HEAD
+<<<<<<< HEAD
           <div className="text-3xl font-bold">{ultimoRelatorio?.ordensRealizadas || 0}</div>
           <p className="text-xs text-muted-foreground mt-1">
             {ultimoRelatorio?.ordensConcluidas || 0} concluídas | {ultimoRelatorio?.ordensPendentes || 0} pendentes
@@ -57,6 +70,11 @@ export const RelatoriosCards = ({ ultimoRelatorio }: RelatoriosCardsProps) => {
           <p className="text-xs text-muted-foreground mt-1">
             {ultimoRelatorio.ordensConcluidas} concluídas | {ultimoRelatorio.ordensPendentes} pendentes
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+          <div className="text-3xl font-bold">{ultimoRelatorio?.ordensRealizadas || 0}</div>
+          <p className="text-xs text-muted-foreground mt-1">
+            {ultimoRelatorio?.ordensConcluidas || 0} concluídas | {ultimoRelatorio?.ordensPendentes || 0} pendentes
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
           </p>
         </CardContent>
       </Card>
@@ -69,16 +87,22 @@ export const RelatoriosCards = ({ ultimoRelatorio }: RelatoriosCardsProps) => {
         <CardContent>
           <div className="text-3xl font-bold">
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
             {formatCurrency(valorTotalContratosPeriodo)}
           </div>
           <p className="text-xs text-muted-foreground mt-1">
             Ordens: {formatCurrency(valorTotalOrdensPeriodo)}
+<<<<<<< HEAD
 =======
             {formatCurrency(ultimoRelatorio.valorTotalContratos)}
           </div>
           <p className="text-xs text-muted-foreground mt-1">
             Ordens: {formatCurrency(ultimoRelatorio.valorTotalOrdens)}
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
           </p>
         </CardContent>
       </Card>

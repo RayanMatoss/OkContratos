@@ -36,10 +36,14 @@ export const useOrdemForm = (
     e.preventDefault();
     
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (!contratoId || !data || !numero) {
 =======
     if (!contratoId || !data) {
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+    if (!contratoId || !data || !numero) {
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       toast({
         title: "Erro",
         description: "Preencha todos os campos obrigatórios",
@@ -59,6 +63,7 @@ export const useOrdemForm = (
 
       toast({
 <<<<<<< HEAD
+<<<<<<< HEAD
         title: mode === 'create' ? "Ordem de Fornecimento criada" : "Ordem de Fornecimento atualizada",
         description: mode === 'create' ? "A ordem foi criada com sucesso" : "A ordem foi atualizada com sucesso",
 =======
@@ -66,6 +71,10 @@ export const useOrdemForm = (
         description: `Número da ordem: ${numero}`,
         variant: "default",
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+        title: mode === 'create' ? "Ordem de Fornecimento criada" : "Ordem de Fornecimento atualizada",
+        description: mode === 'create' ? "A ordem foi criada com sucesso" : "A ordem foi atualizada com sucesso",
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       });
 
       if (onSuccess) onSuccess();
@@ -87,16 +96,22 @@ export const useOrdemForm = (
         contrato_id: contratoId,
         data_emissao: data?.toISOString(),
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         numero,
         // Status is now managed by triggers, no need to set it here
       })
       .select("id")
+<<<<<<< HEAD
 =======
         numero: numero,
         status: "pendente"
       })
       .select("id, numero")
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       .single();
 
     if (ordemError) {
@@ -134,9 +149,13 @@ export const useOrdemForm = (
         data_emissao: data?.toISOString(),
         contrato_id: contratoId
 <<<<<<< HEAD
+<<<<<<< HEAD
         // Status is now managed by triggers, no need to update it here
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+        // Status is now managed by triggers, no need to update it here
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       })
       .eq("id", ordemId);
 
@@ -147,6 +166,7 @@ export const useOrdemForm = (
     await updateConsumedItems(ordemId);
   };
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
   const deleteOrdem = async (ordemId: string) => {
@@ -162,6 +182,8 @@ export const useOrdemForm = (
   };
 
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   return {
     data,
     setData,
@@ -176,10 +198,14 @@ export const useOrdemForm = (
     handleSubmit,
     loading,
 <<<<<<< HEAD
+<<<<<<< HEAD
     loadingNumero
 =======
     loadingNumero,
     deleteOrdem
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+    loadingNumero
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   };
 };

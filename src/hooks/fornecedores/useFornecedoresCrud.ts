@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -36,6 +39,7 @@ export const useFornecedoresCrud = () => {
         variant: "destructive",
       });
       return false;
+<<<<<<< HEAD
 =======
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -74,12 +78,17 @@ export const useFornecedoresCrud = () => {
       });
       return null;
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     } finally {
       setLoading(false);
     }
   };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   const updateFornecedor = async (id: string, fornecedor: Omit<Fornecedor, 'id' | 'createdAt'>) => {
     setLoading(true);
     try {
@@ -106,6 +115,7 @@ export const useFornecedoresCrud = () => {
         title: "Erro ao atualizar fornecedor",
         description: error.message,
         variant: "destructive",
+<<<<<<< HEAD
 =======
   const updateFornecedor = async (id: string, data: Omit<NewFornecedor, "id">): Promise<boolean> => {
     try {
@@ -129,6 +139,8 @@ export const useFornecedoresCrud = () => {
         description: error.message,
         variant: "destructive"
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       });
       return false;
     } finally {
@@ -136,6 +148,7 @@ export const useFornecedoresCrud = () => {
     }
   };
 
+<<<<<<< HEAD
 <<<<<<< HEAD
   const deleteFornecedor = async (fornecedor: Fornecedor) => {
     setLoading(true);
@@ -170,6 +183,11 @@ export const useFornecedoresCrud = () => {
       }
 
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+  const deleteFornecedor = async (fornecedor: Fornecedor) => {
+    setLoading(true);
+    try {
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       const { error } = await supabase
         .from('fornecedores')
         .delete()
@@ -177,15 +195,22 @@ export const useFornecedoresCrud = () => {
 
       if (error) throw error;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
       
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       toast({
         title: "Fornecedor excluído",
         description: "O fornecedor foi excluído com sucesso",
       });
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       return true;
     } catch (error: any) {
       toast({
@@ -200,6 +225,7 @@ export const useFornecedoresCrud = () => {
   };
 
   return { loading, addFornecedor, updateFornecedor, deleteFornecedor };
+<<<<<<< HEAD
 =======
       
       return true;
@@ -228,4 +254,6 @@ export const useFornecedoresCrud = () => {
     hasAssociatedContracts
   };
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 };

@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 import React from "react";
 import { FormStep } from "@/types";
@@ -6,6 +7,11 @@ import { FormStep } from "@/types";
 import React from "react";
 import { FormStep } from "@/hooks/useContratoForm";
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+
+import React from "react";
+import { FormStep } from "@/types";
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 import ContratoBasicInfo from "./ContratoBasicInfo";
 import ContratoDates from "./ContratoDates";
 import ContratoItems from "./ContratoItems";
@@ -17,10 +23,14 @@ interface ContratoFormStepContentProps {
     numero: string;
     objeto: string;
 <<<<<<< HEAD
+<<<<<<< HEAD
     fornecedor_ids: string | string[];
 =======
     fornecedor_id: string;
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+    fornecedor_ids: string | string[];
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     valor: string;
     fundo_municipal: FundoMunicipal[];
     data_inicio: Date;
@@ -38,21 +48,30 @@ export const ContratoFormStepContent: React.FC<ContratoFormStepContentProps> = (
   onFieldChange
 }) => {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   // Ensure fornecedor_ids is always an array
   const fornecedorIds = Array.isArray(formData.fornecedor_ids) 
     ? formData.fornecedor_ids 
     : (formData.fornecedor_ids ? [formData.fornecedor_ids] : []);
+<<<<<<< HEAD
 =======
   // Ensure fundo_municipal is always an array
   const fundoMunicipal = Array.isArray(formData.fundo_municipal) 
     ? formData.fundo_municipal 
     : [];
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   
   switch (step) {
     case "basic":
       return (
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         <>
           <ContratoBasicInfo 
             numero={formData.numero || ""}
@@ -90,6 +109,7 @@ export const ContratoFormStepContent: React.FC<ContratoFormStepContentProps> = (
             onFieldChange("items", newItems);
           }}
           fundosMunicipais={formData.fundo_municipal || []}
+<<<<<<< HEAD
 =======
         <ContratoBasicInfo 
           numero={formData.numero || ""}
@@ -117,6 +137,8 @@ export const ContratoFormStepContent: React.FC<ContratoFormStepContentProps> = (
           onRemoveItem={idx => onFieldChange("items", (formData.items || []).filter((_, i) => i !== idx))}
           fundosMunicipais={fundoMunicipal}
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         />
       );
     default:

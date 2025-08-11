@@ -31,6 +31,7 @@ export const useFetchRelatoriosData = (periodoSelecionado: string) => {
             status,
             created_at
 <<<<<<< HEAD
+<<<<<<< HEAD
           `);
         
         console.log('Contratos retornados:', contratos);
@@ -38,6 +39,11 @@ export const useFetchRelatoriosData = (periodoSelecionado: string) => {
           `)
           .gte('created_at', format(dataInicial, 'yyyy-MM-dd'));
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+          `);
+        
+        console.log('Contratos retornados:', contratos);
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         
         if (contratosError) throw new Error(`Erro ao buscar contratos: ${contratosError.message}`);
 
@@ -53,10 +59,14 @@ export const useFetchRelatoriosData = (periodoSelecionado: string) => {
             contrato_id
           `)
 <<<<<<< HEAD
+<<<<<<< HEAD
           .gte('data_emissao', format(dataInicial, 'yyyy-MM-dd'));
 =======
           .gte('created_at', format(dataInicial, 'yyyy-MM-dd'));
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+          .gte('data_emissao', format(dataInicial, 'yyyy-MM-dd'));
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         
         if (ordensError) throw new Error(`Erro ao buscar ordens: ${ordensError.message}`);
 
@@ -142,19 +152,27 @@ function processRelatoriosData(
   for (let i = 0; i < numMeses; i++) {
     const dataRef = subMonths(dataAtual, i);
 <<<<<<< HEAD
+<<<<<<< HEAD
     console.log('Processando mês:', dataRef.toISOString());
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+    console.log('Processando mês:', dataRef.toISOString());
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     const mes = dataRef.getMonth() + 1;
     const ano = dataRef.getFullYear();
     
     // Filtrar contratos do mês
     const contratosMes = contratos.filter(c => {
 <<<<<<< HEAD
+<<<<<<< HEAD
       const dataContrato = new Date(c.data_inicio);
 =======
       const dataContrato = new Date(c.created_at);
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+      const dataContrato = new Date(c.data_inicio);
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       return dataContrato.getMonth() + 1 === mes && dataContrato.getFullYear() === ano;
     });
     

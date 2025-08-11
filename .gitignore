@@ -9,9 +9,12 @@ lerna-debug.log*
 
 node_modules
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 dist
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 dist-ssr
 *.local
 

@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Login from "./Login";
@@ -14,6 +17,7 @@ const Auth = () => {
   return <Login />;
 };
 
+<<<<<<< HEAD
 =======
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -135,4 +139,6 @@ const Auth = () => {
     </div>;
 };
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 export default Auth;

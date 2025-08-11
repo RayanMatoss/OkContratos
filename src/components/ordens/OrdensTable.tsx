@@ -10,11 +10,17 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { gerarPdfOrdem } from "@/lib/pdf/gerarPdfOrdem";
 import { Download } from "lucide-react";
 import { buscarItensOrdemDetalhados } from "@/lib/pdf/buscarItensOrdemDetalhados";
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+import { gerarPdfOrdem } from "@/lib/pdf/gerarPdfOrdem";
+import { Download } from "lucide-react";
+import { buscarItensOrdemDetalhados } from "@/lib/pdf/buscarItensOrdemDetalhados";
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 
 interface OrdensTableProps {
   filteredOrdens: OrdemFornecimento[];
@@ -53,12 +59,15 @@ const OrdensTable = ({
           {filteredOrdens.length > 0 ? (
             filteredOrdens.map((ordem) => {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
               // Permitir editar e excluir qualquer ordem
               const canEdit = true;
               const canDelete = true;
               
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
               return (
                 <TableRow key={ordem.id}>
                   <TableCell className="font-medium">{ordem.numero}</TableCell>
@@ -70,6 +79,9 @@ const OrdensTable = ({
                   <TableCell className="text-right">
                     <TooltipProvider>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
                       <div className="flex items-center justify-end gap-1">
                         <TableActions
                           onEdit={() => onEdit(ordem)}
@@ -103,6 +115,7 @@ const OrdensTable = ({
                           <TooltipContent>Baixar PDF</TooltipContent>
                         </Tooltip>
                       </div>
+<<<<<<< HEAD
 =======
                       <TableActions
                         onEdit={() => onEdit(ordem)}
@@ -115,6 +128,8 @@ const OrdensTable = ({
                         editTooltip={undefined}
                       />
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
                     </TooltipProvider>
                   </TableCell>
                 </TableRow>
@@ -135,6 +150,10 @@ const OrdensTable = ({
 
 export default OrdensTable;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c

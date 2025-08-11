@@ -1,8 +1,12 @@
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import React from "react";
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+import React from "react";
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,9 +16,13 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import Select from 'react-select';
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+import Select from 'react-select';
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 
 interface OrdemFormFieldsProps {
   numero: string;
@@ -41,15 +49,21 @@ const OrdemFormFields = ({
 }: OrdemFormFieldsProps) => {
   return (
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     <>
       {/* Número da OF */}
       <div className="space-y-2">
         <Label htmlFor="numero" className="text-sm font-medium">Número da OF</Label>
+<<<<<<< HEAD
 =======
     <div className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="numero">Número da OF</Label>
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         <Input
           id="numero"
           placeholder="Carregando número..."
@@ -71,6 +85,9 @@ const OrdemFormFields = ({
       </div>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       {/* Contrato */}
       <div className="space-y-2">
         <Label htmlFor="contrato" className="text-sm font-medium">Contrato</Label>
@@ -108,6 +125,7 @@ const OrdemFormFields = ({
           }}
           isDisabled={mode === 'edit'}
         />
+<<<<<<< HEAD
 =======
       <div className="space-y-2">
         <Label htmlFor="contrato">Contrato</Label>
@@ -126,6 +144,8 @@ const OrdemFormFields = ({
           ))}
         </select>
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         {mode === 'edit' && (
           <p className="text-xs text-muted-foreground">
             O contrato não pode ser alterado após a criação da ordem
@@ -134,6 +154,7 @@ const OrdemFormFields = ({
       </div>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
       {/* Data de Emissão */}
       <div className="space-y-2">
         <Label htmlFor="data" className="text-sm font-medium">Data de Emissão</Label>
@@ -141,6 +162,11 @@ const OrdemFormFields = ({
       <div className="space-y-2">
         <Label htmlFor="data">Data de Emissão</Label>
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+      {/* Data de Emissão */}
+      <div className="space-y-2">
+        <Label htmlFor="data" className="text-sm font-medium">Data de Emissão</Label>
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         <Popover>
           <PopoverTrigger asChild>
             <Button
@@ -155,10 +181,14 @@ const OrdemFormFields = ({
             </Button>
           </PopoverTrigger>
 <<<<<<< HEAD
+<<<<<<< HEAD
           <PopoverContent className="w-auto p-0" align="start">
 =======
           <PopoverContent className="w-auto p-0">
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+          <PopoverContent className="w-auto p-0" align="start">
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
             <Calendar
               mode="single"
               selected={data}
@@ -170,10 +200,14 @@ const OrdemFormFields = ({
         </Popover>
       </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
     </>
 =======
     </div>
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+    </>
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   );
 };
 

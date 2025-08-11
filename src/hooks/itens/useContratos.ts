@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -93,6 +96,7 @@ export const useContratos = () => {
       console.error('Erro ao buscar contratos:', error);
     } finally {
       setLoading(false);
+<<<<<<< HEAD
 =======
 
 import { useState, useEffect } from "react";
@@ -136,6 +140,8 @@ export const useContratos = () => {
         variant: "destructive"
       });
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     }
   };
 
@@ -144,8 +150,12 @@ export const useContratos = () => {
   }, []);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   return { contratos, loading, fetchContratos };
 =======
   return { contratos, fetchContratos };
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+  return { contratos, loading, fetchContratos };
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 };

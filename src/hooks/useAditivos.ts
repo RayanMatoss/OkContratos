@@ -27,8 +27,11 @@ export function useAditivos(contratoId: string) {
         tipo: item.tipo as TipoAditivo,
         nova_data_termino: item.nova_data_termino,
         percentual_itens: item.percentual_itens,
+<<<<<<< HEAD
         aplicar_todos_itens: item.aplicar_todos_itens,
         percentuais_por_item: item.percentuais_por_item,
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         criado_em: item.criado_em
       }));
       

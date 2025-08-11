@@ -2,9 +2,13 @@ import React, { useState } from "react";
 import { FundoMunicipal } from "@/types";
 import Select from "react-select";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { formatCurrency } from "@/lib/utils";
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+import { formatCurrency } from "@/lib/utils";
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 
 // Novo tipo de item com todos os campos necessários
 type Item = {
@@ -114,10 +118,14 @@ const ContratoItems: React.FC<ContratoItemsProps> = ({ items, onAddItem, onRemov
               type="text"
               placeholder="Valor Total"
 <<<<<<< HEAD
+<<<<<<< HEAD
               value={isNaN(valorTotal) ? "" : formatCurrency(valorTotal)}
 =======
               value={isNaN(valorTotal) ? "" : valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+              value={isNaN(valorTotal) ? "" : formatCurrency(valorTotal)}
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
               disabled
             />
           </div>
@@ -180,12 +188,17 @@ const ContratoItems: React.FC<ContratoItemsProps> = ({ items, onAddItem, onRemov
             <span className="w-20">Qtd: {item.quantidade}</span>
             <span className="w-20">Un: {item.unidade}</span>
 <<<<<<< HEAD
+<<<<<<< HEAD
             <span className="w-32">V. Unit: {formatCurrency(item.valor_unitario)}</span>
             <span className="w-32">Total: {formatCurrency(item.quantidade * item.valor_unitario)}</span>
 =======
             <span className="w-32">V. Unit: {item.valor_unitario.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
             <span className="w-32">Total: {(item.quantidade * item.valor_unitario).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+            <span className="w-32">V. Unit: {formatCurrency(item.valor_unitario)}</span>
+            <span className="w-32">Total: {formatCurrency(item.quantidade * item.valor_unitario)}</span>
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
             <span className="w-40">Fundos: {Array.isArray(item.fundos) ? item.fundos.join(", ") : item.fundos}</span>
             <button type="button" className="text-red-500 ml-2" onClick={() => onRemoveItem(idx)}>Remover</button>
           </li>

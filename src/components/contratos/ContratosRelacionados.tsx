@@ -39,6 +39,7 @@ const ContratosRelacionados: React.FC<ContratosRelacionadosProps> = ({
             p_contrato_id: contratoId
           });
 
+<<<<<<< HEAD
         if (error) {
           console.error('Erro na função RPC:', error);
           // Se a função RPC falhar, tentar buscar contratos básicos
@@ -71,6 +72,12 @@ const ContratosRelacionados: React.FC<ContratosRelacionadosProps> = ({
       } catch (error) {
         console.error('Erro ao buscar contratos relacionados:', error);
         setContratosRelacionados([]);
+=======
+        if (error) throw error;
+        setContratosRelacionados(data || []);
+      } catch (error) {
+        console.error('Erro ao buscar contratos relacionados:', error);
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       } finally {
         setLoading(false);
       }

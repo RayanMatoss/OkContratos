@@ -30,6 +30,7 @@ export const RelatoriosTables = ({ relatoriosFiltrados, activeTab }: RelatoriosT
                   {format(new Date(relatorio.ano, relatorio.mes - 1), 'MMMM/yyyy', { locale: ptBR })}
                 </TableCell>
 <<<<<<< HEAD
+<<<<<<< HEAD
                 <TableCell>{relatorio.totalContratos || 0}</TableCell>
                 <TableCell>{relatorio.contratosAtivos || 0}</TableCell>
                 <TableCell>{relatorio.contratosVencidos || 0}</TableCell>
@@ -38,6 +39,11 @@ export const RelatoriosTables = ({ relatoriosFiltrados, activeTab }: RelatoriosT
                 <TableCell>{relatorio.contratosAtivos}</TableCell>
                 <TableCell>{relatorio.contratosVencidos}</TableCell>
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+                <TableCell>{relatorio.totalContratos || 0}</TableCell>
+                <TableCell>{relatorio.contratosAtivos || 0}</TableCell>
+                <TableCell>{relatorio.contratosVencidos || 0}</TableCell>
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
               </TableRow>
             ))}
           </TableBody>
@@ -65,6 +71,7 @@ export const RelatoriosTables = ({ relatoriosFiltrados, activeTab }: RelatoriosT
                   {format(new Date(relatorio.ano, relatorio.mes - 1), 'MMMM/yyyy', { locale: ptBR })}
                 </TableCell>
 <<<<<<< HEAD
+<<<<<<< HEAD
                 <TableCell>{relatorio.ordensRealizadas || 0}</TableCell>
                 <TableCell>{relatorio.ordensConcluidas || 0}</TableCell>
                 <TableCell>{relatorio.ordensPendentes || 0}</TableCell>
@@ -73,6 +80,11 @@ export const RelatoriosTables = ({ relatoriosFiltrados, activeTab }: RelatoriosT
                 <TableCell>{relatorio.ordensConcluidas}</TableCell>
                 <TableCell>{relatorio.ordensPendentes}</TableCell>
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+                <TableCell>{relatorio.ordensRealizadas || 0}</TableCell>
+                <TableCell>{relatorio.ordensConcluidas || 0}</TableCell>
+                <TableCell>{relatorio.ordensPendentes || 0}</TableCell>
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
               </TableRow>
             ))}
           </TableBody>
@@ -98,12 +110,17 @@ export const RelatoriosTables = ({ relatoriosFiltrados, activeTab }: RelatoriosT
                 {format(new Date(relatorio.ano, relatorio.mes - 1), 'MMMM/yyyy', { locale: ptBR })}
               </TableCell>
 <<<<<<< HEAD
+<<<<<<< HEAD
               <TableCell>{formatCurrency(relatorio.valorTotalContratos || 0)}</TableCell>
               <TableCell>{formatCurrency(relatorio.valorTotalOrdens || 0)}</TableCell>
 =======
               <TableCell>{formatCurrency(relatorio.valorTotalContratos)}</TableCell>
               <TableCell>{formatCurrency(relatorio.valorTotalOrdens)}</TableCell>
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+              <TableCell>{formatCurrency(relatorio.valorTotalContratos || 0)}</TableCell>
+              <TableCell>{formatCurrency(relatorio.valorTotalOrdens || 0)}</TableCell>
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
             </TableRow>
           ))}
         </TableBody>

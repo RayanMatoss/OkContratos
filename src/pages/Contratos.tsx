@@ -1,14 +1,21 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { useState, useEffect } from "react";
 =======
 import { useState } from "react";
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+import { useState, useEffect } from "react";
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Search } from "lucide-react";
 import { ContratoFormDialog } from "@/components/contratos/ContratoFormDialog";
 import ContratosTable from "@/components/contratos/ContratosTable";
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 import ContratoDetalhes from "@/components/contratos/ContratoDetalhes";
 import { useContratos } from "@/hooks/useContratos";
 import { useToast } from "@/hooks/use-toast";
@@ -23,17 +30,23 @@ function useFixPointerEvents(open: boolean) {
     }
   }, [open]);
 }
+<<<<<<< HEAD
 =======
 import { useContratos } from "@/hooks/useContratos";
 import { useToast } from "@/hooks/use-toast";
 import { Contrato } from "@/types";
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 
 const Contratos = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editingContrato, setEditingContrato] = useState<Contrato | undefined>();
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   const [selectedContrato, setSelectedContrato] = useState<Contrato | undefined>();
   const { contratos, loading, fetchContratos } = useContratos();
   const { toast } = useToast();
@@ -44,6 +57,7 @@ const Contratos = () => {
       contrato.numero.toLowerCase().includes(searchTerm.toLowerCase()) ||
       contrato.objeto.toLowerCase().includes(searchTerm.toLowerCase()) ||
       fornecedoresNomes.includes(searchTerm.toLowerCase())
+<<<<<<< HEAD
 =======
   const { contratos, loading, deleteContrato } = useContratos();
   const { toast } = useToast();
@@ -54,21 +68,29 @@ const Contratos = () => {
       contrato.objeto.toLowerCase().includes(searchTerm.toLowerCase()) ||
       contrato.fornecedor?.nome.toLowerCase().includes(searchTerm.toLowerCase())
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     );
   });
 
   const handleEdit = (contrato: Contrato) => {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     if (contrato.status === 'Expirado') {
       toast({
         title: "Edição não permitida",
         description: "Contratos expirados não podem ser editados",
+<<<<<<< HEAD
 =======
     if (contrato.status !== 'Em Aprovação') {
       toast({
         title: "Edição não permitida",
         description: "Apenas contratos em aprovação podem ser editados",
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         variant: "destructive"
       });
       return;
@@ -84,6 +106,9 @@ const Contratos = () => {
 
   const handleDelete = async (contrato: Contrato) => {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     try {
       const { error } = await supabase
         .from('contratos')
@@ -189,11 +214,14 @@ const Contratos = () => {
 
   useFixPointerEvents(showForm);
 
+<<<<<<< HEAD
 =======
     await deleteContrato(contrato.id);
   };
 
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between">
@@ -227,9 +255,13 @@ const Contratos = () => {
         onEdit={handleEdit}
         onDelete={handleDelete}
 <<<<<<< HEAD
+<<<<<<< HEAD
         onView={handleView}
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+        onView={handleView}
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
       />
 
       <ContratoFormDialog
@@ -238,6 +270,9 @@ const Contratos = () => {
         mode={editingContrato ? 'edit' : 'create'}
         contrato={editingContrato}
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         onSuccess={handleSuccess}
       />
 
@@ -260,9 +295,12 @@ const Contratos = () => {
           }}
         />
       )}
+<<<<<<< HEAD
 =======
       />
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     </div>
   );
 };

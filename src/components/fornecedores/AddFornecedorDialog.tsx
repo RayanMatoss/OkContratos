@@ -1,16 +1,23 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import type { Fornecedor } from "@/types";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import InputMask from 'react-input-mask';
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+import InputMask from 'react-input-mask';
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 
 interface AddFornecedorDialogProps {
   open: boolean;
@@ -47,6 +54,9 @@ export const AddFornecedorDialog = ({
           </div>
           <div className="space-y-2">
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
             <Label htmlFor="cnpj">CPF ou CNPJ</Label>
             <InputMask
               mask={fornecedor.cnpj.replace(/\D/g, '').length > 11 ? '99.999.999/9999-99' : '999.999.999-99'}
@@ -61,6 +71,7 @@ export const AddFornecedorDialog = ({
                 />
               )}
             </InputMask>
+<<<<<<< HEAD
 =======
             <Label htmlFor="cnpj">CNPJ</Label>
             <Input
@@ -70,6 +81,8 @@ export const AddFornecedorDialog = ({
               onChange={(e) => onFornecedorChange("cnpj", e.target.value)}
             />
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
           </div>
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>

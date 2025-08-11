@@ -6,10 +6,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import FundoMunicipalSelector from "@/components/contratos/FundoMunicipalSelector";
 import { FundoMunicipal } from "@/types";
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+import FundoMunicipalSelector from "@/components/contratos/FundoMunicipalSelector";
+import { FundoMunicipal } from "@/types";
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 
 interface EditItemDialogProps {
   open: boolean;
@@ -23,16 +28,22 @@ interface EditItemDialogProps {
     valor_unitario: number;
     quantidade_consumida: number;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     fundos?: string[];
     contratos?: {
       numero: string;
       objeto: string;
       fundoMunicipal?: FundoMunicipal[];
+<<<<<<< HEAD
 =======
     contratos?: {
       numero: string;
       objeto: string;
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     };
   };
 }
@@ -44,11 +55,17 @@ export const EditItemDialog = ({ open, onOpenChange, onSuccess, item }: EditItem
   const [unidade, setUnidade] = useState(item.unidade);
   const [valorUnitario, setValorUnitario] = useState(String(item.valor_unitario));
 <<<<<<< HEAD
+<<<<<<< HEAD
   const [fundos, setFundos] = useState<string[]>(
     Array.isArray(item.fundos) ? item.fundos : []
   );
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+  const [fundos, setFundos] = useState<string[]>(
+    Array.isArray(item.fundos) ? item.fundos : []
+  );
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 
   const handleSubmit = async () => {
     try {
@@ -63,17 +80,23 @@ export const EditItemDialog = ({ open, onOpenChange, onSuccess, item }: EditItem
           quantidade: Number(quantidade),
           unidade,
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
           valor_unitario: Number(valorUnitario),
           fundos: fundos
         })
         .eq('id', item.id)
         .eq('quantidade_consumida', item.quantidade_consumida);
+<<<<<<< HEAD
 =======
           valor_unitario: Number(valorUnitario)
         })
         .eq('id', item.id)
         .eq('quantidade_consumida', item.quantidade_consumida); // Extra safety check
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 
       if (error) throw error;
 
@@ -94,9 +117,13 @@ export const EditItemDialog = ({ open, onOpenChange, onSuccess, item }: EditItem
   };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+  
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px]">
@@ -113,10 +140,15 @@ export const EditItemDialog = ({ open, onOpenChange, onSuccess, item }: EditItem
 
         <div className="grid gap-4 py-4">
 <<<<<<< HEAD
+<<<<<<< HEAD
           
           
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+          
+          
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
           <div className="space-y-2">
             <Label htmlFor="descricao">Descrição</Label>
             <Input
@@ -165,6 +197,9 @@ export const EditItemDialog = ({ open, onOpenChange, onSuccess, item }: EditItem
             </div>
           </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
           
           
           <div className="space-y-2">
@@ -174,8 +209,11 @@ export const EditItemDialog = ({ open, onOpenChange, onSuccess, item }: EditItem
               onChange={setFundos}
             />
           </div>
+<<<<<<< HEAD
 =======
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         </div>
 
         <DialogFooter>

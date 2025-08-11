@@ -1,12 +1,18 @@
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 import React from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
+<<<<<<< HEAD
 =======
 import { FormSheet } from "@/components/ui/form-sheet";
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 import OrdemFormFields from "./OrdemFormFields";
 import OrdemItemsSelection from "./OrdemItemsSelection";
 import { useOrdemForm } from "@/hooks/useOrdemForm";
@@ -41,6 +47,9 @@ export const AddOrdemForm = ({
   } = useOrdemForm(onSuccess);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     handleSubmit(e);
@@ -52,9 +61,26 @@ export const AddOrdemForm = ({
         <form onSubmit={handleFormSubmit} className="h-full flex flex-col">
           {/* Header */}
           <DialogHeader className="px-6 py-4 border-b bg-muted/30 dark:bg-muted/20 flex-shrink-0">
+<<<<<<< HEAD
             <div>
               <DialogTitle className="text-xl font-semibold">Nova Ordem de Fornecimento</DialogTitle>
               <DialogDescription className="mt-1">Preencha os dados para criar uma nova ordem de fornecimento</DialogDescription>
+=======
+            <div className="flex items-center justify-between">
+              <div>
+                <DialogTitle className="text-xl font-semibold">Nova Ordem de Fornecimento</DialogTitle>
+                <DialogDescription className="mt-1">Preencha os dados para criar uma nova ordem de fornecimento</DialogDescription>
+              </div>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => onOpenChange(false)}
+                className="h-8 w-8 p-0"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
             </div>
           </DialogHeader>
 
@@ -105,6 +131,7 @@ export const AddOrdemForm = ({
         </form>
       </DialogContent>
     </Dialog>
+<<<<<<< HEAD
 =======
   return (
     <FormSheet
@@ -138,6 +165,8 @@ export const AddOrdemForm = ({
       </div>
     </FormSheet>
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   );
 };
 

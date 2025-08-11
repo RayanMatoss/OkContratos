@@ -1,12 +1,18 @@
 
 import { Item } from "@/types";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useMemo } from "react";
 =======
 import OrdemItemRow from "./OrdemItemRow";
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+import { Input } from "@/components/ui/input";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useMemo } from "react";
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 
 interface OrdemItemsListProps {
   contratoItens: Item[];
@@ -27,6 +33,9 @@ const OrdemItemsList = ({
   };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   // Calcular total geral dos itens selecionados
   const { totalGeral, itensComQuantidade } = useMemo(() => {
     let total = 0;
@@ -200,6 +209,7 @@ const OrdemItemsList = ({
               </div>
             </div>
           </div>
+<<<<<<< HEAD
 =======
   return (
     <div className="max-h-[300px] overflow-y-auto space-y-2 rounded-md border p-2">
@@ -223,6 +233,8 @@ const OrdemItemsList = ({
         <div className="p-4 text-center text-muted-foreground">
           Nenhum item disponível para este contrato.
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         </div>
       )}
     </div>

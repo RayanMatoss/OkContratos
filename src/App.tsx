@@ -5,16 +5,23 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useState } from "react";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { useAuth, AuthProvider } from "@/hooks/useAuth";
 =======
 import { useAuth } from "@/hooks/useAuth";
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+import { useAuth, AuthProvider } from "@/hooks/useAuth";
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 import AppLayout from "./layouts/AppLayout";
 import Dashboard from "./pages/Dashboard";
 import Contratos from "./pages/Contratos";
 import Fornecedores from "./pages/Fornecedores";
 import Ordens from "./pages/Ordens";
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 import Itens from "./pages/Itens"; // Adicionando a rota de Itens
 import Relatorios from "./pages/Relatorios";
 import Auth from "./pages/Auth";
@@ -74,6 +81,7 @@ const AppRoutes = () => {
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
+<<<<<<< HEAD
 =======
 import Relatorios from "./pages/Relatorios";
 import Auth from "./pages/Auth";
@@ -90,6 +98,8 @@ const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   
   return <>{children}</>;
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 };
 
 const App = () => {
@@ -101,11 +111,15 @@ const App = () => {
       <TooltipProvider>
         <BrowserRouter>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
           <AuthProvider>
             <Toaster />
             <Sonner />
             <AppRoutes />
           </AuthProvider>
+<<<<<<< HEAD
 =======
           <Toaster />
           <Sonner />
@@ -136,6 +150,8 @@ const App = () => {
             <Route path="*" element={<NotFound />} />
           </Routes>
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>

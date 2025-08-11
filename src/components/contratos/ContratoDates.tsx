@@ -1,14 +1,20 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 import DatePickerField from "./DatePickerField";
 import { useState } from "react";
 import { format, parse, isValid } from "date-fns";
 import React from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
+<<<<<<< HEAD
 =======
 
 import DatePickerField from "./DatePickerField";
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 
 interface ContratoDatesProps {
   dataInicio: Date;
@@ -18,6 +24,9 @@ interface ContratoDatesProps {
 
 const ContratoDates = ({ dataInicio, dataTermino, onDateChange }: ContratoDatesProps) => {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   // Estado local para o input de intervalo
   const [inputValue, setInputValue] = useState(() => {
     const ini = dataInicio ? format(dataInicio, "dd/MM/yyyy") : "";
@@ -100,6 +109,7 @@ const ContratoDates = ({ dataInicio, dataTermino, onDateChange }: ContratoDatesP
           />
         </PopoverContent>
       </Popover>
+<<<<<<< HEAD
 =======
   return (
     <div className="space-y-4">
@@ -114,6 +124,8 @@ const ContratoDates = ({ dataInicio, dataTermino, onDateChange }: ContratoDatesP
         onDateChange={date => onDateChange("data_termino", date || new Date())} 
       />
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     </div>
   );
 };

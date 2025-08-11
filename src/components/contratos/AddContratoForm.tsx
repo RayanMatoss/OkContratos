@@ -1,5 +1,8 @@
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -124,6 +127,7 @@ export const AddContratoForm = ({
         description: "Contrato salvo com sucesso",
       });
       onSuccess();
+<<<<<<< HEAD
 =======
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -200,12 +204,15 @@ export const AddContratoForm = ({
       onSuccess?.();
       onOpenChange(false);
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     } catch (error: any) {
       toast({
         title: "Erro",
         description: error.message,
         variant: "destructive"
       });
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
     } finally {
@@ -246,11 +253,16 @@ export const AddContratoForm = ({
       default:
         return null;
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     }
   };
 
   return (
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <Label htmlFor="fornecedor">Fornecedor</Label>
@@ -399,6 +411,7 @@ export const AddContratoForm = ({
     </form>
   );
 };
+<<<<<<< HEAD
 =======
     <FormSheet
       open={open}
@@ -415,3 +428,5 @@ export const AddContratoForm = ({
 
 export default AddContratoForm;
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c

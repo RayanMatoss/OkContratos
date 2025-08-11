@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import FornecedorSelector from "./FornecedorSelector";
@@ -8,6 +11,7 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 interface ContratoBasicInfoProps {
   numero: string;
   fornecedorIds: string | string[];
+<<<<<<< HEAD
 =======
 
 import { Label } from "@/components/ui/label";
@@ -21,6 +25,8 @@ interface ContratoBasicInfoProps {
   fornecedorId: string;
   fundoMunicipal: FundoMunicipal[];
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   objeto: string;
   valor: string;
   fornecedores: Fornecedor[];
@@ -30,10 +36,14 @@ interface ContratoBasicInfoProps {
 const ContratoBasicInfo = ({
   numero,
 <<<<<<< HEAD
+<<<<<<< HEAD
   fornecedorIds,
 =======
   fornecedorId,
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+  fornecedorIds,
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   fundoMunicipal = [], // Always provide a default empty array
   objeto,
   valor,
@@ -41,6 +51,9 @@ const ContratoBasicInfo = ({
   onFieldChange
 }: ContratoBasicInfoProps) => {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   // Ensure fornecedorIds is always an array for compatibility
   const selectedFornecedores = Array.isArray(fornecedorIds) ? fornecedorIds : (fornecedorIds ? [fornecedorIds] : []);
 
@@ -82,6 +95,7 @@ const ContratoBasicInfo = ({
         />
       </div>
       <div className="flex flex-col gap-2">
+<<<<<<< HEAD
 =======
   // Ensure fundoMunicipal is always an array
   const selectedFundos = Array.isArray(fundoMunicipal) ? fundoMunicipal : [];
@@ -132,6 +146,8 @@ const ContratoBasicInfo = ({
 
       <div className="space-y-2">
 >>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
+=======
+>>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
         <Label htmlFor="objeto">Objeto do Contrato</Label>
         <Input
           id="objeto"
