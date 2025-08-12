@@ -91,7 +91,7 @@ export const ItemFormDialog = ({
         <strong>Itens adicionados:</strong>
         <ul>
           {itemsList.map((item, idx) => (
-            <li key={idx}>{item.descricao} - {item.quantidade} {item.unidade} - R$ {item.valor_unitario}</li>
+            <li key={`item-${idx}-${item.descricao}-${item.contrato_id}`}>{item.descricao} - {item.quantidade} {item.unidade} - R$ {item.valor_unitario}</li>
           ))}
         </ul>
       </div>

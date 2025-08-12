@@ -1,13 +1,7 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
->>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
-=======
->>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { parseDatabaseDate } from "@/lib/dateUtils";
 
 interface DashboardData {
   totalContratos: number;
@@ -114,11 +108,14 @@ export const useDashboardData = () => {
 
       // Calculate dashboard metrics
       const now = new Date();
-      const contratosAVencer = contratos?.filter(c => {
-        const dataTermino = new Date(c.data_termino);
+      // Definir a variável local contratosAVencer corretamente
+      const contratosAVencer = (data.contratosRecentes || []).filter((contrato: any) => {
+        if (!contrato.data_termino) return false;
+        const dataTermino = parseDatabaseDate(contrato.data_termino) || new Date();
+        const now = new Date();
         const diffDays = Math.ceil((dataTermino.getTime() - now.getTime()) / (1000 * 3600 * 24));
         return diffDays <= 30 && diffDays > 0;
-      }).length || 0;
+      });
 
       const ordensPendentes = ordens?.filter(o => o.status === 'Pendente').length || 0;
 

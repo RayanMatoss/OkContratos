@@ -17,11 +17,13 @@ import ContratosTable from "@/components/contratos/ContratosTable";
 =======
 >>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
 import ContratoDetalhes from "@/components/contratos/ContratoDetalhes";
+import { ConnectionStatus } from "@/components/ConnectionStatus";
 import { useContratos } from "@/hooks/useContratos";
 import { useToast } from "@/hooks/use-toast";
 import { Contrato, FundoMunicipal, StatusContrato } from "@/types";
 import { supabase } from "@/integrations/supabase/client";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { parseDatabaseDate } from "@/lib/dateUtils";
 
 function useFixPointerEvents(open: boolean) {
   useEffect(() => {
@@ -48,7 +50,7 @@ const Contratos = () => {
 =======
 >>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
   const [selectedContrato, setSelectedContrato] = useState<Contrato | undefined>();
-  const { contratos, loading, fetchContratos } = useContratos();
+  const { contratos, loading, error, fetchContratos } = useContratos();
   const { toast } = useToast();
 
   const filteredContratos = contratos.filter((contrato) => {
@@ -192,7 +194,7 @@ const Contratos = () => {
       unidade: item.unidade,
       valorUnitario: item.valor_unitario,
       quantidadeConsumida: item.quantidade_consumida || 0,
-      createdAt: new Date(item.created_at),
+      createdAt: parseDatabaseDate(item.created_at) || new Date(),
       fundos: item.fundos || []
     })) || [];
 
@@ -204,10 +206,10 @@ const Contratos = () => {
       fundoMunicipal: Array.isArray(data.fundo_municipal) ? data.fundo_municipal as FundoMunicipal[] : [],
       objeto: data.objeto,
       valor: data.valor,
-      dataInicio: new Date(data.data_inicio),
-      dataTermino: new Date(data.data_termino),
+      dataInicio: parseDatabaseDate(data.data_inicio) || new Date(),
+      dataTermino: parseDatabaseDate(data.data_termino) || new Date(),
       status: data.status as StatusContrato,
-      createdAt: new Date(data.created_at),
+      createdAt: parseDatabaseDate(data.created_at) || new Date(),
       itens: itens
     };
   };
@@ -248,21 +250,74 @@ const Contratos = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
+        
+        {/* Status de Conexão */}
+        <ConnectionStatus />
       </div>
 
-      <ContratosTable 
-        contratos={filteredContratos} 
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-<<<<<<< HEAD
-<<<<<<< HEAD
-        onView={handleView}
-=======
->>>>>>> e62eb17966de823dfc16cbe132c6f6a1844b8654
-=======
-        onView={handleView}
->>>>>>> b4ea07a19c853f162db95a287d24975d8678940c
-      />
+      {/* Estado de Loading */}
+      {loading && (
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center space-y-4">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+            <p className="text-muted-foreground">Carregando contratos...</p>
+          </div>
+        </div>
+      )}
+
+      {/* Estado de Erro */}
+      {error && !loading && (
+        <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-6">
+          <div className="flex items-start gap-4">
+            <div className="flex-shrink-0">
+              <div className="w-6 h-6 bg-destructive rounded-full flex items-center justify-center">
+                <span className="text-white text-sm font-bold">!</span>
+              </div>
+            </div>
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-destructive mb-2">
+                Erro ao carregar contratos
+              </h3>
+              <p className="text-muted-foreground mb-4">{error}</p>
+              <div className="flex gap-3">
+                <Button 
+                  onClick={fetchContratos} 
+                  variant="outline"
+                  className="border-destructive/20 text-destructive hover:bg-destructive/10"
+                >
+                  Tentar novamente
+                </Button>
+                <Button 
+                  onClick={() => window.location.reload()} 
+                  variant="outline"
+                >
+                  Recarregar página
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tabela de Contratos - só exibir se não houver erro e não estiver carregando */}
+      {!error && !loading && (
+        <ContratosTable 
+          contratos={filteredContratos} 
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          onView={handleView}
+        />
+      )}
+
+      {/* Mensagem quando não há contratos */}
+      {!error && !loading && contratos.length === 0 && (
+        <div className="text-center py-12">
+          <div className="text-muted-foreground space-y-2">
+            <p className="text-lg">Nenhum contrato encontrado</p>
+            <p className="text-sm">Crie seu primeiro contrato clicando no botão "Novo Contrato"</p>
+          </div>
+        </div>
+      )}
 
       <ContratoFormDialog
         open={showForm}

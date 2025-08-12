@@ -31,6 +31,7 @@ import Login from "./pages/Login";
 import RecuperarSenha from "./pages/RecuperarSenha";
 import RedefinirSenha from "./pages/RedefinirSenha";
 import TesteRecuperacao from "./pages/TesteRecuperacao";
+import DateDebugger from "./components/debug/DateDebugger"; // DEBUG: Componente de debug
 import { MunicipioGuard } from "@/components/MunicipioGuard";
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
@@ -77,6 +78,7 @@ const AppRoutes = () => {
         <Route path="itens" element={<Itens />} /> {/* Rota de Itens */}
         <Route path="relatorios" element={<Relatorios />} />
         <Route path="configuracoes" element={<Configuracoes />} />
+        <Route path="debug-datas" element={<DateDebugger />} /> {/* DEBUG: Rota temporária */}
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

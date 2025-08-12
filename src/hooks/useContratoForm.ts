@@ -6,8 +6,9 @@
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Contrato, ContratoFormValues, Item } from "@/types";
+import { Contrato, ContratoFormValues, Item, FundoMunicipal } from "@/types";
 import { useAuth } from "@/hooks/useAuth";
+import { formatDateForDatabase } from "@/lib/dateUtils";
 
 export type FormStep = 'basic' | 'items';
 <<<<<<< HEAD
@@ -239,8 +240,8 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
             : (formData.fundo_municipal ? [formData.fundo_municipal] : []),
           objeto: formData.objeto,
           valor: parseFloat(formData.valor),
-          data_inicio: formData.data_inicio.toISOString(),
-          data_termino: formData.data_termino.toISOString(),
+          data_inicio: formatDateForDatabase(formData.data_inicio),
+          data_termino: formatDateForDatabase(formData.data_termino),
           fornecedor_id: fornecedorId
         };
 
@@ -259,8 +260,8 @@ export const useContratoForm = ({ mode, contrato, onSuccess, onOpenChange }: Use
             : (formData.fundo_municipal ? [formData.fundo_municipal] : []),
           objeto: formData.objeto,
           valor: parseFloat(formData.valor),
-          data_inicio: formData.data_inicio.toISOString().split('T')[0],
-          data_termino: formData.data_termino.toISOString().split('T')[0],
+          data_inicio: formatDateForDatabase(formData.data_inicio),
+          data_termino: formatDateForDatabase(formData.data_termino),
           fornecedor_id: fornecedorId
         };
 
