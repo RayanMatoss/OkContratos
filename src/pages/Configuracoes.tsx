@@ -123,12 +123,12 @@ const Configuracoes = () => {
         <div className="notebook-container relative w-full max-w-xl min-h-[400px] mt-8 mb-4">
           <div className="notebook-spirals">
             {Array.from({ length: 13 }).map((_, i) => (
-              <div key={i} className="notebook-spiral" />
+              <div key={`spiral-${i}`} className="notebook-spiral" />
             ))}
           </div>
           <div className="notebook-lines">
             {[...Array(11)].map((_, i) => (
-              <div key={i} className="notebook-line" />
+              <div key={`line-${i}`} className="notebook-line" />
             ))}
           </div>
           <textarea

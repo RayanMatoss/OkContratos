@@ -31,7 +31,7 @@ const AditivoFormDialog = ({ contratoId, open, onOpenChange, onSuccess }: Aditiv
   const [tipo, setTipo] = useState<TipoAditivo>("periodo");
   const [novaDataTermino, setNovaDataTermino] = useState("");
   const [percentual, setPercentual] = useState("");
-  const [aplicarTodosItens, setAplicarTodosItens] = useState(true);
+  const [aplicarTodosItens, setAplicarTodosItens] = useState(false); // CORREÇÃO: Desabilitado por padrão
   const [percentuaisIndividuais, setPercentuaisIndividuais] = useState<{ [key: string]: string }>({});
   const [itensContrato, setItensContrato] = useState<ItemContrato[]>([]);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -92,6 +92,7 @@ const AditivoFormDialog = ({ contratoId, open, onOpenChange, onSuccess }: Aditiv
     }
 
     if (tipo === "valor") {
+      // CORREÇÃO: Forçar escolha explícita entre aplicar a todos ou percentuais individuais
       if (aplicarTodosItens) {
         if (!percentual) {
           newErrors.percentual = "Percentual é obrigatório";
@@ -119,10 +120,33 @@ const AditivoFormDialog = ({ contratoId, open, onOpenChange, onSuccess }: Aditiv
           }
         }
       }
+      
+      // CORREÇÃO: Adicionar validação para garantir que uma opção foi escolhida
+      if (!aplicarTodosItens && Object.values(percentuaisIndividuais).filter(p => p && parseFloat(p) > 0).length === 0) {
+        newErrors.percentuaisIndividuais = "Escolha entre aplicar percentual a todos os itens ou definir percentuais individuais";
+      }
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+  };
+
+  // CORREÇÃO: Função para verificar se o formulário é válido (sem executar validação completa)
+  const isFormValid = () => {
+    if (tipo === "periodo") {
+      return !!novaDataTermino;
+    }
+    
+    if (tipo === "valor") {
+      if (aplicarTodosItens) {
+        return !!percentual && parseFloat(percentual) > 0 && parseFloat(percentual) <= 25;
+      } else {
+        const percentuaisValidos = Object.values(percentuaisIndividuais).filter(p => p && parseFloat(p) > 0 && parseFloat(p) <= 25);
+        return percentuaisValidos.length > 0;
+      }
+    }
+    
+    return false;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -299,6 +323,13 @@ const AditivoFormDialog = ({ contratoId, open, onOpenChange, onSuccess }: Aditiv
                   Aplicar percentual a todos os itens
                 </Label>
               </div>
+              
+              {/* CORREÇÃO: Texto explicativo para orientar o usuário */}
+              <div className="text-xs text-muted-foreground bg-muted/20 p-2 rounded-md border">
+                <p>⚠️ <strong>Escolha uma opção:</strong></p>
+                <p>• <strong>Ativado:</strong> Aplica o mesmo percentual a todos os itens</p>
+                <p>• <strong>Desativado:</strong> Define percentuais diferentes para cada item</p>
+              </div>
 
               {aplicarTodosItens ? (
                 <div className="space-y-3">
@@ -391,7 +422,11 @@ const AditivoFormDialog = ({ contratoId, open, onOpenChange, onSuccess }: Aditiv
             <Button type="button" variant="outline" onClick={handleCancel}>
               Cancelar
             </Button>
-            <Button type="submit" disabled={loading}>
+            <Button 
+              type="submit" 
+              disabled={loading || !isFormValid()}
+              className={!isFormValid() ? "opacity-50 cursor-not-allowed" : ""}
+            >
               {loading ? "Salvando..." : "Salvar Aditivo"}
             </Button>
           </div>

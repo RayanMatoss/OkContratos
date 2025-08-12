@@ -25,7 +25,7 @@ export const RelatoriosTables = ({ relatoriosFiltrados, activeTab }: RelatoriosT
           </TableHeader>
           <TableBody>
             {relatoriosFiltrados.map((relatorio, index) => (
-              <TableRow key={index}>
+              <TableRow key={`contratos-${relatorio.ano}-${relatorio.mes}`}>
                 <TableCell className="font-medium">
                   {format(new Date(relatorio.ano, relatorio.mes - 1), 'MMMM/yyyy', { locale: ptBR })}
                 </TableCell>
@@ -54,7 +54,7 @@ export const RelatoriosTables = ({ relatoriosFiltrados, activeTab }: RelatoriosT
           </TableHeader>
           <TableBody>
             {relatoriosFiltrados.map((relatorio, index) => (
-              <TableRow key={index}>
+              <TableRow key={`ordens-${relatorio.ano}-${relatorio.mes}`}>
                 <TableCell className="font-medium">
                   {format(new Date(relatorio.ano, relatorio.mes - 1), 'MMMM/yyyy', { locale: ptBR })}
                 </TableCell>
@@ -81,7 +81,7 @@ export const RelatoriosTables = ({ relatoriosFiltrados, activeTab }: RelatoriosT
         </TableHeader>
         <TableBody>
           {relatoriosFiltrados.map((relatorio, index) => (
-            <TableRow key={index}>
+            <TableRow key={`geral-${relatorio.ano}-${relatorio.mes}`}>
               <TableCell className="font-medium">
                 {format(new Date(relatorio.ano, relatorio.mes - 1), 'MMMM/yyyy', { locale: ptBR })}
               </TableCell>

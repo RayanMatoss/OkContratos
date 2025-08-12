@@ -36,7 +36,7 @@ export const ItemsList = ({ items }: ItemsListProps) => {
         </TableHeader>
         <TableBody>
           {items.map((item, index) => (
-            <TableRow key={index}>
+            <TableRow key={`item-${index}-${item.descricao}-${item.quantidade}`}>
               <TableCell>{item.descricao}</TableCell>
               <TableCell className="text-right">{item.quantidade}</TableCell>
               <TableCell>{item.unidade}</TableCell>

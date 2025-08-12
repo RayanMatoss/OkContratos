@@ -212,7 +212,7 @@ const Dashboard = () => {
                   </tr>
                 ) : (
                   data.fornecedores.map((fornecedor: any, idx: number) => (
-                    <tr key={fornecedor.id || idx} className="border-b last:border-0">
+                    <tr key={fornecedor.id || `fornecedor-${idx}-${fornecedor.nome}`} className="border-b last:border-0">
                       <td className="px-2 py-1 font-medium">{fornecedor.nome || '-'}</td>
                       <td className="px-2 py-1">{fornecedor.cnpj || '-'}</td>
                       <td className="px-2 py-1">{fornecedor.email || '-'}</td>

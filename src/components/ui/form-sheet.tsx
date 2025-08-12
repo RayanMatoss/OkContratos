@@ -54,7 +54,7 @@ export function FormSheet({
                 <div className="flex gap-1">
                   {Array.from({ length: totalSteps }).map((_, index) => (
                     <div 
-                      key={index} 
+                      key={`step-${index}-${step}`} 
                       className={`h-2 w-10 rounded ${
                         index + 1 === step ? 'bg-primary' : 'bg-muted'
                       }`}

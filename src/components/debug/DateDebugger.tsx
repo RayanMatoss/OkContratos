@@ -162,7 +162,7 @@ const DateDebugger: React.FC = () => {
               <p className="text-muted-foreground">Execute um teste para ver os resultados...</p>
             ) : (
               debugResults.map((log, index) => (
-                <div key={index} className="py-1">
+                <div key={`log-${index}-${log.substring(0, 20)}`} className="py-1">
                   {log}
                 </div>
               ))

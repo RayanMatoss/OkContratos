@@ -168,7 +168,7 @@ const ContratoItems: React.FC<ContratoItemsProps> = ({ items, onAddItem, onRemov
       </div>
       <ul className="mt-2 space-y-1">
         {items.map((item, idx) => (
-          <li key={idx} className="flex flex-col md:flex-row md:items-center gap-1 border-b pb-1 text-sm">
+          <li key={`item-${idx}-${item.descricao}`} className="flex flex-col md:flex-row md:items-center gap-1 border-b pb-1 text-sm">
             <span className="flex-1 font-medium">{item.descricao}</span>
             <span className="w-20">Qtd: {item.quantidade}</span>
             <span className="w-20">Un: {item.unidade}</span>

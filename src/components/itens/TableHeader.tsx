@@ -11,7 +11,7 @@ export const TableHeader = ({ columns }: TableHeaderProps) => {
       <TableRow>
         {columns.map((column, index) => (
           <TableHead 
-            key={index}
+            key={`header-${index}-${column}`}
             className={column === "Valor Unit." || 
                       column === "Valor Total" || 
                       column === "Quantidade" ||
