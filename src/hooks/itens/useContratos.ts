@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Contrato, FundoMunicipal } from "@/types";
+import { parseDatabaseDate } from "@/lib/dateUtils";
 
 export const useContratos = () => {
   const { toast } = useToast();
@@ -65,7 +66,7 @@ export const useContratos = () => {
           unidade: item.unidade,
           valorUnitario: item.valor_unitario,
           quantidadeConsumida: item.quantidade_consumida || 0,
-          createdAt: new Date(item.created_at),
+          createdAt: parseDatabaseDate(item.created_at) || new Date(),
           fundos: item.fundos || []
         })) || [];
 
@@ -79,10 +80,10 @@ export const useContratos = () => {
             : [],
           objeto: contrato.objeto,
           valor: contrato.valor,
-          dataInicio: new Date(contrato.data_inicio),
-          dataTermino: new Date(contrato.data_termino),
+          dataInicio: parseDatabaseDate(contrato.data_inicio) || new Date(),
+          dataTermino: parseDatabaseDate(contrato.data_termino) || new Date(),
           status: contrato.status,
-          createdAt: new Date(contrato.created_at),
+          createdAt: parseDatabaseDate(contrato.created_at) || new Date(),
           itens: itens
         };
       });

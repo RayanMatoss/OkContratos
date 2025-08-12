@@ -7,7 +7,8 @@ import {
   Package, 
   FileEdit, 
   ChartBar, 
-  Settings 
+  Settings,
+  Bug // DEBUG: Ícone para debug
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -75,6 +76,12 @@ const sidebarLinks = [
     to: "/dashboard/configuracoes",
     icon: Settings,
     label: "Configurações"
+  },
+  // DEBUG: Link temporário para debug de datas
+  {
+    to: "/dashboard/debug-datas",
+    icon: Bug,
+    label: "🔍 Debug Datas"
   }
 ];
 

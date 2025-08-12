@@ -3,14 +3,17 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Calendar } from "@/components/ui/calendar";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Fornecedor, FundoMunicipal } from "@/types";
+import { Contrato, Fornecedor, FundoMunicipal } from "@/types";
 import FundoMunicipalSelector from "@/components/contratos/FundoMunicipalSelector";
+import { formatDateForDatabase, adjustToLocalMidday } from "@/lib/dateUtils";
+import { ptBR } from "date-fns/locale";
 
 interface AddContratoFormProps {
   onSuccess: () => void;
@@ -93,8 +96,8 @@ export const AddContratoForm = ({
         fundo_municipal: fundoMunicipalArray,
         objeto: selectedContrato.objeto,
         valor: selectedContrato.valor,
-        data_inicio: selectedContrato.dataInicio.toISOString(),
-        data_termino: selectedContrato.dataTermino.toISOString(),
+        data_inicio: formatDateForDatabase(selectedContrato.dataInicio),
+        data_termino: formatDateForDatabase(selectedContrato.dataTermino),
       };
 
       let contratoId;
@@ -225,9 +228,13 @@ export const AddContratoForm = ({
               <Calendar
                 mode="single"
                 selected={selectedContrato.dataInicio}
-                onSelect={(date) =>
-                  setSelectedContrato({ ...selectedContrato, dataInicio: date || new Date() })
-                }
+                onSelect={(date) => {
+                  if (date) {
+                    // CORREÇÃO: Ajustar para meio-dia local para evitar problemas de fuso horário
+                    const adjustedDate = adjustToLocalMidday(date);
+                    setSelectedContrato({ ...selectedContrato, dataInicio: adjustedDate });
+                  }
+                }}
                 disabled={(date) =>
                   date > new Date()
                 }
@@ -260,9 +267,13 @@ export const AddContratoForm = ({
               <Calendar
                 mode="single"
                 selected={selectedContrato.dataTermino}
-                onSelect={(date) =>
-                  setSelectedContrato({ ...selectedContrato, dataTermino: date || new Date() })
-                }
+                onSelect={(date) => {
+                  if (date) {
+                    // CORREÇÃO: Ajustar para meio-dia local para evitar problemas de fuso horário
+                    const adjustedDate = adjustToLocalMidday(date);
+                    setSelectedContrato({ ...selectedContrato, dataTermino: adjustedDate });
+                  }
+                }}
                 disabled={(date) =>
                   date < selectedContrato.dataInicio!
                 }

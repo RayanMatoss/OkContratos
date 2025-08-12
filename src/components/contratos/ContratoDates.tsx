@@ -4,6 +4,7 @@ import { format, parse, isValid } from "date-fns";
 import React from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
+import { createLocalDate, adjustToLocalMidday } from "@/lib/dateUtils";
 
 interface ContratoDatesProps {
   dataInicio: Date;
@@ -31,20 +32,31 @@ const ContratoDates = ({ dataInicio, dataTermino, onDateChange }: ContratoDatesP
     const value = e.target.value;
     setInputValue(value);
     const [ini, fim] = value.split("-").map(v => v.trim());
+    
+    // CORREÇÃO: Usar parse com base de data específica para evitar problemas de fuso horário
     const parsedIni = parse(ini, "dd/MM/yyyy", new Date());
     const parsedFim = parse(fim, "dd/MM/yyyy", new Date());
+    
     if (isValid(parsedIni) && isValid(parsedFim)) {
-      onDateChange("data_inicio", parsedIni);
-      onDateChange("data_termino", parsedFim);
+      // CORREÇÃO: Ajustar para meio-dia local para evitar problemas de fuso horário
+      const adjustedIni = adjustToLocalMidday(parsedIni);
+      const adjustedFim = adjustToLocalMidday(parsedFim);
+      
+      onDateChange("data_inicio", adjustedIni);
+      onDateChange("data_termino", adjustedFim);
     }
   };
 
   const handleCalendarRangeSelect = (range: { from?: Date; to?: Date } | undefined) => {
     if (range?.from && isValid(range.from)) {
-      onDateChange("data_inicio", range.from);
+      // CORREÇÃO: Ajustar para meio-dia local
+      const adjustedFrom = adjustToLocalMidday(range.from);
+      onDateChange("data_inicio", adjustedFrom);
     }
     if (range?.to && isValid(range.to)) {
-      onDateChange("data_termino", range.to);
+      // CORREÇÃO: Ajustar para meio-dia local
+      const adjustedTo = adjustToLocalMidday(range.to);
+      onDateChange("data_termino", adjustedTo);
     }
     if (range?.from && range?.to) {
       setInputValue(`${format(range.from, "dd/MM/yyyy")} - ${format(range.to, "dd/MM/yyyy")}`);
@@ -67,11 +79,18 @@ const ContratoDates = ({ dataInicio, dataTermino, onDateChange }: ContratoDatesP
               onBlur={e => {
                 const value = e.target.value;
                 const [ini, fim] = value.split("-").map(v => v.trim());
+                
+                // CORREÇÃO: Usar parse com base de data específica
                 const parsedIni = parse(ini, "dd/MM/yyyy", new Date());
                 const parsedFim = parse(fim, "dd/MM/yyyy", new Date());
+                
                 if (isValid(parsedIni) && isValid(parsedFim)) {
-                  onDateChange("data_inicio", parsedIni);
-                  onDateChange("data_termino", parsedFim);
+                  // CORREÇÃO: Ajustar para meio-dia local
+                  const adjustedIni = adjustToLocalMidday(parsedIni);
+                  const adjustedFim = adjustToLocalMidday(parsedFim);
+                  
+                  onDateChange("data_inicio", adjustedIni);
+                  onDateChange("data_termino", adjustedFim);
                 }
               }}
               readOnly={false}
@@ -80,7 +99,7 @@ const ContratoDates = ({ dataInicio, dataTermino, onDateChange }: ContratoDatesP
               className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground cursor-pointer"
               onClick={() => setOpen((v) => !v)}
             >
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z" /></svg>
             </span>
           </div>
         </PopoverTrigger>

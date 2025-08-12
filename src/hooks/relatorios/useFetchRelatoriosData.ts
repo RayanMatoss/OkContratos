@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { format, subMonths } from "date-fns";
 import { RelatorioMensal } from "@/types";
+import { parseDatabaseDate } from "@/lib/dateUtils";
 
 export const useFetchRelatoriosData = (periodoSelecionado: string) => {
   const [loading, setLoading] = useState(true);
@@ -73,10 +74,25 @@ export const useFetchRelatoriosData = (periodoSelecionado: string) => {
         
         if (itensBaseError) throw new Error(`Erro ao buscar itens: ${itensBaseError.message}`);
 
+        // Processar dados dos contratos
+        const contratosProcessados = contratos?.map(contrato => ({
+          ...contrato,
+          data_inicio: parseDatabaseDate(contrato.data_inicio),
+          data_termino: parseDatabaseDate(contrato.data_termino),
+          created_at: parseDatabaseDate(contrato.created_at)
+        })) || [];
+
+        // Processar dados das ordens
+        const ordensProcessadas = ordens?.map(ordem => ({
+          ...ordem,
+          data_emissao: parseDatabaseDate(ordem.data_emissao),
+          created_at: parseDatabaseDate(ordem.created_at)
+        })) || [];
+
         // Processar os dados
         const processedData = processRelatoriosData(
-          contratos || [],
-          ordens || [],
+          contratosProcessados,
+          ordensProcessadas,
           itensConsumidos || [],
           itens || [],
           numMeses
