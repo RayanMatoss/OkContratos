@@ -97,7 +97,7 @@ const Dashboard = () => {
                   </tr>
                 ) : (
                   data.itensAlerta.map((item: any) => (
-                    <tr key={item.id} className="border-b last:border-0 hover:bg-gray-50">
+                    <tr key={item.id} className="border-b last:border-0">
                       <td className="px-2 py-1 font-medium">{item.descricao}</td>
                       <td className="px-2 py-1">{item.contrato?.numero || '-'}</td>
                       <td className="px-2 py-1">{item.contrato?.fornecedores?.[0]?.nome || '-'}</td>
@@ -144,7 +144,7 @@ const Dashboard = () => {
                   </tr>
                 ) : (
                   data.contratosRecentes.map((contrato: any) => (
-                    <tr key={contrato.id} className="border-b last:border-0 hover:bg-gray-50">
+                    <tr key={contrato.id} className="border-b last:border-0">
                       <td className="px-3 py-2 font-medium">{contrato.numero}</td>
                       <td className="px-3 py-2 max-w-44 truncate" title={contrato.fornecedor?.nome || '-'}>
                         {contrato.fornecedor?.nome || '-'}
@@ -236,7 +236,7 @@ const Dashboard = () => {
                   </tr>
                 ) : (
                   data.fornecedores.map((fornecedor: any, idx: number) => (
-                    <tr key={fornecedor.id || `fornecedor-${idx}-${fornecedor.nome}`} className="border-b last:border-0 hover:bg-gray-50">
+                    <tr key={fornecedor.id || `fornecedor-${idx}-${fornecedor.nome}`} className="border-b last:border-0">
                       <td className="px-3 py-2 font-medium max-w-60 truncate" title={fornecedor.nome || '-'}>
                         {fornecedor.nome || '-'}
                       </td>

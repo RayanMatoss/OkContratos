@@ -45,6 +45,8 @@ export const useDashboardData = () => {
 
       if (contratosAtivosError) throw contratosAtivosError;
 
+
+
       // Fetch ordens
       const { data: ordens, error: ordensError } = await supabase
         .from("ordens")
@@ -82,7 +84,8 @@ export const useDashboardData = () => {
         data_inicio: contrato.data_inicio ? parseDatabaseDate(contrato.data_inicio) : new Date(),
         data_termino: contrato.data_termino ? parseDatabaseDate(contrato.data_termino) : new Date(),
         fornecedor_nome: contrato.fornecedor_nome || '',
-        fundo_municipal: contrato.fundo_municipal || []
+        fundo_municipal: contrato.fundo_municipal || [],
+        status: contrato.status || 'Ativo' // Adicionar status com fallback para 'Ativo'
       })) || [];
 
       // Processar dados das ordens
@@ -122,11 +125,15 @@ export const useDashboardData = () => {
       const contratosRecentes = contratosProcessados.map(contrato => ({
         id: contrato.id,
         numero: contrato.numero,
-        fornecedores: contrato.fornecedor_nome ? [{ nome: contrato.fornecedor_nome }] : [],
+        objeto: contrato.objeto,
+        fornecedor: contrato.fornecedor_nome ? { nome: contrato.fornecedor_nome } : undefined,
         valor: contrato.valor,
         data_inicio: contrato.data_inicio,
-        data_termino: contrato.data_termino
+        data_termino: contrato.data_termino,
+        status: contrato.status // Incluir o status
       }));
+
+
 
       // Ordens pendentes (últimas 5)
       const ordensPendentesLista = ordensProcessadas
