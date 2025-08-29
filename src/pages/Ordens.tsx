@@ -24,7 +24,7 @@ const Ordens = () => {
   const { ordens: ordensAprovadas, loading: loadingOrdensAprovadas } = useOrdensAprovadas();
   
   // Hook para solicitações pendentes
-  const { data: solicitacoes, loading: loadingSolicitacoes, error: errorSolicitacoes } = useSolicitacoes('PENDENTE');
+  const { data: solicitacoes, loading: loadingSolicitacoes, error: errorSolicitacoes, refetch: refetchSolicitacoes } = useSolicitacoes('PENDENTE');
   
   const { toast } = useToast();
 
@@ -73,8 +73,13 @@ const Ordens = () => {
 
   const handleFormSuccess = () => {
     setShowForm(false);
-    refetch();
-    // Recarregar solicitações se necessário
+    refetch(); // Recarregar ordens aprovadas
+    refetchSolicitacoes(); // Recarregar solicitações pendentes
+    
+    toast({
+      title: "Sucesso!",
+      description: "A solicitação foi criada e a lista foi atualizada",
+    });
   };
 
   // Tratar erro das solicitações
@@ -132,49 +137,11 @@ const Ordens = () => {
               </div>
             </div>
           ) : solicitacoes && solicitacoes.length > 0 ? (
-            <div className="bg-card border rounded-lg">
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-muted/50">
-                    <tr>
-                      <th className="text-left p-4 font-semibold">Contrato</th>
-                      <th className="text-left p-4 font-semibold">Fornecedor</th>
-                      <th className="text-left p-4 font-semibold">Data</th>
-                      <th className="text-left p-4 font-semibold">Justificativa</th>
-                      <th className="text-left p-4 font-semibold">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {solicitacoes.map((solicitacao) => (
-                      <tr key={solicitacao.id} className="border-b hover:bg-muted/50">
-                        <td className="p-4">
-                          {solicitacao.contrato?.numero || 'N/A'}
-                        </td>
-                        <td className="p-4">
-                          {solicitacao.contrato?.fornecedor?.nome || 'N/A'}
-                        </td>
-                        <td className="p-4">
-                          {new Date(solicitacao.criado_em).toLocaleDateString('pt-BR')}
-                        </td>
-                        <td className="p-4 max-w-xs truncate">
-                          {solicitacao.justificativa || 'N/A'}
-                        </td>
-                        <td className="p-4">
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            solicitacao.status === 'PENDENTE' ? 'bg-yellow-100 text-yellow-800' :
-                            solicitacao.status === 'APROVADA' ? 'bg-green-100 text-green-800' :
-                            solicitacao.status === 'RECUSADA' ? 'bg-red-100 text-red-800' :
-                            'bg-gray-100 text-gray-800'
-                          }`}>
-                            {solicitacao.status}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            <SolicitacoesTable
+              solicitacoes={solicitacoes}
+              loading={loadingSolicitacoes}
+              onRefresh={refetchSolicitacoes}
+            />
           ) : (
             <div className="text-center p-8">
               <Clock className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
@@ -208,10 +175,10 @@ const Ordens = () => {
             </div>
           ) : (
             <OrdensTable
-              ordens={filteredOrdens}
+              ordens={ordensAprovadas}
               onEdit={handleEdit}
               onDelete={handleDelete}
-              loading={loading}
+              loading={loadingOrdensAprovadas}
             />
           )}
         </TabsContent>

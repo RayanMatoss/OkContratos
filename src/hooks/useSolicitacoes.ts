@@ -7,26 +7,46 @@ export function useSolicitacoes(status?: 'PENDENTE' | 'APROVADA' | 'RECUSADA' | 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  useEffect(() => {
-    let q = supabase
-      .from('ordem_solicitacoes')
-      .select(`
-        *,
-        contrato:contratos (
-          numero,
-          fornecedor:fornecedores ( nome )
-        )
-      `)
-      .order('criado_em', { ascending: false });
+  const fetchData = async () => {
+    setLoading(true);
+    setError(null);
 
-    if (status) q = q.eq('status', status);
+    try {
+      let q = supabase
+        .from('ordem_solicitacoes')
+        .select(`
+          *,
+          contrato:contratos (
+            numero,
+            fornecedor:fornecedores ( nome )
+          )
+        `)
+        .order('criado_em', { ascending: false });
 
-    q.then(({ data, error }) => {
-      if (error) setError(error as any);
-      else setData((data ?? []) as any);
+      if (status) q = q.eq('status', status);
+
+      const { data: result, error } = await q;
+      
+      if (error) {
+        setError(error as any);
+      } else {
+        setData((result ?? []) as any);
+      }
+    } catch (err: any) {
+      setError(err);
+    } finally {
       setLoading(false);
-    });
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
   }, [status]);
 
-  return { data, loading, error };
+  return { 
+    data, 
+    loading, 
+    error, 
+    refetch: fetchData 
+  };
 }

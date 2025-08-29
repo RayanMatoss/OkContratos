@@ -9,18 +9,12 @@ export function gerarPdfOrdem(
   contrato, 
   fornecedor, 
   itens, 
-  timbreConfig?: {
-    secretaria?: string;
-    posicao?: 'top-right' | 'top-left' | 'center-top' | 'header';
-    tamanho?: { width: number; height: number };
-  }
+  timbreConfig?: TimbreConfig
 ) {
   const doc = new jsPDF();
 
-  // Obter configuração do timbre
-  const timbre = getTimbreConfig(timbreConfig?.secretaria);
-  
-
+  // Usar diretamente o timbreConfig passado como parâmetro
+  const timbre = timbreConfig || getTimbreConfig();
   
   // Aplicar configurações personalizadas se fornecidas
   if (timbreConfig?.posicao) {

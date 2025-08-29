@@ -1,64 +1,75 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { OrdemFornecimento } from "@/types";
+import { OrdemSolicitacao } from "@/types";
 
 export const useOrdensAprovadas = () => {
-  const [ordens, setOrdens] = useState<OrdemFornecimento[]>([]);
+  const [ordens, setOrdens] = useState<OrdemSolicitacao[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchOrdens = async () => {
     try {
       setLoading(true);
       
-      console.log('🔍 Iniciando busca de ordens aprovadas...');
-      
-      // Teste 1: Verificar TODAS as ordens (sem filtro)
-      const { data: todasOrdens, error: todasError } = await supabase
-        .from('ordens')
-        .select('id, numero, status');
-      
-      console.log('🔍 Todas as ordens (sem filtro):', todasOrdens);
-      console.log('🔍 Status das ordens encontradas:', todasOrdens?.map(o => ({ numero: o.numero, status: o.status })));
-      
+      // Consultar ordens aprovadas na tabela ordem_solicitacoes
       const { data, error } = await supabase
-        .from('ordens')
+        .from('ordem_solicitacoes')
         .select(`
-          id, numero, data_emissao, status, contrato_id,
+          id, 
+          numero_ordem,
+          contrato_id,
+          solicitante,
+          secretaria,
+          justificativa,
+          quantidade,
+          status,
+          criado_em,
+          decidido_em,
+          decidido_por,
+          motivo_decisao,
           contrato:contratos (
-            id, numero,
-            fornecedor:fornecedores ( id, nome )
+            id, 
+            numero,
+            objeto,
+            fornecedor:fornecedores ( 
+              id, 
+              nome,
+              cnpj
+            )
           )
         `)
-        .eq('status', 'Aprovada')
-        .order('data_emissao', { ascending: false });
-      
-      console.log('🔍 Resultado da consulta:', { data, error });
-      console.log('🔍 Quantidade de ordens encontradas:', data?.length || 0);
+        .eq('status', 'APROVADA')
+        .order('decidido_em', { ascending: false });
 
       if (error) throw error;
 
-      const transformedOrdens: OrdemFornecimento[] = (data || []).map(ordem => ({
+      const transformedOrdens: OrdemSolicitacao[] = (data || []).map(ordem => ({
         id: ordem.id,
-        numero: ordem.numero,
-        contratoId: ordem.contrato_id,
+        numero_ordem: ordem.numero_ordem, // ✅ Adicionando campo numero_ordem
+        contrato_id: ordem.contrato_id,
+        solicitante: ordem.solicitante,
+        secretaria: ordem.secretaria,
+        justificativa: ordem.justificativa,
+        quantidade: ordem.quantidade,
+        status: ordem.status,
+        criado_em: ordem.criado_em,
+        decidido_por: ordem.decidido_por,
+        decidido_em: ordem.decidido_em,
+        motivo_decisao: ordem.motivo_decisao,
         contrato: ordem.contrato ? {
           id: ordem.contrato.id,
           numero: ordem.contrato.numero,
-          fornecedores: ordem.contrato.fornecedor ? [{
+          objeto: ordem.contrato.objeto,
+          fornecedor: ordem.contrato.fornecedor ? {
             id: ordem.contrato.fornecedor.id,
-            nome: ordem.contrato.fornecedor.nome
-          }] : []
-        } : undefined,
-        dataEmissao: new Date(ordem.data_emissao),
-        status: ordem.status,
-        itens: [],
-        valorTotal: 0,
-        createdAt: new Date(ordem.data_emissao)
+            nome: ordem.contrato.fornecedor.nome,
+            cnpj: ordem.contrato.fornecedor.cnpj
+          } : null
+        } : null
       }));
 
       setOrdens(transformedOrdens);
     } catch (error: any) {
-      console.error("Erro ao carregar ordens:", error);
+      console.error("Erro ao carregar ordens aprovadas:", error);
     } finally {
       setLoading(false);
     }

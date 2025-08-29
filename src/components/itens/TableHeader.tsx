@@ -6,17 +6,27 @@ interface TableHeaderProps {
 }
 
 export const TableHeader = ({ columns }: TableHeaderProps) => {
+  const getColumnClasses = (column: string) => {
+    switch (column) {
+      case "Quantidade":
+      case "Valor Unit.":
+      case "Valor Total":
+        return "text-right";
+      case "Unidade":
+      case "Ações":
+        return "text-center";
+      default:
+        return "";
+    }
+  };
+
   return (
     <UITableHeader>
       <TableRow>
         {columns.map((column, index) => (
           <TableHead 
             key={`header-${index}-${column}`}
-            className={column === "Valor Unit." || 
-                      column === "Valor Total" || 
-                      column === "Quantidade" ||
-                      column === "Consumido" ||
-                      column === "Ações" ? "text-right" : ""}
+            className={getColumnClasses(column)}
           >
             {column}
           </TableHead>

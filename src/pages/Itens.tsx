@@ -27,7 +27,7 @@ const Itens = () => {
     const fetchContratos = async () => {
       try {
         const { data, error } = await supabase
-          .from('contratos')
+          .from('vw_contratos_limpos')
           .select('*');
 
         if (error) {

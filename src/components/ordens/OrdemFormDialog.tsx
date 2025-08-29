@@ -41,6 +41,7 @@ export const OrdemFormDialog = ({
     selectedItems,
     handleSubmit,
     loading,
+    submitting,
     selectFirstContrato,
     addItem,
     removeItem,
@@ -108,6 +109,7 @@ export const OrdemFormDialog = ({
 
           <OrdemFormFooter
             loading={loading}
+            submitting={submitting}
             submitLabel={submitLabel}
             onGeneratePDF={handleGeneratePDF}
             showGeneratePDF={mode === 'edit' && !!ordem}

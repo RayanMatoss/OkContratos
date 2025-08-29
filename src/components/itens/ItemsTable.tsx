@@ -18,7 +18,6 @@ export const ItemsTable = ({ items, loading, onEdit, onDelete }: ItemsTableProps
     "Contrato", 
     "Fornecedor", 
     "Quantidade", 
-    "Consumido", 
     "Unidade", 
     "Valor Unit.", 
     "Valor Total", 

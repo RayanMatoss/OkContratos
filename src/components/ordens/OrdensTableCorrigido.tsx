@@ -13,7 +13,6 @@ import { gerarPdfOrdem } from "@/lib/pdf/gerarPdfOrdem";
 import { Download } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { getTimbreConfig } from "@/lib/timbreConfig";
 
 interface OrdensTableProps {
   ordens: OrdemSolicitacao[];
@@ -101,8 +100,9 @@ export const OrdensTable = ({ ordens, loading, onEdit, onDelete }: OrdensTablePr
 
                                   // Usar a secretaria da solicitação (não a do usuário logado)
                                   const secretaria = ordem.secretaria?.toLowerCase() || 'prefeitura';
-                                  
-                                  const timbreConfig = getTimbreConfig(secretaria);
+                                  const timbreConfig = {
+                                    secretaria: secretaria
+                                  };
 
                                   // Criar objeto completo para o PDF
                                   const ordemParaPdf = {
@@ -115,6 +115,8 @@ export const OrdensTable = ({ ordens, loading, onEdit, onDelete }: OrdensTablePr
                                     solicitante: ordem.solicitante,
                                     justificativa: ordem.justificativa
                                   };
+
+                                  console.log('🔍 Gerando PDF com:', { ordemParaPdf, itensParaPdf, timbreConfig });
 
                                   await gerarPdfOrdem(
                                     ordemParaPdf,

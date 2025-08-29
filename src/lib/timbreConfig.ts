@@ -32,6 +32,12 @@ export const TIMBRE_CONFIG = {
       url: "/Timbres/Assistencia/assitencia.png",
       posicao: 'center-top' as const, // Centralizado por padrão
       tamanho: { width: 160, height: 50 } // Largura aumentada
+    },
+    // Mapeamento para "ASSISTÊNCIA SOCIAL"
+    'assistencia social': {
+      url: "/Timbres/Assistencia/assitencia.png",
+      posicao: 'center-top' as const,
+      tamanho: { width: 160, height: 50 }
     }
   } as TimbreSecretaria,
   
@@ -51,6 +57,11 @@ export function getTimbreConfig(secretaria?: string): TimbreConfig {
   }
   
   const secretariaLower = secretaria.toLowerCase();
+  
+  // Mapeamento específico para "ASSISTÊNCIA SOCIAL"
+  if (secretariaLower === 'assistencia social' || secretariaLower === 'assistência social') {
+    return TIMBRE_CONFIG.secretarias.assistencia;
+  }
   
   // Verificar se existe timbre específico para a secretaria
   if (TIMBRE_CONFIG.secretarias[secretariaLower]) {

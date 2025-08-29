@@ -4,6 +4,7 @@ import { FileText } from "lucide-react";
 
 interface OrdemFormFooterProps {
   loading: boolean;
+  submitting?: boolean;
   submitLabel: string;
   onGeneratePDF?: () => void;
   showGeneratePDF?: boolean;
@@ -11,10 +12,23 @@ interface OrdemFormFooterProps {
 
 export const OrdemFormFooter: React.FC<OrdemFormFooterProps> = ({
   loading,
+  submitting = false,
   submitLabel,
   onGeneratePDF,
   showGeneratePDF = false
 }) => {
+  const isSubmitting = loading || submitting;
+  
+  const getSubmitText = () => {
+    if (submitting) {
+      return "Criando solicitação...";
+    }
+    if (loading) {
+      return "Carregando...";
+    }
+    return submitLabel;
+  };
+
   return (
     <div className="flex justify-between items-center">
       <div className="flex items-center gap-2">
@@ -34,10 +48,10 @@ export const OrdemFormFooter: React.FC<OrdemFormFooterProps> = ({
       <div className="flex gap-3">
         <Button
           type="submit"
-          disabled={loading}
+          disabled={isSubmitting}
           className="min-w-[120px]"
         >
-          {loading ? "Salvando..." : submitLabel}
+          {getSubmitText()}
         </Button>
       </div>
     </div>

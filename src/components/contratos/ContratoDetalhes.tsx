@@ -12,7 +12,7 @@ import { format, formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Contrato } from "@/types";
 import { Button } from "@/components/ui/button";
-import { Edit, Eye, Plus, TrendingDown, TrendingUp, DollarSign } from "lucide-react";
+import { Edit, Eye, Plus, TrendingDown, TrendingUp, DollarSign, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import AditivoFormDialog from "./AditivoFormDialog";
@@ -23,6 +23,7 @@ import { Progress } from "@/components/ui/progress";
 import { useContratoSaldo } from "@/hooks/useContratoSaldo";
 import { useAuth } from "@/hooks/useAuth";
 import ContratosRelacionados from "./ContratosRelacionados";
+import { gerarPdfContrato } from "@/lib/pdf/gerarPdfContrato";
 
 interface ContratoDetalhesProps {
   contrato: Contrato;
@@ -71,6 +72,50 @@ const ContratoDetalhes = ({ contrato, open, onOpenChange, onAditivoCriado }: Con
       description: "O aditivo foi criado com sucesso",
     });
     onAditivoCriado?.();
+  };
+
+  const handleGerarPdf = async () => {
+    try {
+      // Buscar informações completas do fornecedor
+      const fornecedorCompleto = contrato.fornecedores?.[0];
+      
+      // Debug: verificar estrutura dos dados
+      console.log('🔍 Contrato completo:', contrato);
+      console.log('🔍 Fornecedores:', contrato.fornecedores);
+      console.log('🔍 Fornecedor selecionado:', fornecedorCompleto);
+      console.log('🔍 CNPJ do fornecedor:', fornecedorCompleto?.cnpj);
+      
+      // Preparar dados para o PDF
+      const contratoParaPdf = {
+        id: contrato.id,
+        numero: contrato.numeroCompleto || contrato.numero,
+        objeto: contrato.objeto || '',
+        valor_total: saldo.itensSaldo?.reduce((total, itemSaldo) => 
+          total + (itemSaldo.quantidadeOriginal * itemSaldo.valorUnitario), 0) || 0,
+        fundo_municipal: fundosString,
+        fornecedor: {
+          nome: fornecedorCompleto?.nome || 'N/A',
+          cnpj: fornecedorCompleto?.cnpj && fornecedorCompleto.cnpj.trim() !== '' ? fornecedorCompleto.cnpj : 'Não informado'
+        },
+        itens: saldo.itensSaldo || []
+      };
+
+      console.log('🔍 Dados para PDF:', contratoParaPdf);
+
+      await gerarPdfContrato(contratoParaPdf);
+      
+      toast({
+        title: "PDF gerado",
+        description: "O extrato do contrato foi gerado com sucesso",
+      });
+    } catch (error) {
+      console.error('Erro ao gerar PDF:', error);
+      toast({
+        title: "Erro",
+        description: "Erro ao gerar o PDF do contrato",
+        variant: "destructive"
+      });
+    }
   };
 
   return (
@@ -342,6 +387,10 @@ const ContratoDetalhes = ({ contrato, open, onOpenChange, onAditivoCriado }: Con
           </div>
         </ScrollArea>
         <div className="flex justify-end gap-2 pt-4 border-t">
+          <Button variant="outline" onClick={handleGerarPdf}>
+            <FileText size={16} className="mr-2" />
+            Gerar PDF
+          </Button>
           <Button variant="outline" onClick={() => setShowAditivoForm(true)}>
             <Plus size={16} className="mr-2" />
             Novo Aditivo

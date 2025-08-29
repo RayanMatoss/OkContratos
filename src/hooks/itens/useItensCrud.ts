@@ -29,16 +29,15 @@ export const useItensCrud = () => {
   async function fetchItens() {
     try {
       setLoading(true);
+      
       const { data, error } = await supabase
         .from('itens')
         .select(`
           *,
-          contratos (
+          vw_contratos_limpos!contrato_id (
             numero,
             objeto,
-            fornecedores (
-              nome
-            )
+            fornecedor_nome
           )
         `)
         .order('created_at', { ascending: false });

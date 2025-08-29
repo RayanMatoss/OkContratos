@@ -14,18 +14,17 @@ export const ItemRow = ({ item, onEdit, onDelete }: ItemRowProps) => {
   return (
     <TableRow key={item.id}>
       <TableCell className="font-medium">{item.descricao}</TableCell>
-      <TableCell>{item.contrato?.numero}</TableCell>
-      <TableCell>{item.contrato?.fornecedores?.[0]?.nome}</TableCell>
+      <TableCell>{item.vw_contratos_limpos?.numero || 'N/A'}</TableCell>
+      <TableCell>{item.vw_contratos_limpos?.fornecedor_nome || 'N/A'}</TableCell>
       <TableCell className="text-right">{item.quantidade}</TableCell>
-      <TableCell className="text-right">{item.quantidade_consumida}</TableCell>
-      <TableCell>{item.unidade}</TableCell>
+      <TableCell className="text-center">{item.unidade}</TableCell>
       <TableCell className="text-right">
         {formatCurrency(item.valor_unitario)}
       </TableCell>
       <TableCell className="text-right">
         {formatCurrency(item.quantidade * item.valor_unitario)}
       </TableCell>
-      <TableCell className="text-right">
+      <TableCell className="text-center">
         <TableActions
           onEdit={() => onEdit?.(item)}
           onDelete={() => onDelete?.(item)}

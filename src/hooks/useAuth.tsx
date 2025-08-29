@@ -89,6 +89,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return false;
       }
 
+      console.log('useAuth: userInfo.permissao:', userInfo.permissao);
       setPerfil(userInfo.permissao || null);
       setFundosSelecionados(fundosSelecionados);
       
@@ -143,6 +144,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
     
     const savedPerfil = localStorage.getItem('perfil');
+    console.log('useAuth: savedPerfil do localStorage:', savedPerfil);
     if (savedPerfil) {
       setPerfil(savedPerfil);
     }
@@ -169,6 +171,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setSecretariaAtiva(savedSecretaria);
     }
   }, []);
+
+  // Buscar perfil do usuário diretamente do banco quando user estiver disponível
+  useEffect(() => {
+    if (user && !perfil) {
+      console.log('useAuth: Buscando perfil do usuário no banco...');
+      const buscarPerfil = async () => {
+        try {
+          const { data: userProfile, error } = await supabase
+            .from('user_profiles')
+            .select('permissao, perfil')
+            .eq('user_id', user.id)
+            .single();
+          
+          if (error) {
+            console.error('useAuth: Erro ao buscar perfil:', error);
+            return;
+          }
+          
+          console.log('useAuth: Perfil encontrado no banco:', userProfile);
+          
+          // Usar permissao se disponível, senão usar perfil
+          const perfilUsuario = userProfile.permissao || userProfile.perfil;
+          if (perfilUsuario) {
+            console.log('useAuth: Definindo perfil:', perfilUsuario);
+            setPerfil(perfilUsuario);
+            localStorage.setItem('perfil', perfilUsuario);
+          }
+        } catch (error) {
+          console.error('useAuth: Erro ao buscar perfil:', error);
+        }
+      };
+      
+      buscarPerfil();
+    }
+  }, [user, perfil]);
 
   return (
     <AuthContext.Provider value={{ 
