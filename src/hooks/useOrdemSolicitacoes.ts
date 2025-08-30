@@ -177,111 +177,44 @@ export const useOrdemSolicitacoes = () => {
   }) => {
     try {
       console.log("🚀 Iniciando criação de solicitação...", solicitacaoData);
-      
-      // Obter informações do usuário logado
-      const { data: { user }, error: authError } = await supabase.auth.getUser();
-      
-      if (authError) {
-        console.error("❌ Erro ao obter usuário:", authError);
-        throw new Error("Erro de autenticação: " + authError.message);
-      }
-      
-      if (!user) {
-        console.error("❌ Usuário não autenticado");
-        throw new Error("Usuário não autenticado");
-      }
 
-      console.log("✅ Usuário autenticado:", user.id);
+      // Calcular quantidade total dos itens
+      const quantidadeTotal = solicitacaoData.itens.reduce((total, item) => total + item.quantidade, 0);
 
-      // Buscar informações do usuário incluindo fundo municipal
-      const { data: userProfile, error: userError } = await supabase
-        .from("user_profiles")
-        .select("id, fundo_municipal")
-        .eq("user_id", user.id)
-        .single();
-
-      if (userError) {
-        console.error("❌ Erro ao buscar perfil do usuário:", userError);
-        throw new Error("Erro ao buscar perfil do usuário: " + userError.message);
-      }
-
-      console.log("✅ Perfil do usuário encontrado:", userProfile);
-
-      if (!userProfile?.fundo_municipal || userProfile.fundo_municipal.length === 0) {
-        console.error("❌ Fundo municipal não definido para o usuário");
-        throw new Error("Fundo municipal não definido para o usuário");
-      }
-
-      // Usar o primeiro fundo municipal como secretaria
-      const secretaria = userProfile.fundo_municipal[0];
-      console.log("✅ Secretaria definida:", secretaria);
-
-      // Verificar se a tabela existe e tem a estrutura correta
-      const { data: tableInfo, error: tableError } = await supabase
-        .from("ordem_solicitacoes")
-        .select("id")
-        .limit(1);
-
-      if (tableError) {
-        console.error("❌ Erro ao verificar tabela:", tableError);
-        throw new Error("Erro ao verificar tabela: " + tableError.message);
-      }
-
-      console.log("✅ Tabela verificada com sucesso");
-
-      // Preparar dados para inserção
-      const dadosSolicitacao = {
-        contrato_id: solicitacaoData.contratoId,
-        solicitante: user.id,
-        secretaria: secretaria,
-        justificativa: solicitacaoData.justificativa || "Solicitação criada via sistema",
-        quantidade: solicitacaoData.quantidade || 0,
-        status: "PENDENTE"
+      // Montar payload para RPC
+      const payload = {
+        p_contrato_id: solicitacaoData.contratoId,
+        p_justificativa: solicitacaoData.justificativa || "Solicitação criada via sistema",
+        p_quantidade: Number(quantidadeTotal),
+        p_secretaria: "Prefeitura Municipal", // Secretaria padrão para este hook
       };
 
-      console.log("📝 Dados para inserção:", dadosSolicitacao);
+      console.log('payload/ordem', payload);
 
-      // Tentar inserir usando RPC para contornar possíveis problemas de RLS
-      const { data: solicitacao, error: solicitacaoError } = await supabase
-        .rpc('create_solicitacao_ordem', {
-          p_contrato_id: dadosSolicitacao.contrato_id,
-          p_solicitante: dadosSolicitacao.solicitante,
-          p_secretaria: dadosSolicitacao.secretaria,
-          p_justificativa: dadosSolicitacao.justificativa,
-          p_quantidade: dadosSolicitacao.quantidade,
-          p_status: dadosSolicitacao.status
-        });
+      // Chamar RPC create_solicitacao_ordem
+      const { data: result, error } = await supabase.rpc('create_solicitacao_ordem', payload);
 
-      if (solicitacaoError) {
-        console.error("❌ Erro ao criar solicitação via RPC:", solicitacaoError);
-        
-        // Fallback: tentar inserção direta
-        console.log("🔄 Tentando inserção direta...");
-        
-        const { data: solicitacaoDirect, error: solicitacaoDirectError } = await supabase
-          .from("ordem_solicitacoes")
-          .insert(dadosSolicitacao)
-          .select("id")
-          .single();
-
-        if (solicitacaoDirectError) {
-          console.error("❌ Erro na inserção direta:", solicitacaoDirectError);
-          throw solicitacaoDirectError;
-        }
-
-        console.log("✅ Solicitação criada via inserção direta:", solicitacaoDirect.id);
-        await fetchSolicitacoes();
-        return solicitacaoDirect;
+      if (error) {
+        console.error('Erro ao criar ordem via RPC:', { error, payload });
+        throw new Error(error.message || 'Erro ao criar solicitação');
       }
 
-      console.log("✅ Solicitação criada via RPC:", solicitacao);
+      // Verificar resposta da RPC
+      if (!result?.success) {
+        console.error('RPC retornou sucesso=false:', result);
+        throw new Error(result?.message || 'Não foi possível criar a solicitação');
+      }
+
+      const ordemCriada = result;
+
+      console.log("✅ Solicitação criada com sucesso:", ordemCriada.id);
 
       // Inserir itens da solicitação
       if (solicitacaoData.itens.length > 0) {
         console.log("📦 Inserindo itens da solicitação...", solicitacaoData.itens);
         
         const itensSolicitacao = solicitacaoData.itens.map((item) => ({
-          solicitacao_id: solicitacao.id,
+          solicitacao_id: ordemCriada.id,
           item_id: item.itemId,
           quantidade: item.quantidade,
         }));
@@ -299,15 +232,27 @@ export const useOrdemSolicitacoes = () => {
       }
 
       await fetchSolicitacoes();
-      return solicitacao;
+      return ordemCriada;
     } catch (error: any) {
       console.error("💥 Erro completo na criação da solicitação:", error);
       
-      toast({
-        title: "Erro ao criar solicitação",
-        description: error.message,
-        variant: "destructive",
-      });
+      // Tratamento específico para erros de secretaria
+      if (error.message?.includes('P0001') || 
+          error.message?.includes('Secretaria não definida') ||
+          error.message?.includes('Selecione a secretaria') ||
+          error.message?.includes('Escolha uma secretaria')) {
+        toast({
+          title: "Secretaria não definida",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Erro ao criar solicitação",
+          description: error.message,
+          variant: "destructive",
+        });
+      }
       throw error;
     }
   };

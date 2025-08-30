@@ -11,6 +11,8 @@ import { cn } from "@/lib/utils";
 import Select from 'react-select';
 import { Item } from "@/types";
 import OrdemItemsList from "./OrdemItemsList";
+import { SecretariaSelector } from "./SecretariaSelector";
+import { useAuth } from "@/hooks/useAuth";
 
 interface OrdemFormStepContentProps {
   contratos: any[];
@@ -29,6 +31,10 @@ interface OrdemFormStepContentProps {
   onAddItem?: (item: Item, quantidade: number) => void;
   onRemoveItem?: (itemId: string) => void;
   onUpdateQuantity?: (itemId: string, quantidade: number) => void;
+  userFundos?: string[];
+  requiresSecretariaSelection?: boolean;
+  selectedSecretaria?: string;
+  setSelectedSecretaria?: (secretaria: string) => void;
 }
 
 export const OrdemFormStepContent: React.FC<OrdemFormStepContentProps> = ({
@@ -47,9 +53,14 @@ export const OrdemFormStepContent: React.FC<OrdemFormStepContentProps> = ({
   mode,
   onAddItem,
   onRemoveItem,
-  onUpdateQuantity
+  onUpdateQuantity,
+  userFundos = [],
+  requiresSecretariaSelection = false,
+  selectedSecretaria = "",
+  setSelectedSecretaria
 }) => {
   const [quantities, setQuantities] = React.useState<{ [key: string]: number }>({});
+  const { secretariaAtiva, setSecretariaAtiva } = useAuth();
 
   // Inicializar quantidades quando selectedItems mudar
   React.useEffect(() => {
@@ -97,6 +108,12 @@ export const OrdemFormStepContent: React.FC<OrdemFormStepContentProps> = ({
       // Remover item se quantidade for 0
       onRemoveItem?.(itemId);
     }
+  };
+
+  const handleSecretariaChange = (secretaria: string) => {
+    // Atualizar tanto o contexto quanto o estado local
+    setSecretariaAtiva(secretaria);
+    setSelectedSecretaria?.(secretaria);
   };
 
   return (
@@ -172,6 +189,18 @@ export const OrdemFormStepContent: React.FC<OrdemFormStepContentProps> = ({
           </p>
         </div>
       </div>
+
+      {/* Seletor de Secretaria */}
+      {userFundos.length > 0 && (
+        <div className="bg-card border rounded-lg p-4">
+          <SecretariaSelector
+            fundos={userFundos}
+            selectedSecretaria={selectedSecretaria || secretariaAtiva}
+            onSecretariaChange={handleSecretariaChange}
+            required={requiresSecretariaSelection}
+          />
+        </div>
+      )}
 
       {/* Justificativa */}
       <div className="space-y-2">

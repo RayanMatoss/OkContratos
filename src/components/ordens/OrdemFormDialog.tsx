@@ -45,7 +45,11 @@ export const OrdemFormDialog = ({
     selectFirstContrato,
     addItem,
     removeItem,
-    updateItemQuantity
+    updateItemQuantity,
+    userFundos,
+    requiresSecretariaSelection,
+    selectedSecretaria,
+    setSelectedSecretaria
   } = useOrdemForm({ mode, initialOrdem: ordem, onSuccess });
   
   // AGORA contratoId já está definido!
@@ -103,6 +107,10 @@ export const OrdemFormDialog = ({
             onAddItem={addItem}
             onRemoveItem={removeItem}
             onUpdateQuantity={updateItemQuantity}
+            userFundos={userFundos}
+            requiresSecretariaSelection={requiresSecretariaSelection}
+            selectedSecretaria={selectedSecretaria}
+            setSelectedSecretaria={setSelectedSecretaria}
           />
 
           <Separator />

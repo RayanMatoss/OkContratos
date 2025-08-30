@@ -3,6 +3,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { OrdemFornecimento, Item, ItemOrdem } from "@/types";
+import { criarOrdem, obterSecretariaUsuario } from "@/features/ordens/api/createSolicitacao";
 
 export interface UseOrdemFormProps {
   mode: 'create' | 'edit';
@@ -20,6 +21,37 @@ export const useOrdemForm = ({ mode, initialOrdem, onSuccess }: UseOrdemFormProp
   const [selectedItems, setSelectedItems] = useState<{ itemId: string; quantidade: number }[]>([]);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [userFundos, setUserFundos] = useState<string[]>([]);
+  const [requiresSecretariaSelection, setRequiresSecretariaSelection] = useState(false);
+  const [selectedSecretaria, setSelectedSecretaria] = useState<string>(""); // sempre string
+
+  // Buscar fundos do usuário ao inicializar
+  useEffect(() => {
+    const fetchUserFundos = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const { data: perfil } = await supabase
+            .from('user_profiles')
+            .select('fundo_municipal')
+            .eq('user_id', user.id)
+            .single();
+
+          if (perfil?.fundo_municipal) {
+            setUserFundos(perfil.fundo_municipal);
+            // Se tem múltiplas secretarias e não tem uma selecionada, obrigar seleção
+            if (perfil.fundo_municipal.length > 1 && !secretariaAtiva) {
+              setRequiresSecretariaSelection(true);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Erro ao buscar fundos do usuário:', error);
+      }
+    };
+
+    fetchUserFundos();
+  }, [secretariaAtiva]);
 
   // Para edição, preencher dados iniciais
   useEffect(() => {
@@ -61,11 +93,28 @@ export const useOrdemForm = ({ mode, initialOrdem, onSuccess }: UseOrdemFormProp
     setSubmitting(true);
     try {
       if (mode === 'create') {
-        // Obter usuário logado
-        const { data: { user } } = await supabase.auth.getUser();
-        
-        if (!user) {
-          throw new Error("Usuário não autenticado");
+        // Determinar secretaria a ser enviada
+        let secretariaParaEnviar: string;
+
+        // 1. Se o usuário selecionou explicitamente uma secretaria
+        if (selectedSecretaria && selectedSecretaria.trim() !== '') {
+          secretariaParaEnviar = selectedSecretaria;
+        } else if (secretariaAtiva && secretariaAtiva.trim() !== '') {
+          secretariaParaEnviar = secretariaAtiva;
+        } else {
+          // 2. Se não selecionou, tentar obter do perfil (apenas se houver 1 opção)
+          const secretariaDoPerfil = await obterSecretariaUsuario();
+          if (secretariaDoPerfil) {
+            secretariaParaEnviar = secretariaDoPerfil;
+          } else {
+            // 3. Se não conseguiu determinar, bloquear submit
+            toast({
+              title: "Secretaria não selecionada",
+              description: "Você possui múltiplas secretarias. Selecione uma na interface antes de continuar.",
+              variant: "destructive",
+            });
+            return;
+          }
         }
 
         // Toast de "Criando solicitação..."
@@ -74,184 +123,34 @@ export const useOrdemForm = ({ mode, initialOrdem, onSuccess }: UseOrdemFormProp
           description: "Aguarde enquanto processamos sua solicitação",
         });
 
-        // SOLUÇÃO INTELIGENTE: Detectar secretaria automaticamente do usuário
-        let secretariaFinal = '';
-        
-        try {
-          // 1. Tentar usar a secretaria ativa do contexto
-          if (secretariaAtiva && secretariaAtiva.trim() !== '') {
-            secretariaFinal = secretariaAtiva;
-            console.log('Usando secretaria do contexto:', secretariaFinal);
-          } else {
-            // 2. Buscar secretaria do perfil do usuário no banco
-            const { data: userProfile, error: profileError } = await supabase
-              .from('user_profiles')
-              .select('fundo_municipal')
-              .eq('user_id', user.id)
-              .single();
-            
-            if (!profileError && userProfile?.fundo_municipal && userProfile.fundo_municipal.length > 0) {
-              // Usar o primeiro fundo como secretaria
-              secretariaFinal = userProfile.fundo_municipal[0];
-              console.log('Usando secretaria do perfil do usuário:', secretariaFinal);
-            } else {
-              // 3. Fallback: buscar secretarias disponíveis no sistema
-              const { data: secretariasDisponiveis, error: secretariasError } = await supabase
-                .from('ordem_solicitacoes')
-                .select('secretaria')
-                .not('secretaria', 'is', null)
-                .limit(10);
-              
-              if (!secretariasError && secretariasDisponiveis && secretariasDisponiveis.length > 0) {
-                // Usar a primeira secretaria encontrada no sistema
-                secretariaFinal = secretariasDisponiveis[0].secretaria;
-                console.log('Usando secretaria do sistema:', secretariaFinal);
-              } else {
-                // 4. Fallback final: usar assistencia (que sabemos que existe)
-                secretariaFinal = 'assistencia';
-                console.log('Usando secretaria padrão (assistencia):', secretariaFinal);
-              }
-            }
-          }
-          
-          // 5. Validação final: garantir que temos uma secretaria válida
-          if (!secretariaFinal || secretariaFinal.trim() === '') {
-            secretariaFinal = 'assistencia';
-            console.log('Secretaria vazia, usando padrão:', secretariaFinal);
-          }
-          
-          console.log('Secretaria final para criação (INTELIGENTE):', secretariaFinal);
-          
-        } catch (error) {
-          console.warn('Erro ao detectar secretaria, usando padrão:', error);
-          secretariaFinal = 'assistencia';
-          console.log('Secretaria final (fallback):', secretariaFinal);
-        }
+        // Calcular quantidade total dos itens selecionados
+        const quantidadeTotal = selectedItems.reduce((total, item) => total + item.quantidade, 0);
 
-        // SOLUÇÃO FINAL: Verificação ULTRA-RIGOROSA antes de inserir
-        console.log('=== VERIFICAÇÃO ULTRA-RIGOROSA ===');
-        console.log('user.id:', user.id);
-        console.log('user.id type:', typeof user.id);
-        console.log('user.id length:', user.id?.length);
-        console.log('user.id is null?', user.id === null);
-        console.log('user.id is undefined?', user.id === undefined);
-        console.log('user.id is empty string?', user.id === '');
-        console.log('secretariaFinal:', secretariaFinal);
-        console.log('secretariaFinal type:', typeof secretariaFinal);
-        console.log('secretariaFinal is null?', secretariaFinal === null);
-        console.log('secretariaFinal is undefined?', secretariaFinal === undefined);
-        console.log('secretariaFinal is empty string?', secretariaFinal === '');
-        console.log('=====================================');
-        
-        // VALIDAÇÃO FINAL: Garantir que temos dados válidos
-        if (!user.id || user.id === '00000000-0000-0000-0000-000000000000') {
-          throw new Error('ID do usuário inválido ou não autenticado');
-        }
-        
-        if (!secretariaFinal || secretariaFinal.trim() === '') {
-          throw new Error('Secretaria não pode ser vazia');
-        }
-        
-        // SOLUÇÃO FINAL: Inserir com dados VALIDADOS
-        const dadosParaInserir = {
-          contrato_id: contratoId,
-          solicitante: user.id,
-          secretaria: secretariaFinal,
-          justificativa: justificativa.trim(),
-          quantidade: null,
-          status: 'PENDENTE'
+        // Montar payload para RPC
+        const payload = {
+          p_contrato_id: contratoId,
+          p_justificativa: justificativa,
+          p_quantidade: Number(quantidadeTotal),
+          p_secretaria: secretariaParaEnviar, // string
         };
-        
-        console.log('=== DADOS FINAIS VALIDADOS ===');
-        console.log('dadosParaInserir:', JSON.stringify(dadosParaInserir, null, 2));
-        console.log('=====================================');
-        
-        // SOLUÇÃO RADICAL: SQL puro para contornar Supabase
-        console.log('=== SOLUÇÃO RADICAL: SQL PURO ===');
-        
-        try {
-          // 1. SOLUÇÃO RADICAL: Inserir via SQL puro
-          const { data: sqlResult, error: sqlError } = await supabase.rpc('exec_sql_insert', {
-            sql_query: `
-              INSERT INTO ordem_solicitacoes (
-                contrato_id, 
-                solicitante, 
-                secretaria, 
-                justificativa, 
-                quantidade, 
-                status
-              ) VALUES (
-                '${contratoId}',
-                '${user.id}',
-                'assistencia',
-                '${justificativa.trim().replace(/'/g, "''")}',
-                ${null},
-                'PENDENTE'
-              ) RETURNING id, secretaria;
-            `
-          });
-          
-          if (sqlError) {
-            console.error('Erro na SOLUÇÃO RADICAL:', sqlError);
-            throw new Error(`Erro na SOLUÇÃO RADICAL: ${sqlError.message}`);
-          }
-          
-          console.log('SOLUÇÃO RADICAL funcionou:', sqlResult);
-          
-          if (!sqlResult || !sqlResult[0] || !sqlResult[0].id) {
-            throw new Error('ID da solicitação não retornado na SOLUÇÃO RADICAL');
-          }
-          
-          const solicitacaoId = sqlResult[0].id;
-          
-        } catch (radicalError) {
-          console.error('Erro na SOLUÇÃO RADICAL:', radicalError);
-          
-          // FALLBACK: Tentar inserção normal com valor hardcoded
-          console.log('Tentando inserção normal com valor hardcoded...');
-          
-          const { data: solicitacaoData, error: solicitacaoError } = await supabase
-            .from('ordem_solicitacoes')
-            .insert({
-              contrato_id: contratoId,
-              solicitante: user.id,
-              secretaria: 'assistencia', // VALOR FORÇADO
-              justificativa: justificativa.trim(),
-              quantidade: null,
-              status: 'PENDENTE'
-            })
-            .select('id')
-            .single();
 
-          if (solicitacaoError) {
-            console.error('Erro no fallback também:', solicitacaoError);
-            
-            // ÚLTIMA TENTATIVA: Com outro valor
-            console.log('ÚLTIMA TENTATIVA: Com valor alternativo...');
-            
-            const { data: solicitacaoDataAlt, error: solicitacaoErrorAlt } = await supabase
-              .from('ordem_solicitacoes')
-              .insert({
-                contrato_id: contratoId,
-                solicitante: user.id,
-                secretaria: 'prefeitura', // VALOR ALTERNATIVO
-                justificativa: justificativa.trim(),
-                quantidade: null,
-                status: 'PENDENTE'
-              })
-              .select('id')
-              .single();
+        console.log('payload/ordem', payload);
 
-            if (solicitacaoErrorAlt) {
-              console.error('TODAS AS TENTATIVAS FALHARAM:', solicitacaoErrorAlt);
-              throw new Error(`Erro ao criar solicitação: ${solicitacaoErrorAlt.message}`);
-            }
-            
-            solicitacaoData = solicitacaoDataAlt;
-          }
+        // Chamar RPC create_solicitacao_ordem
+        const { data: result, error } = await supabase.rpc('create_solicitacao_ordem', payload);
 
-          const solicitacaoId = solicitacaoData.id;
+        if (error) {
+          console.error('Erro ao criar ordem via RPC:', { error, payload });
+          throw new Error(error.message || 'Erro ao criar solicitação');
         }
+
+        // Verificar resposta da RPC
+        if (!result?.success) {
+          console.error('RPC retornou sucesso=false:', result);
+          throw new Error(result?.message || 'Não foi possível criar a solicitação');
+        }
+
+        const ordemCriada = result;
 
         // Toast de "Adicionando itens..."
         toast({
@@ -259,9 +158,9 @@ export const useOrdemForm = ({ mode, initialOrdem, onSuccess }: UseOrdemFormProp
           description: "Configurando os itens da solicitação",
         });
 
-        // 2. Adicionar itens diretamente na tabela
+        // Adicionar itens diretamente na tabela
         const itensParaInserir = selectedItems.map(item => ({
-          solicitacao_id: solicitacaoId,
+          solicitacao_id: ordemCriada.id,
           item_id: item.itemId,
           quantidade: item.quantidade
         }));
@@ -291,6 +190,7 @@ export const useOrdemForm = ({ mode, initialOrdem, onSuccess }: UseOrdemFormProp
         setNumero("");
         setJustificativa("");
         setSelectedItems([]);
+        setSelectedSecretaria("");
 
         // Chamar callback de sucesso
         onSuccess?.();
@@ -307,15 +207,28 @@ export const useOrdemForm = ({ mode, initialOrdem, onSuccess }: UseOrdemFormProp
     } catch (error: any) {
       console.error("Erro ao processar solicitação:", error);
       
-      toast({
-        title: "Erro ao processar solicitação",
-        description: error.message,
-        variant: "destructive",
-      });
+      // Tratamento específico para erros de secretaria
+      if (error.message?.includes('P0001') || 
+          error.message?.includes('Secretaria não definida') ||
+          error.message?.includes('Selecione a secretaria') ||
+          error.message?.includes('Escolha uma secretaria')) {
+        toast({
+          title: "Secretaria não definida",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        // Outros erros
+        toast({
+          title: "Erro ao processar solicitação",
+          description: error.message || 'Erro desconhecido',
+          variant: "destructive",
+        });
+      }
     } finally {
       setSubmitting(false);
     }
-  }, [contratoId, data, justificativa, selectedItems, mode, onSuccess, toast, secretariaAtiva]);
+  }, [contratoId, data, justificativa, selectedItems, mode, onSuccess, toast, secretariaAtiva, selectedSecretaria]);
 
   const addItem = (item: Item, quantidade: number) => {
     const existingItemIndex = selectedItems.findIndex(selected => selected.itemId === item.id);
@@ -366,6 +279,10 @@ export const useOrdemForm = ({ mode, initialOrdem, onSuccess }: UseOrdemFormProp
     addItem,
     removeItem,
     updateItemQuantity,
+    userFundos,
+    requiresSecretariaSelection,
+    selectedSecretaria,
+    setSelectedSecretaria,
   };
 };
 

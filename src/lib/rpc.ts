@@ -5,7 +5,7 @@ export interface SolicitacaoCreateInput {
   contratoId: string;
   justificativa?: string;
   quantidade?: number;
-  secretaria?: string; // Opcional: apenas se admin quiser especificar
+  secretaria: string; // sempre enviar como string
 }
 
 export interface SolicitacaoItemInput {
@@ -21,55 +21,36 @@ export interface RpcResult {
   error?: string;
 }
 
-// Helper para criar solicitação
+// Helper para criar solicitação usando RPC diretamente
 export async function rpcCreateSolicitacao(params: SolicitacaoCreateInput): Promise<RpcResult> {
   try {
-    // Verificar se o usuário está logado
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      return {
-        success: false,
-        error: 'Usuário não autenticado'
-      };
-    }
-
-    // Montar parâmetros da RPC
-    const rpcParams: any = {
+    // Montar payload para RPC com parâmetros nomeados
+    const payload = {
       p_contrato_id: params.contratoId,
-      p_justificativa: params.justificativa ?? null,
-      p_quantidade: params.quantidade ?? null,
+      p_justificativa: params.justificativa || '',
+      p_quantidade: params.quantidade || 0,
+      p_secretaria: params.secretaria, // sempre enviar
     };
 
-    // Adicionar secretaria apenas se especificada (para admin)
-    if (params.secretaria) {
-      rpcParams.p_secretaria = params.secretaria;
-    }
+    console.log('payload/ordem', payload);
 
-    const { data, error } = await supabase.rpc('create_solicitacao_ordem', rpcParams);
+    // Chamar RPC create_solicitacao_ordem diretamente
+    const { data: result, error } = await supabase.rpc('create_solicitacao_ordem', payload);
 
     if (error) {
-      console.error('Erro na RPC create_solicitacao_ordem:', error);
+      console.error('Erro ao criar ordem via RPC:', { error, payload });
       return {
         success: false,
-        error: error.message || 'Erro interno do servidor'
+        error: error.message || 'Erro ao criar solicitação'
       };
     }
 
-    // Validar resposta da RPC
-    if (!data) {
+    // Verificar resposta da RPC
+    if (!result?.success) {
+      console.error('RPC retornou sucesso=false:', result);
       return {
         success: false,
-        error: 'Resposta vazia da RPC'
-      };
-    }
-
-    // Se a RPC retornou string, tentar fazer parse
-    const result = typeof data === 'string' ? JSON.parse(data) : data;
-    
-    if (!result.success) {
-      return {
-        success: false,
-        error: result.error || 'Erro ao criar solicitação'
+        error: result?.message || 'Não foi possível criar a solicitação'
       };
     }
 

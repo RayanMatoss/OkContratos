@@ -198,11 +198,6 @@ export const SolicitacoesTable: React.FC<SolicitacoesTableProps> = ({
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      {/* Debug temporário */}
-                      <span className="text-xs text-red-500 mr-2">
-                        Admin: {isAdmin ? 'SIM' : 'NÃO'} | Status: {solicitacao.status}
-                      </span>
-                      
                       {/* Botão Visualizar - sempre visível */}
                       <Button
                         variant="outline"
